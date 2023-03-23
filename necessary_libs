@@ -1,1 +1,5 @@
-pypdbc
+PyQt6                     6.4.2
+PySide6                   6.4.2
+pyodbc                    4.0.35
+auto-py-to-exe            2.32.0
+workalendar               17.0.0
