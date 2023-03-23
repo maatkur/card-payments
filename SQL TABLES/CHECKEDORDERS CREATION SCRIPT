@@ -1,0 +1,45 @@
+USE [card_payments]
+GO
+
+/****** Object:  Table [dbo].[checkedOrders]    Script Date: 23/03/2023 15:38:42 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[checkedOrders](
+	[id] [bigint] IDENTITY(1,1) NOT NULL,
+	[orderNumber] [varchar](6) NOT NULL,
+	[cashierNumber] [char](6) NOT NULL,
+	[cashFlow] [char](6) NOT NULL,
+	[transactionType] [varchar](6) NOT NULL,
+	[flag] [varchar](30) NOT NULL,
+	[installments] [varchar](2) NOT NULL,
+	[installmentValue] [money] NOT NULL,
+	[currentInstallment] [varchar](6) NOT NULL,
+	[payday] [date] NOT NULL,
+	[orderValue] [money] NOT NULL,
+	[flagTax] [numeric](3, 2) NOT NULL,
+	[liquidValue] [money] NOT NULL,
+	[storeUnit] [varchar](20) NOT NULL,
+	[NSU] [varchar](30) NOT NULL,
+	[transactionAuthorization] [varchar](30) NOT NULL,
+	[dateUpdate] [datetime] NULL,
+PRIMARY KEY CLUSTERED
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[checkedOrders] ADD  DEFAULT (getdate()) FOR [dateUpdate]
+GO
+
+ALTER TABLE [dbo].[checkedOrders]  WITH CHECK ADD  CONSTRAINT [chk_transactionType2] CHECK  (([transactionType]='debit' OR [transactionType]='credit'))
+GO
+
+ALTER TABLE [dbo].[checkedOrders] CHECK CONSTRAINT [chk_transactionType2]
+GO
+
+
