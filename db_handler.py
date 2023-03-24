@@ -38,8 +38,8 @@ class DatabaseHandler:
 
         return result
 
-    def insert_in_order_stage(self, order_number: str, cashier_number: str, cash_flow: str, transaction_type: str,
-                              order_value: float, store_id: int) -> None:
+    def insert_in_order_stage(self, order_number: str, cashier_number: str, cash_flow: str, order_value: float,
+                              store_id: int) -> None:
 
         #  Insere uma ordem no banco de dados de stage
 
@@ -54,7 +54,6 @@ class DatabaseHandler:
                     orderNumber, 
                     cashierNumber, 
                     cashFlow, 
-                    transactionType, 
                     orderValue, 
                     storeUnit, 
                     isCommit
@@ -62,8 +61,7 @@ class DatabaseHandler:
                     VALUES (
                     '{order_number}', 
                     '{cashier_number}', 
-                    '{cash_flow}', 
-                    '{transaction_type}', 
+                    '{cash_flow}',  
                     {order_value}, 
                     (SELECT storeUnit FROM Stores WHERE ID = {store_id}), 
                     0
@@ -73,9 +71,9 @@ class DatabaseHandler:
                 BEGIN
                     UPDATE orderStage
             
-                    set transactionType = '{transaction_type}' , isCommit = 0
+                    set cashierNumber = '{cashier_number}', cashFlow = '{cash_flow}', orderValue = {order_value}, isCommit = 0		
             
-                    where orderNumber = '{order_number}'		
+                    where orderNumber = '{order_number}' 
                 END
                  """
         self._execute_and_commit(command)
@@ -116,7 +114,8 @@ class DatabaseHandler:
 
         return result
 
-    def insert_purchase(self, flag, installments, order_number, current_installment, payday, NSU, transaction_authorization) -> None:
+    def insert_checked_order(self, flag, installments, order_number, current_installment, payday, NSU,
+                             transaction_authorization) -> None:
 
         command = f"""
             INSERT INTO checkedOrders (orderNumber, cashierNumber, cashFLow, transactionType, flag, installments, installmentValue, currentInstallment, payday, orderValue, flagTax, liquidValue, storeUnit, NSU, [transactionAuthorization])
@@ -124,7 +123,7 @@ class DatabaseHandler:
                 os.orderNumber, 
                 os.cashierNumber, 
                 os.cashFLow, 
-                os.transactionType, 
+                transactionType, 
                 '{flag}', 
                 {installments}, 
                 os.orderValue / {installments},

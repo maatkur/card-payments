@@ -18,7 +18,9 @@ class CardDetails(QMainWindow):
         self.order = order
         self.set_data()
         self.set_card_flags()
+        self.ui.installments_comboBox.setDisabled(True)
         self.ui.save_button.clicked.connect(self.insert_checked_order)
+        self.ui.transaction_type_comboBox.currentIndexChanged.connect(self.allow_installment_comboBox_use)
 
     def set_data(self) -> None:
 
@@ -28,36 +30,18 @@ class CardDetails(QMainWindow):
 
         order_data = self.db_handler.get_order(self.order)
 
-        transaction_type = order_data[0][4]
-
-        self.check_transaction_type(transaction_type)
-
         self.ui.order_label.setText(order_data[0][1])
         self.ui.cashier_lineEdit.setText(order_data[0][2])
         self.ui.cash_flow_lineEdit.setText(order_data[0][3])
 
-        formatted_value = "{:.2f}".format(round(order_data[0][5], 2)).replace(".", ",")
+        formatted_value = "{:.2f}".format(round(order_data[0][4], 2)).replace(".", ",")
 
-        sale_date_string = order_data[0][7].strftime('%d/%m/%Y')
+        sale_date_string = order_data[0][6].strftime('%d/%m/%Y')
 
         self.ui.order_value_lineEdit.setText(str(formatted_value))
         self.ui.sale_date.setText(f"{sale_date_string}")
 
         self.db_handler.disconnect()
-
-    def check_transaction_type(self, transaction_type) -> None:
-
-        if transaction_type == 'credit':
-            transaction_type = 'Crédito'
-            self.ui.installments_comboBox.setDisabled(False)
-            self.ui.transaction_type_mask.setText('credit')
-            self.ui.transaction_type_lineEdit.setText(transaction_type)
-        elif transaction_type == 'debit':
-            transaction_type = 'Débito'
-            self.ui.installments_comboBox.setDisabled(True)
-            self.ui.transaction_type_mask.setText('debit')
-            self.ui.transaction_type_lineEdit.setText(transaction_type)
-
 
     def update_data(self, order) -> None:
 
@@ -78,24 +62,33 @@ class CardDetails(QMainWindow):
 
         self.db_handler.disconnect()
 
+    def allow_installment_comboBox_use(self):
+        is_a_credit_transaction = self.ui.transaction_type_comboBox.currentText() == "Crédito"
+
+        if is_a_credit_transaction:
+            self.ui.installments_comboBox.setDisabled(False)
+        else:
+            self.ui.installments_comboBox.setDisabled(True)
+            self.ui.installments_comboBox.setCurrentText('1')
+
     def insert_checked_order(self) -> None:
 
         # Salva um pedido com as informações necessárias na tabela 'checkedOrders'
 
         self.db_handler.connect()
 
+        transaction_type = self.ui.transaction_type_comboBox.currentText()
         flag = self.ui.card_flag_comboBox.currentText()
         installments = self.ui.installments_comboBox.currentText()
         order_number = self.order
         nsu = self.ui.nsu_lineEdit.text()
         transaction_authorization = self.ui.authorization_lineEdit.text()
-        transaction_type = self.ui.transaction_type_mask.text()
         sale_date = self.ui.sale_date.text().replace("/", "-")
-        payday = paydays(sale_date, installments, transaction_type)
+        payday = paydays(sale_date, installments, f"{'credit' if transaction_type == 'Crédito' else 'debit'}")
 
         for installment in range(1, int(installments)+1):
             current_installment = f"{installment}/{installments}"
-            self.db_handler.insert_purchase(flag, installments, order_number, current_installment, payday[installment - 1], nsu, transaction_authorization)
+            self.db_handler.insert_checked_order(flag, installments, order_number, current_installment, payday[installment - 1], nsu, transaction_authorization)
 
         self.db_handler.update_stage(order_number)
         self.db_handler.disconnect()

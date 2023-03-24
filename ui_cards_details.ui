@@ -140,7 +140,7 @@
      <rect>
       <x>111</x>
       <y>50</y>
-      <width>59</width>
+      <width>71</width>
       <height>16</height>
      </rect>
     </property>
@@ -294,6 +294,11 @@
       <height>16777215</height>
      </size>
     </property>
+    <item>
+     <property name="text">
+      <string>Selecione</string>
+     </property>
+    </item>
    </widget>
    <widget class="QLabel" name="label_5">
     <property name="geometry">
@@ -465,44 +470,6 @@
      <string>Data da venda: </string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="transaction_type_lineEdit">
-    <property name="geometry">
-     <rect>
-      <x>135</x>
-      <y>116</y>
-      <width>95</width>
-      <height>22</height>
-     </rect>
-    </property>
-    <property name="maximumSize">
-     <size>
-      <width>100</width>
-      <height>16777215</height>
-     </size>
-    </property>
-    <property name="readOnly">
-     <bool>true</bool>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="transaction_type_mask">
-    <property name="geometry">
-     <rect>
-      <x>135</x>
-      <y>116</y>
-      <width>95</width>
-      <height>22</height>
-     </rect>
-    </property>
-    <property name="maximumSize">
-     <size>
-      <width>100</width>
-      <height>16777215</height>
-     </size>
-    </property>
-    <property name="readOnly">
-     <bool>true</bool>
-    </property>
-   </widget>
    <widget class="QLabel" name="sale_date">
     <property name="geometry">
      <rect>
@@ -521,27 +488,37 @@
      <string>24/02/18</string>
     </property>
    </widget>
-   <zorder>transaction_type_mask</zorder>
-   <zorder>save_button</zorder>
-   <zorder>order_label</zorder>
-   <zorder>label_6</zorder>
-   <zorder>cashier_lineEdit</zorder>
-   <zorder>label_7</zorder>
-   <zorder>cash_flow_lineEdit</zorder>
-   <zorder>order_value_lineEdit</zorder>
-   <zorder>installments_comboBox</zorder>
-   <zorder>card_flag_comboBox</zorder>
-   <zorder>label_5</zorder>
-   <zorder>label_4</zorder>
-   <zorder>label_3</zorder>
-   <zorder>label_2</zorder>
-   <zorder>nsu_lineEdit</zorder>
-   <zorder>authorization_lineEdit</zorder>
-   <zorder>label</zorder>
-   <zorder>label_8</zorder>
-   <zorder>date_text_label</zorder>
-   <zorder>transaction_type_lineEdit</zorder>
-   <zorder>sale_date</zorder>
+   <widget class="QComboBox" name="transaction_type_comboBox">
+    <property name="geometry">
+     <rect>
+      <x>135</x>
+      <y>116</y>
+      <width>90</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="maximumSize">
+     <size>
+      <width>150</width>
+      <height>16777215</height>
+     </size>
+    </property>
+    <item>
+     <property name="text">
+      <string>Selecione</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Crédito</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Débito</string>
+     </property>
+    </item>
+   </widget>
   </widget>
  </widget>
  <resources/>
