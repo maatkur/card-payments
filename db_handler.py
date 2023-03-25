@@ -114,43 +114,32 @@ class DatabaseHandler:
 
         return result
 
-    def insert_checked_order(self, flag, installments, order_number, current_installment, payday, NSU,
-                             transaction_authorization) -> None:
+    def insert_order(self, flag, installments, order_number, current_installment, payday, NSU,
+                     transaction_authorization, transaction_type) -> None:
 
         command = f"""
             INSERT INTO checkedOrders (orderNumber, cashierNumber, cashFLow, transactionType, flag, installments, installmentValue, currentInstallment, payday, orderValue, flagTax, liquidValue, storeUnit, NSU, [transactionAuthorization])
-            SELECT 
-                os.orderNumber, 
-                os.cashierNumber, 
-                os.cashFLow, 
-                transactionType, 
-                '{flag}', 
-                {installments}, 
-                os.orderValue / {installments},
-                '{current_installment}',
-                '{payday}',
-                os.orderValue,
-                CASE os.transactionType
-                    WHEN 'debit'
-                        THEN cf.debit
-                    WHEN 'credit'
-                        THEN IIF({installments} = 1, cf.creditAtSight, IIF({installments} < 7, cf.tax_6x, cf.tax_12x))
-                END as transactionTax,
-                os.orderValue - ((os.orderValue * (CASE os.transactionType
-                    WHEN 'debit'
-                        THEN cf.debit
-                    WHEN 'credit'
-                        THEN IIF({installments} = 1, cf.creditAtSight, IIF({installments} < 7, cf.tax_6x, cf.tax_12x))
-                END))/ 100) as liquidValue, 
-                os.storeUnit,
-                '{NSU}',
-                '{transaction_authorization}'
-            FROM orderStage as os
-            inner join cardFlags as cf
-                on flag = '{flag}'
-            WHERE orderNumber = '{order_number}';
-        """
+                SELECT
+                    '{order_number}',
+                    os.cashierNumber,
+                    os.cashFlow,
+                    '{transaction_type}',
+                    '{flag}',
+                    '{installments}',
+                    os.orderValue / {installments},
+                    '{current_installment}',
+                    '{payday}',
+                    os.orderValue,
+                    (SELECT cf.tax FROM cardFlags2 cf WHERE cf.flag = '{flag}' AND cf.installments = '{installments}'),
+                    os.orderValue - (os.orderValue * ((SELECT cf.tax FROM cardFlags2 cf WHERE cf.flag = '{flag}' AND cf.installments = '{installments}') / 100)),
+                    os.storeUnit,
+                    '{NSU}',
+                    '{transaction_authorization}'
+                FROM orderStage as os
+                WHERE os.orderNumber = '{order_number}';"""
+
         self._execute_and_commit(command)
+
 
     def get_payments_by_date(self, initial_date, final_date):
         command = f"SELECT installmentValue, payday FROM checkedOrders WHERE payday BETWEEN '{initial_date}' AND '{final_date}'"

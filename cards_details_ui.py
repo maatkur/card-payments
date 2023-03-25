@@ -1,5 +1,5 @@
 from PySide6.QtWidgets import *
-from PySide6.QtCore import Signal
+from PySide6.QtCore import Signal, QTimer
 import sys
 from ui_cards_details import Ui_Form
 from db_handler import DatabaseHandler
@@ -72,28 +72,31 @@ class CardDetails(QMainWindow):
             self.ui.installments_comboBox.setCurrentText('1')
 
     def insert_checked_order(self) -> None:
-
+        print("Inserting checked order...")
         # Salva um pedido com as informações necessárias na tabela 'checkedOrders'
 
         self.db_handler.connect()
 
         transaction_type = self.ui.transaction_type_comboBox.currentText()
+        transaction_type = 'credit' if transaction_type == 'Crédito' else 'debit'
         flag = self.ui.card_flag_comboBox.currentText()
         installments = self.ui.installments_comboBox.currentText()
         order_number = self.order
         nsu = self.ui.nsu_lineEdit.text()
         transaction_authorization = self.ui.authorization_lineEdit.text()
         sale_date = self.ui.sale_date.text().replace("/", "-")
-        payday = paydays(sale_date, installments, f"{'credit' if transaction_type == 'Crédito' else 'debit'}")
+        payday = paydays(sale_date, installments, transaction_type)
 
-        for installment in range(1, int(installments)+1):
+        for installment in range(1, int(installments) + 1):
             current_installment = f"{installment}/{installments}"
-            self.db_handler.insert_checked_order(flag, installments, order_number, current_installment, payday[installment - 1], nsu, transaction_authorization)
+            print(f"Inserting installment {current_installment}")
+            self.db_handler.insert_order(flag, installments, order_number, current_installment, payday[installment - 1],
+                                         nsu, transaction_authorization, transaction_type)
 
         self.db_handler.update_stage(order_number)
         self.db_handler.disconnect()
         self.closed.emit()
-        self.close_details_window()
+        QTimer.singleShot(500, self.close_details_window)
 
     def clear_fields(self) -> None:
         self.ui.nsu_lineEdit.setText("")
