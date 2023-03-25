@@ -8,7 +8,7 @@ def paydays(payment_date, installments, transaction_type):
     calendar = Brazil()
 
     payment_date = datetime.datetime.strptime(payment_date, '%d-%m-%Y').date()
-    installments = int(installments)
+    installments = 1 if installments == 0 else installments
     transaction_type = transaction_type
 
     # Define a data de vencimento da primeira parcela

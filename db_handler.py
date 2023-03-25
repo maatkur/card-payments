@@ -114,7 +114,7 @@ class DatabaseHandler:
 
         return result
 
-    def insert_order(self, flag, installments, order_number, current_installment, payday, NSU,
+    def insert_checked_order(self, flag, installments, order_number, current_installment, payday, NSU,
                      transaction_authorization, transaction_type) -> None:
 
         command = f"""
@@ -126,7 +126,7 @@ class DatabaseHandler:
                     '{transaction_type}',
                     '{flag}',
                     '{installments}',
-                    os.orderValue / {installments},
+                    os.orderValue / {'1' if installments == 0 else installments},
                     '{current_installment}',
                     '{payday}',
                     os.orderValue,

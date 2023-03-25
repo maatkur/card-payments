@@ -19,8 +19,14 @@ class CardDetails(QMainWindow):
         self.set_data()
         self.set_card_flags()
         self.ui.installments_comboBox.setDisabled(True)
-        self.ui.save_button.clicked.connect(self.insert_checked_order)
-        self.ui.transaction_type_comboBox.currentIndexChanged.connect(self.allow_installment_comboBox_use)
+        self.ui.save_button.setDisabled(True)
+        self.ui.save_button.clicked.connect(self.handle_save_button)
+
+        # Dispara os eventos para verificar se o botão de salvar atende os requisitos para ser ativo
+        self.ui.card_flag_comboBox.currentIndexChanged.connect(self.active_save_button)
+        self.ui.transaction_type_comboBox.currentIndexChanged.connect(self.active_save_button)
+        self.ui.authorization_lineEdit.textChanged.connect(self.active_save_button)
+        self.ui.nsu_lineEdit.textChanged.connect(self.active_save_button)
 
     def set_data(self) -> None:
 
@@ -69,10 +75,20 @@ class CardDetails(QMainWindow):
             self.ui.installments_comboBox.setDisabled(False)
         else:
             self.ui.installments_comboBox.setDisabled(True)
-            self.ui.installments_comboBox.setCurrentText('1')
+            self.ui.installments_comboBox.setCurrentText('0')
 
-    def insert_checked_order(self) -> None:
-        print("Inserting checked order...")
+    def active_save_button(self):
+        verify_flag_selection = self.ui.card_flag_comboBox.currentText() != "Selecione"
+        verify_transaction_type_selection = self.ui.transaction_type_comboBox.currentText() != "Selecione"
+        verify_authorization_line_edit = len(self.ui.authorization_lineEdit.text()) > 0
+        verify_nsu_line_edit = len(self.ui.nsu_lineEdit.text()) > 0
+
+        if verify_flag_selection and verify_transaction_type_selection and verify_authorization_line_edit and verify_nsu_line_edit:
+            self.ui.save_button.setDisabled(False)
+        else:
+            self.ui.save_button.setDisabled(True)
+
+    def handle_save_button(self) -> None:
         # Salva um pedido com as informações necessárias na tabela 'checkedOrders'
 
         self.db_handler.connect()
@@ -80,28 +96,29 @@ class CardDetails(QMainWindow):
         transaction_type = self.ui.transaction_type_comboBox.currentText()
         transaction_type = 'credit' if transaction_type == 'Crédito' else 'debit'
         flag = self.ui.card_flag_comboBox.currentText()
-        installments = self.ui.installments_comboBox.currentText()
+        installments = int(self.ui.installments_comboBox.currentText())
         order_number = self.order
         nsu = self.ui.nsu_lineEdit.text()
         transaction_authorization = self.ui.authorization_lineEdit.text()
         sale_date = self.ui.sale_date.text().replace("/", "-")
         payday = paydays(sale_date, installments, transaction_type)
 
-        for installment in range(1, int(installments) + 1):
+        for installment in range(1, installments + 1):
             current_installment = f"{installment}/{installments}"
-            print(f"Inserting installment {current_installment}")
-            self.db_handler.insert_order(flag, installments, order_number, current_installment, payday[installment - 1],
-                                         nsu, transaction_authorization, transaction_type)
+            self.db_handler.insert_checked_order(flag, 0 if transaction_type == 'debit' else installments, order_number, current_installment,
+                                                 payday[installment - 1],
+                                                 nsu, transaction_authorization, transaction_type)
 
         self.db_handler.update_stage(order_number)
         self.db_handler.disconnect()
-        self.closed.emit()
-        QTimer.singleShot(500, self.close_details_window)
+        self.close_details_window()
 
     def clear_fields(self) -> None:
         self.ui.nsu_lineEdit.setText("")
         self.ui.authorization_lineEdit.setText("")
         self.ui.installments_comboBox.setCurrentText('1')
+        self.ui.card_flag_comboBox.setCurrentText('Selecione')
+        self.ui.transaction_type_comboBox.setCurrentText('Selecione')
 
     def close_details_window(self) -> None:
         self.closed.emit()  # emite o sinal closed quando a janela de detalhes for fechada
