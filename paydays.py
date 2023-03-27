@@ -37,5 +37,5 @@ def paydays(payment_date, installments, transaction_type):
 
 
 if __name__ == "__main__":
-    p = paydays('17-03-2023', 3, 'credit')
+    p = paydays('27-03-2023', 1, 'debit')
     print(p)

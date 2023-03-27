@@ -45,6 +45,7 @@ class CardView(QMainWindow):
         if self.details_window is not None:
             order = self.ui.tableWidget.item(row, 0).text()  # pega o valor da coluna "Pedido"
             self.details_window.update_data(order)
+            self.details_window.clear_fields()
             self.details_window.show()
             return
 

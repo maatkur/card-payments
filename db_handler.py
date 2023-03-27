@@ -78,16 +78,16 @@ class DatabaseHandler:
                  """
         self._execute_and_commit(command)
 
-    def delete_order(self, order_number: str) -> None:
+    def verify_checked_orders(self, order_number: str) -> None:
         """Deleta uma ordem do banco de dados."""
         command = f"""
             IF EXISTS (
                 SELECT orderNumber 
-                FROM orderStage 
+                FROM checkedOrders 
                 WHERE orderNumber = '{order_number}'
             )
             BEGIN
-                DELETE FROM orderStage WHERE orderNumber = '{order_number}'
+                DELETE FROM checkedOrders WHERE orderNumber = '{order_number}'
             END
         """
         self._execute_and_commit(command)
@@ -115,7 +115,7 @@ class DatabaseHandler:
         return result
 
     def insert_checked_order(self, flag, installments, order_number, current_installment, payday, NSU,
-                     transaction_authorization, transaction_type) -> None:
+                             transaction_authorization, transaction_type) -> None:
 
         command = f"""
             INSERT INTO checkedOrders (orderNumber, cashierNumber, cashFLow, transactionType, flag, installments, installmentValue, currentInstallment, payday, orderValue, flagTax, liquidValue, storeUnit, NSU, [transactionAuthorization])
@@ -139,7 +139,6 @@ class DatabaseHandler:
                 WHERE os.orderNumber = '{order_number}';"""
 
         self._execute_and_commit(command)
-
 
     def get_payments_by_date(self, initial_date, final_date):
         command = f"SELECT installmentValue, payday FROM checkedOrders WHERE payday BETWEEN '{initial_date}' AND '{final_date}'"

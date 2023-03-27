@@ -16,17 +16,20 @@ class CardDetails(QMainWindow):
         self.setWindowTitle("Detalhes do cartão")
         self.db_handler = DatabaseHandler()
         self.order = order
+        self.clear_fields()
         self.set_data()
         self.set_card_flags()
         self.ui.installments_comboBox.setDisabled(True)
         self.ui.save_button.setDisabled(True)
-        self.ui.save_button.clicked.connect(self.handle_save_button)
+        self.ui.transaction_type_comboBox.currentIndexChanged.connect(self.allow_installment_comboBox_use)
 
         # Dispara os eventos para verificar se o botão de salvar atende os requisitos para ser ativo
         self.ui.card_flag_comboBox.currentIndexChanged.connect(self.active_save_button)
         self.ui.transaction_type_comboBox.currentIndexChanged.connect(self.active_save_button)
         self.ui.authorization_lineEdit.textChanged.connect(self.active_save_button)
         self.ui.nsu_lineEdit.textChanged.connect(self.active_save_button)
+
+        self.ui.save_button.clicked.connect(self.handle_save_button)
 
     def set_data(self) -> None:
 
