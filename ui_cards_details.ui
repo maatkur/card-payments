@@ -519,6 +519,23 @@
      </property>
     </item>
    </widget>
+   <widget class="QPushButton" name="delete_button">
+    <property name="geometry">
+     <rect>
+      <x>275</x>
+      <y>2</y>
+      <width>31</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>icons/delete.ico</normaloff>icons/delete.ico</iconset>
+    </property>
+   </widget>
   </widget>
  </widget>
  <resources/>

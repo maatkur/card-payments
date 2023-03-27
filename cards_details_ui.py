@@ -30,6 +30,7 @@ class CardDetails(QMainWindow):
         self.ui.nsu_lineEdit.textChanged.connect(self.active_save_button)
 
         self.ui.save_button.clicked.connect(self.handle_save_button)
+        self.ui.delete_button.clicked.connect(self.handle_delete_button)
 
     def set_data(self) -> None:
 
@@ -113,6 +114,23 @@ class CardDetails(QMainWindow):
                                                  nsu, transaction_authorization, transaction_type)
 
         self.db_handler.update_stage(order_number)
+        self.db_handler.disconnect()
+        self.close_details_window()
+
+    def handle_delete_button(self):
+        message_box = QMessageBox()
+        message_box.setIcon(QMessageBox.Warning)
+        message_box.setWindowTitle("Confirmar exclusão")
+        message_box.setText("Tem certeza que deseja excluir?")
+        message_box.setStandardButtons(QMessageBox.Yes | QMessageBox.Cancel)
+        message_box.setDefaultButton(QMessageBox.Cancel)
+        result = message_box.exec_()
+        if result == QMessageBox.Yes:
+            self.delete_order()
+
+    def delete_order(self):
+        self.db_handler.connect()
+        self.db_handler.delete_staged_order(self.order)
         self.db_handler.disconnect()
         self.close_details_window()
 

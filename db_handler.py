@@ -78,6 +78,14 @@ class DatabaseHandler:
                  """
         self._execute_and_commit(command)
 
+    def delete_staged_order(self, order):
+        command = f"""
+                    DELETE FROM orderStage
+                    
+                    WHERE orderNumber = '{order}'
+                """
+        self._execute_and_commit(command)
+
     def verify_checked_orders(self, order_number: str) -> None:
         """Deleta uma ordem do banco de dados."""
         command = f"""

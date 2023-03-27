@@ -148,6 +148,12 @@ class Ui_Form(object):
         self.transaction_type_comboBox.setObjectName(u"transaction_type_comboBox")
         self.transaction_type_comboBox.setGeometry(QRect(135, 116, 90, 22))
         self.transaction_type_comboBox.setMaximumSize(QSize(150, 16777215))
+        self.delete_button = QPushButton(self.frame)
+        self.delete_button.setObjectName(u"delete_button")
+        self.delete_button.setGeometry(QRect(275, 2, 31, 24))
+        icon = QIcon()
+        icon.addFile(u"icons/delete.ico", QSize(), QIcon.Normal, QIcon.Off)
+        self.delete_button.setIcon(icon)
 
         self.retranslateUi(Form)
 
@@ -187,5 +193,6 @@ class Ui_Form(object):
         self.transaction_type_comboBox.setItemText(1, QCoreApplication.translate("Form", u"Cr\u00e9dito", None))
         self.transaction_type_comboBox.setItemText(2, QCoreApplication.translate("Form", u"D\u00e9bito", None))
 
+        self.delete_button.setText("")
     # retranslateUi
 
