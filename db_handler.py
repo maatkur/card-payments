@@ -78,7 +78,50 @@ class DatabaseHandler:
                  """
         self._execute_and_commit(command)
 
-    def delete_staged_order(self, order):
+    def manually_insert_in_order_stage(self, order_number: str, cashier_number: str, cash_flow: str, order_value: float,
+                                       store_id: int, order_date: str) -> None:
+
+        #  Insere uma ordem no banco de dados de stage
+
+        command = f"""
+            IF NOT EXISTS (
+                SELECT orderNumber 
+                FROM orderStage 
+                WHERE orderNumber = '{order_number}'
+                )
+                BEGIN
+                    INSERT INTO orderStage (
+                    orderNumber, 
+                    cashierNumber, 
+                    cashFlow, 
+                    orderValue, 
+                    storeUnit,
+                    dateUpdate, 
+                    isCommit
+                    )
+                    VALUES (
+                    '{order_number}', 
+                    '{cashier_number}', 
+                    '{cash_flow}',  
+                    {order_value}, 
+                    (SELECT storeUnit FROM Stores WHERE ID = {store_id}),
+                    '{order_date}', 
+                    0
+                    )
+                END
+            ELSE
+                BEGIN
+                    UPDATE orderStage
+
+                    set cashierNumber = '{cashier_number}', cashFlow = '{cash_flow}', orderValue = {order_value}, isCommit = 0		
+
+                    where orderNumber = '{order_number}' 
+                END
+                 """
+
+        self._execute_and_commit(command)
+
+    def delete_staged_order(self, order) -> None:
         command = f"""
                     DELETE FROM orderStage
                     

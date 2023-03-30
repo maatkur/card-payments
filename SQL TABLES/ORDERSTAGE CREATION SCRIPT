@@ -1,7 +1,7 @@
 USE [card_payments]
 GO
 
-/****** Object:  Table [dbo].[orderStage]    Script Date: 24/03/2023 13:09:31 ******/
+/****** Object:  Table [dbo].[orderStage]    Script Date: 27/03/2023 14:13:55 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -15,7 +15,7 @@ CREATE TABLE [dbo].[orderStage](
 	[cashFlow] [char](6) NOT NULL,
 	[orderValue] [money] NOT NULL,
 	[storeUnit] [varchar](20) NULL,
-	[dateUpdate] [datetime] NULL,
+	[dateUpdate] [date] NULL,
 	[isCommit] [bit] NOT NULL,
 PRIMARY KEY CLUSTERED
 (
@@ -26,4 +26,5 @@ GO
 
 ALTER TABLE [dbo].[orderStage] ADD  DEFAULT (getdate()) FOR [dateUpdate]
 GO
+
 

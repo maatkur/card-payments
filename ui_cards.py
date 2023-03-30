@@ -16,13 +16,14 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QAbstractItemView, QApplication, QHeaderView, QMainWindow,
-    QSizePolicy, QTableWidget, QTableWidgetItem, QWidget)
+    QPushButton, QSizePolicy, QTableWidget, QTableWidgetItem,
+    QWidget)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(393, 329)
+        MainWindow.resize(389, 354)
         MainWindow.setStyleSheet(u"* {\n"
 "  font-family: Arial;\n"
 "}")
@@ -44,14 +45,28 @@ class Ui_MainWindow(object):
         __qtablewidgetitem2.setFont(font);
         self.tableWidget.setHorizontalHeaderItem(2, __qtablewidgetitem2)
         self.tableWidget.setObjectName(u"tableWidget")
-        self.tableWidget.setGeometry(QRect(10, 24, 371, 291))
+        self.tableWidget.setGeometry(QRect(10, 12, 371, 291))
         self.tableWidget.viewport().setProperty("cursor", QCursor(Qt.PointingHandCursor))
         self.tableWidget.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.tableWidget.setSelectionMode(QAbstractItemView.ExtendedSelection)
         self.tableWidget.setSelectionBehavior(QAbstractItemView.SelectRows)
+        self.add_card_payment_button = QPushButton(self.centralwidget)
+        self.add_card_payment_button.setObjectName(u"add_card_payment_button")
+        self.add_card_payment_button.setGeometry(QRect(113, 312, 161, 31))
+        self.add_card_payment_button.setFont(font)
+        self.add_card_payment_button.setCursor(QCursor(Qt.PointingHandCursor))
+        icon = QIcon()
+        icon.addFile(u"icons/adicionar.ico", QSize(), QIcon.Normal, QIcon.Off)
+        self.add_card_payment_button.setIcon(icon)
+        self.add_card_payment_button.setIconSize(QSize(20, 20))
+        self.add_card_payment_button.setAutoDefault(False)
+        self.add_card_payment_button.setFlat(False)
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
+
+        self.add_card_payment_button.setDefault(False)
+
 
         QMetaObject.connectSlotsByName(MainWindow)
     # setupUi
@@ -64,5 +79,6 @@ class Ui_MainWindow(object):
         ___qtablewidgetitem1.setText(QCoreApplication.translate("MainWindow", u"Valor", None));
         ___qtablewidgetitem2 = self.tableWidget.horizontalHeaderItem(2)
         ___qtablewidgetitem2.setText(QCoreApplication.translate("MainWindow", u"Data", None));
+        self.add_card_payment_button.setText(QCoreApplication.translate("MainWindow", u"Adicionar Pagamento ", None))
     # retranslateUi
 

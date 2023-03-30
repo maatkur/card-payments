@@ -1,6 +1,7 @@
-from PySide6.QtWidgets import *
-from PySide6.QtCore import Signal, QTimer
 import sys
+from datetime import datetime
+from PySide6.QtWidgets import *
+from PySide6.QtCore import Signal
 from ui_cards_details import Ui_Form
 from db_handler import DatabaseHandler
 from paydays import paydays
@@ -46,10 +47,12 @@ class CardDetails(QMainWindow):
 
         formatted_value = "{:.2f}".format(round(order_data[0][4], 2)).replace(".", ",")
 
-        sale_date_string = order_data[0][6].strftime('%d/%m/%Y')
+        sale_date_string = order_data[0][6]
+        date_object = datetime.strptime(sale_date_string, "%Y-%m-%d")
+        formatted_date = date_object.strftime("%d/%m/%Y")
 
         self.ui.order_value_lineEdit.setText(str(formatted_value))
-        self.ui.sale_date.setText(f"{sale_date_string}")
+        self.ui.sale_date.setText(f"{formatted_date}")
 
         self.db_handler.disconnect()
 
@@ -79,7 +82,7 @@ class CardDetails(QMainWindow):
             self.ui.installments_comboBox.setDisabled(False)
         else:
             self.ui.installments_comboBox.setDisabled(True)
-            self.ui.installments_comboBox.setCurrentText('0')
+            self.ui.installments_comboBox.setCurrentText('1')
 
     def active_save_button(self):
         verify_flag_selection = self.ui.card_flag_comboBox.currentText() != "Selecione"
