@@ -1,18 +1,25 @@
 from datetime import datetime
-from PySide6.QtWidgets import *
 import sys
+from PySide6.QtWidgets import *
+from PySide6.QtCore import QDate
 from ui_cards import Ui_MainWindow
 from db_handler import DatabaseHandler
 from cards_details_ui import CardDetails
 from manual_insert import AddPayment
-
+from excel_reports import generate_conference_report
+from helpers import to_sql_format
 
 # TO DO
 # ALTERAR O CÓDIGO PARA QUE A LOJA SEJA RECEBIDA COMO PARAMETRO VIA CMD NA CHAMADA DO EXECUTAVEL
 # --------------------------O TIPO DE USUÁRIO SEJA RECEBIDO-------------------------------------
 # TRAVAR OS BOTÕES DE 'ADICIONAR PAGAMENTO' E 'APAGAR LANÇAMENTO'
 
+
 class CardView(QMainWindow):
+
+    today = datetime.today()
+    qdate = QDate(today.year, today.month, today.day)
+
     def __init__(self) -> None:
         super(CardView, self).__init__()
         self.ui = Ui_MainWindow()  # instanciar a classe Ui_MainWindow
@@ -21,10 +28,13 @@ class CardView(QMainWindow):
         self.show_payments()
         self.details_window = None
         self.add_payment_window = None
-        self.ui.tableWidget.setColumnWidth(2, 154)  # Definindo a largura da coluna da data para 154 pixels
+        self.ui.tableWidget.setColumnWidth(2, 88)  # Definindo a largura da coluna da data para 154 pixels
         self.ui.tableWidget.cellDoubleClicked.connect(
             self.handle_order_details)  # Conectando o evento de duplo clique a um slot
         self.ui.add_card_payment_button.clicked.connect(self.handle_add_payment_button)
+        self.ui.initial_date.setDate(self.qdate)
+        self.ui.final_date.setDate(self.qdate)
+        self.ui.excel_report_button.clicked.connect(self.handle_report_button)
 
     def show_payments(self):
         db_handler = DatabaseHandler()
@@ -72,6 +82,12 @@ class CardView(QMainWindow):
         self.add_payment_window.clear_fields()
         self.add_payment_window.show()
         self.add_payment_window.closed.connect(self.show_payments)
+
+    def handle_report_button(self):
+        initial_date = to_sql_format(self.ui.initial_date.text())
+        final_date = to_sql_format(self.ui.final_date.text())
+
+        generate_conference_report(initial_date, final_date)
 
 
 if __name__ == "__main__":

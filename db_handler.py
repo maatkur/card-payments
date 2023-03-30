@@ -169,7 +169,7 @@ class DatabaseHandler:
                              transaction_authorization, transaction_type) -> None:
 
         command = f"""
-            INSERT INTO checkedOrders (orderNumber, cashierNumber, cashFLow, transactionType, flag, installments, installmentValue, currentInstallment, payday, orderValue, flagTax, liquidValue, storeUnit, NSU, [transactionAuthorization])
+            INSERT INTO checkedOrders (orderNumber, cashierNumber, cashFLow, transactionType, flag, installments, installmentValue, currentInstallment, purchaseDate, payday, orderValue, flagTax, liquidValue, storeUnit, NSU, [transactionAuthorization])
                 SELECT
                     '{order_number}',
                     os.cashierNumber,
@@ -179,6 +179,7 @@ class DatabaseHandler:
                     '{installments}',
                     os.orderValue / {'1' if installments == 0 else installments},
                     '{current_installment}',
+                    os.dateUpdate,
                     '{payday}',
                     os.orderValue,
                     (SELECT cf.tax FROM cardFlags2 cf WHERE cf.flag = '{flag}' AND cf.installments = '{installments}'),
@@ -190,6 +191,14 @@ class DatabaseHandler:
                 WHERE os.orderNumber = '{order_number}';"""
 
         self._execute_and_commit(command)
+
+    def get_orders_to_conference(self, initial_date: str, final_date: str) -> list:
+
+        command = f"""SELECT DISTINCT orderNumber, cashierNumber, cashFlow, transactionType, flag, orderValue, purchaseDate FROM checkedOrders WHERE purchaseDate BETWEEN '{initial_date}' AND '{final_date}' ORDER BY purchaseDate"""
+
+        result = self._search_and_fetch(command)
+
+        return result
 
     def get_payments_by_date(self, initial_date, final_date):
         command = f"SELECT installmentValue, payday FROM checkedOrders WHERE payday BETWEEN '{initial_date}' AND '{final_date}'"
