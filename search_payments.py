@@ -10,7 +10,7 @@ def search(initial_date, final_date):
 
     handler = DatabaseHandler()
     handler.connect()
-    payments = handler.get_payments_by_date(initial_date, final_date)
+    payments = handler.get_paydays_and_installments(initial_date, final_date)
     handler.disconnect()
     pre_json = {}
 
@@ -34,4 +34,4 @@ def search(initial_date, final_date):
 
 
 if __name__ == "__main__":
-    search('24/04/2023', '19/09/2023')
+    search('20/03/2023', '19/09/2023')

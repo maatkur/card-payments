@@ -200,8 +200,45 @@ class DatabaseHandler:
 
         return result
 
-    def get_payments_by_date(self, initial_date, final_date):
+    def get_orders_by_date_management(self, initial_date: str, final_date: str) -> list:
+        command = f"""SELECT DISTINCT orderNumber, cashierNumber, cashFlow, transactionType, flag, orderValue, purchaseDate, storeUnit, NSU, transactionAuthorization FROM checkedOrders WHERE purchaseDate BETWEEN '{initial_date}' AND '{final_date}' ORDER BY purchaseDate"""
+
+        result = self._search_and_fetch(command)
+
+        return result
+
+    def get_orders_by_number_management(self, order: str) -> list:
+        command = f"""SELECT orderNumber, cashierNumber, cashFlow, transactionType, flag, orderValue, purchaseDate, storeUnit, NSU, transactionAuthorization FROM checkedOrders WHERE orderNumber = '{order}'"""
+
+        result = self._search_and_fetch(command)
+
+        return result
+
+    def get_orders_by_nsu_or_authorization_management(self, nsu_authorization: str) -> list:
+        command = f"""IF EXISTS (SELECT NSU FROM checkedOrders WHERE NSU = '{nsu_authorization}')
+                    BEGIN
+                        SELECT orderNumber, cashierNumber, cashFlow, transactionType, flag, orderValue, purchaseDate, storeUnit, NSU, transactionAuthorization FROM checkedOrders WHERE NSU = '{nsu_authorization}'
+                    END
+                
+                ELSE IF EXISTS (SELECT transactionAuthorization FROM checkedOrders WHERE transactionAuthorization = '{nsu_authorization}')
+                    BEGIN
+                        SELECT orderNumber, cashierNumber, cashFlow, transactionType, flag, orderValue, purchaseDate, storeUnit, NSU, transactionAuthorization FROM checkedOrders WHERE transactionAuthorization = '{nsu_authorization}'
+                    END
+                  """
+
+        result = self._search_and_fetch(command)
+
+        return result
+
+    def get_paydays_and_installments(self, initial_date, final_date) -> list:
         command = f"SELECT installmentValue, payday FROM checkedOrders WHERE payday BETWEEN '{initial_date}' AND '{final_date}'"
+
+        result = self._search_and_fetch(command)
+
+        return result
+
+    def management(self) -> list:
+        command = """SELECT orderNumber, cashierNumber, cashFlow, transactionType, flag, orderValue, purchaseDate, storeUnit, NSU, transactionAuthorization FROM checkedOrders WHERE storeUnit = (SELECT storeUnit from stores WHERE id = 4)"""
 
         result = self._search_and_fetch(command)
 
