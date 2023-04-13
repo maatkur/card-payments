@@ -48,7 +48,7 @@ class AddPayment(QMainWindow):
         order_numer = self.ui.order_entry.text()
         cashier_number = self.ui.cashier_entry.text()
         cash_flow = self.ui.cashflow_entry.text()
-        order_value = self.ui.order_value_entry.text()
+        order_value = self.ui.order_value_entry.text().replace(",", ".")
         order_date = self.ui.order_date.text()
         print(order_date)
         self.db_handler.connect()
@@ -74,4 +74,6 @@ class AddPayment(QMainWindow):
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    window = AddPayment(5)
+    window = AddPayment(7)
+    window.show()
+    app.exec()

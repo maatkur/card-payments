@@ -131,7 +131,7 @@ class CardView(QMainWindow):
         order = self.ui.tableWidget.item(row, 0).text()  # pega o valor da coluna "Pedido"
         self.details_window = CardDetails(order, self.user_type, self.store)
         self.details_window.show()
-        self.details_window.closed.connect(self.show_payments)
+        self.details_window.closed.connect(self.manage_orders_table)
 
     def handle_add_payment_button(self):
         if self.add_payment_window is not None:
@@ -142,7 +142,7 @@ class CardView(QMainWindow):
         self.add_payment_window = AddPayment(self.store)
         self.add_payment_window.clear_fields()
         self.add_payment_window.show()
-        self.add_payment_window.closed.connect(self.show_payments)
+        self.add_payment_window.closed.connect(self.manage_orders_table)
 
     def handle_report_button(self):
         initial_date = to_sql_format(self.ui.initial_date.text())
