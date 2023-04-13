@@ -2,15 +2,16 @@ import sys
 from datetime import datetime
 from PySide6.QtWidgets import *
 from PySide6.QtCore import Signal
-from ui_cards_details import Ui_Form
-from db_handler import DatabaseHandler
+from ui.ui_cards_details import Ui_Form
+from database.db_handler import DatabaseHandler
 from paydays import paydays
+from helpers import to_sql_format
 
 
 class CardDetails(QMainWindow):
     closed = Signal()
 
-    def __init__(self, order) -> None:
+    def __init__(self, order, user_type, store) -> None:
         super(CardDetails, self).__init__()
         self.ui = Ui_Form()  # instanciar a classe Ui_form
         self.ui.setupUi(self)
@@ -22,13 +23,20 @@ class CardDetails(QMainWindow):
         self.set_card_flags()
         self.ui.installments_comboBox.setDisabled(True)
         self.ui.save_button.setDisabled(True)
+        self.ui.plus_card_button.setDisabled(True)
         self.ui.transaction_type_comboBox.currentIndexChanged.connect(self.allow_installment_comboBox_use)
+        self.ui.plus_card_button.clicked.connect(self.handle_plus_card_button)
+        self.user_type = user_type
+        self.store = store
+        self.initial_value = float(self.ui.order_value_lineEdit.text().replace(",", "."))
+        self.ui.transaction_type_comboBox.setCurrentText("Crédito")
 
         # Dispara os eventos para verificar se o botão de salvar atende os requisitos para ser ativo
-        self.ui.card_flag_comboBox.currentIndexChanged.connect(self.active_save_button)
-        self.ui.transaction_type_comboBox.currentIndexChanged.connect(self.active_save_button)
-        self.ui.authorization_lineEdit.textChanged.connect(self.active_save_button)
-        self.ui.nsu_lineEdit.textChanged.connect(self.active_save_button)
+        self.ui.card_flag_comboBox.currentIndexChanged.connect(self.active_save_and_plus_button)
+        self.ui.transaction_type_comboBox.currentIndexChanged.connect(self.active_save_and_plus_button)
+        self.ui.authorization_lineEdit.textChanged.connect(self.active_save_and_plus_button)
+        self.ui.nsu_lineEdit.textChanged.connect(self.active_save_and_plus_button)
+        self.ui.order_value_lineEdit.textChanged.connect(self.active_save_and_plus_button)
 
         self.ui.save_button.clicked.connect(self.handle_save_button)
         self.ui.delete_button.clicked.connect(self.handle_delete_button)
@@ -84,16 +92,23 @@ class CardDetails(QMainWindow):
             self.ui.installments_comboBox.setDisabled(True)
             self.ui.installments_comboBox.setCurrentText('1')
 
-    def active_save_button(self):
+    def active_save_and_plus_button(self):
         verify_flag_selection = self.ui.card_flag_comboBox.currentText() != "Selecione"
         verify_transaction_type_selection = self.ui.transaction_type_comboBox.currentText() != "Selecione"
         verify_authorization_line_edit = len(self.ui.authorization_lineEdit.text()) > 0
         verify_nsu_line_edit = len(self.ui.nsu_lineEdit.text()) > 0
+        verify_order_value = self.initial_value != float(self.ui.order_value_lineEdit.text().replace(",", "."))
 
         if verify_flag_selection and verify_transaction_type_selection and verify_authorization_line_edit and verify_nsu_line_edit:
             self.ui.save_button.setDisabled(False)
+            if verify_order_value:
+                self.ui.plus_card_button.setDisabled(False)
+            else:
+                self.ui.plus_card_button.setDisabled(True)
+
         else:
             self.ui.save_button.setDisabled(True)
+            self.ui.plus_card_button.setDisabled(True)
 
     def handle_save_button(self) -> None:
         # Salva um pedido com as informações necessárias na tabela 'checkedOrders'
@@ -109,11 +124,13 @@ class CardDetails(QMainWindow):
         transaction_authorization = self.ui.authorization_lineEdit.text()
         sale_date = self.ui.sale_date.text().replace("/", "-")
         payday = paydays(sale_date, installments, transaction_type)
+        order_value = self.ui.order_value_lineEdit.text().replace(",", ".")
 
         for installment in range(1, installments + 1):
             current_installment = f"{installment}/{installments}"
-            self.db_handler.insert_checked_order(flag, 0 if transaction_type == 'debit' else installments, order_number, current_installment,
-                                                 payday[installment - 1],
+            self.db_handler.insert_checked_order(flag, 0 if transaction_type == 'debit' else installments, order_number,
+                                                 current_installment,
+                                                 payday[installment - 1], order_value,
                                                  nsu, transaction_authorization, transaction_type)
 
         self.db_handler.update_stage(order_number)
@@ -131,11 +148,51 @@ class CardDetails(QMainWindow):
         if result == QMessageBox.Yes:
             self.delete_order()
 
+    def handle_plus_card_button(self):
+
+        self.db_handler.connect()
+
+        transaction_type = self.ui.transaction_type_comboBox.currentText()
+        transaction_type = 'credit' if transaction_type == 'Crédito' else 'debit'
+        flag = self.ui.card_flag_comboBox.currentText()
+        installments = int(self.ui.installments_comboBox.currentText())
+        order_number = self.order
+        nsu = self.ui.nsu_lineEdit.text()
+        transaction_authorization = self.ui.authorization_lineEdit.text()
+        sale_date = self.ui.sale_date.text().replace("/", "-")
+        payday = paydays(sale_date, installments, transaction_type)
+        order_value = self.ui.order_value_lineEdit.text().replace(",", ".")
+        remaining_value = self.initial_value - float(order_value)
+        order_date = to_sql_format(self.ui.sale_date.text())
+        cashier_number = self.ui.cashier_lineEdit.text()
+        cash_flow = self.ui.cash_flow_lineEdit.text()
+
+        for installment in range(1, installments + 1):
+            current_installment = f"{installment}/{installments}"
+            self.db_handler.insert_checked_order(flag, 0 if transaction_type == 'debit' else installments, order_number,
+                                                 current_installment,
+                                                 payday[installment - 1], order_value,
+                                                 nsu, transaction_authorization, transaction_type)
+        self.initial_value = remaining_value
+        self.db_handler.update_stage(order_number)
+        self.db_handler.manually_insert_in_order_stage(order_number, cashier_number, cash_flow, remaining_value,
+                                                       self.store, order_date)
+        self.db_handler.disconnect()
+        self.close_details_window()
+
     def delete_order(self):
         self.db_handler.connect()
         self.db_handler.delete_staged_order(self.order)
         self.db_handler.disconnect()
         self.close_details_window()
+
+    def check_user_type(self):
+        is_admint_user = self.user_type == "True"
+
+        if is_admint_user:
+            self.enable_delete_button()
+        else:
+            self.disable_delete_button()
 
     def clear_fields(self) -> None:
         self.ui.nsu_lineEdit.setText("")
@@ -143,6 +200,12 @@ class CardDetails(QMainWindow):
         self.ui.installments_comboBox.setCurrentText('1')
         self.ui.card_flag_comboBox.setCurrentText('Selecione')
         self.ui.transaction_type_comboBox.setCurrentText('Selecione')
+
+    def enable_delete_button(self):
+        self.ui.delete_button.setDisabled(False)
+
+    def disable_delete_button(self):
+        self.ui.delete_button.setDisabled(True)
 
     def close_details_window(self) -> None:
         self.closed.emit()  # emite o sinal closed quando a janela de detalhes for fechada
@@ -152,6 +215,6 @@ class CardDetails(QMainWindow):
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    window = CardDetails("202321")
+    window = CardDetails("")
     window.show()
     app.exec()

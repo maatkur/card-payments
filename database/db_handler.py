@@ -44,12 +44,6 @@ class DatabaseHandler:
         #  Insere uma ordem no banco de dados de stage
 
         command = f"""
-            IF NOT EXISTS (
-                SELECT orderNumber 
-                FROM orderStage 
-                WHERE orderNumber = '{order_number}'
-                )
-                BEGIN
                     INSERT INTO orderStage (
                     orderNumber, 
                     cashierNumber, 
@@ -66,15 +60,6 @@ class DatabaseHandler:
                     (SELECT storeUnit FROM Stores WHERE ID = {store_id}), 
                     0
                     )
-                END
-            ELSE
-                BEGIN
-                    UPDATE orderStage
-            
-                    set cashierNumber = '{cashier_number}', cashFlow = '{cash_flow}', orderValue = {order_value}, isCommit = 0		
-            
-                    where orderNumber = '{order_number}' 
-                END
                  """
         self._execute_and_commit(command)
 
@@ -84,12 +69,6 @@ class DatabaseHandler:
         #  Insere uma ordem no banco de dados de stage
 
         command = f"""
-            IF NOT EXISTS (
-                SELECT orderNumber 
-                FROM orderStage 
-                WHERE orderNumber = '{order_number}'
-                )
-                BEGIN
                     INSERT INTO orderStage (
                     orderNumber, 
                     cashierNumber, 
@@ -108,15 +87,6 @@ class DatabaseHandler:
                     '{order_date}', 
                     0
                     )
-                END
-            ELSE
-                BEGIN
-                    UPDATE orderStage
-
-                    set cashierNumber = '{cashier_number}', cashFlow = '{cash_flow}', orderValue = {order_value}, isCommit = 0		
-
-                    where orderNumber = '{order_number}' 
-                END
                  """
 
         self._execute_and_commit(command)
@@ -124,7 +94,7 @@ class DatabaseHandler:
     def delete_staged_order(self, order) -> None:
         command = f"""
                     DELETE FROM orderStage
-                    
+
                     WHERE orderNumber = '{order}'
                 """
         self._execute_and_commit(command)
@@ -143,7 +113,7 @@ class DatabaseHandler:
         """
         self._execute_and_commit(command)
 
-    def get_orders_by_store(self, store_id) -> list:
+    def get_orders_by_store_and_cashier(self, store_id, cashier_number) -> list:
         """Seleciona os pedidos com cartão por loja"""
 
         command = f"""
@@ -151,7 +121,21 @@ class DatabaseHandler:
                     FROM orderStage
                     JOIN stores
                     ON orderStage.storeUnit = stores.storeUnit
-                    WHERE stores.id = {store_id} and isCommit = 0;
+                    WHERE stores.id = {store_id} AND isCommit = 0 AND cashierNumber = {cashier_number};
+                    """
+        result = self._search_and_fetch(command)
+
+        return result
+
+    def get_orders_by_store_and_cashier_filter(self, store_id, cashier_number, order_number) -> list:
+        """Seleciona os pedidos com cartão por loja"""
+
+        command = f"""
+                    SELECT orderNumber, orderValue, dateUpdate
+                    FROM orderStage
+                    JOIN stores
+                    ON orderStage.storeUnit = stores.storeUnit
+                    WHERE stores.id = {store_id} AND isCommit = 0 AND cashierNumber = {cashier_number} AND orderNumber = {order_number} ;
                     """
         result = self._search_and_fetch(command)
 
@@ -159,13 +143,13 @@ class DatabaseHandler:
 
     def get_order(self, order_number) -> list:
         command = f"""
-        select * from orderStage where orderNumber = '{order_number}'
+        SELECT * FROM orderStage WHERE orderNumber = '{order_number}' AND isCommit = 0
         """
         result = self._search_and_fetch(command)
 
         return result
 
-    def insert_checked_order(self, flag, installments, order_number, current_installment, payday, NSU,
+    def insert_checked_order(self, flag, installments, order_number, current_installment, payday, order_value, NSU,
                              transaction_authorization, transaction_type) -> None:
 
         command = f"""
@@ -177,24 +161,24 @@ class DatabaseHandler:
                     '{transaction_type}',
                     '{flag}',
                     '{installments}',
-                    os.orderValue / {'1' if installments == 0 else installments},
+                    {order_value} / {'1' if installments == 0 else installments},
                     '{current_installment}',
                     os.dateUpdate,
                     '{payday}',
-                    os.orderValue,
-                    (SELECT cf.tax FROM cardFlags2 cf WHERE cf.flag = '{flag}' AND cf.installments = '{installments}'),
-                    os.orderValue - (os.orderValue * ((SELECT cf.tax FROM cardFlags2 cf WHERE cf.flag = '{flag}' AND cf.installments = '{installments}') / 100)),
+                    {order_value},
+                    (SELECT cf.tax FROM cardFlags cf WHERE cf.flag = '{flag}' AND cf.installments = '{installments}'),
+                    {order_value} - ({order_value} * ((SELECT cf.tax FROM cardFlags cf WHERE cf.flag = '{flag}' AND cf.installments = '{installments}') / 100)),
                     os.storeUnit,
                     '{NSU}',
                     '{transaction_authorization}'
                 FROM orderStage as os
-                WHERE os.orderNumber = '{order_number}';"""
+                WHERE os.orderNumber = '{order_number}' AND isCommit = 0;"""
 
         self._execute_and_commit(command)
 
-    def get_orders_to_conference(self, initial_date: str, final_date: str) -> list:
+    def get_orders_to_conference(self, initial_date: str, final_date: str, store: str) -> list:
 
-        command = f"""SELECT DISTINCT orderNumber, cashierNumber, cashFlow, transactionType, flag, orderValue, purchaseDate FROM checkedOrders WHERE purchaseDate BETWEEN '{initial_date}' AND '{final_date}' ORDER BY purchaseDate"""
+        command = f"""SELECT DISTINCT orderNumber, cashierNumber, cashFlow, transactionType, flag, orderValue, purchaseDate FROM checkedOrders WHERE purchaseDate BETWEEN '{initial_date}' AND '{final_date}' AND storeUnit = (SELECT storeUnit FROM stores WHERE id = '{store}')ORDER BY purchaseDate"""
 
         result = self._search_and_fetch(command)
 
@@ -219,7 +203,7 @@ class DatabaseHandler:
                     BEGIN
                         SELECT orderNumber, cashierNumber, cashFlow, transactionType, flag, orderValue, purchaseDate, storeUnit, NSU, transactionAuthorization FROM checkedOrders WHERE NSU = '{nsu_authorization}'
                     END
-                
+
                 ELSE IF EXISTS (SELECT transactionAuthorization FROM checkedOrders WHERE transactionAuthorization = '{nsu_authorization}')
                     BEGIN
                         SELECT orderNumber, cashierNumber, cashFlow, transactionType, flag, orderValue, purchaseDate, storeUnit, NSU, transactionAuthorization FROM checkedOrders WHERE transactionAuthorization = '{nsu_authorization}'
@@ -246,7 +230,7 @@ class DatabaseHandler:
 
     def get_card_flags(self) -> list:
         command = f"""
-        select flag from cardFlags
+        SELECT DISTINCT flag FROM cardFlags
         """
 
         result = self._search_and_fetch(command)
@@ -256,9 +240,9 @@ class DatabaseHandler:
     def update_stage(self, order_number) -> None:
         command = f"""
                     UPDATE orderStage
-                    
+
                     SET isCommit = 1
-                    
+
                     WHERE orderNumber = {order_number}    
                 """
 

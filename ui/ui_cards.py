@@ -16,15 +16,18 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QAbstractItemView, QApplication, QDateEdit, QFrame,
-    QHBoxLayout, QHeaderView, QLabel, QMainWindow,
-    QPushButton, QSizePolicy, QSpacerItem, QTableWidget,
+    QHBoxLayout, QHeaderView, QLabel, QLineEdit,
+    QMainWindow, QPushButton, QSizePolicy, QTableWidget,
     QTableWidgetItem, QVBoxLayout, QWidget)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(561, 263)
+        MainWindow.resize(561, 268)
+        icon = QIcon()
+        icon.addFile(u"icons/pagamento-com-cartao-de-credito.ico", QSize(), QIcon.Normal, QIcon.Off)
+        MainWindow.setWindowIcon(icon)
         MainWindow.setStyleSheet(u"* {\n"
 "  font-family: Arial;\n"
 "}")
@@ -48,7 +51,7 @@ class Ui_MainWindow(object):
         __qtablewidgetitem2.setFont(font);
         self.tableWidget.setHorizontalHeaderItem(2, __qtablewidgetitem2)
         self.tableWidget.setObjectName(u"tableWidget")
-        self.tableWidget.setMaximumSize(QSize(305, 16777215))
+        self.tableWidget.setMaximumSize(QSize(325, 16777215))
         self.tableWidget.viewport().setProperty("cursor", QCursor(Qt.PointingHandCursor))
         self.tableWidget.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.tableWidget.setSelectionMode(QAbstractItemView.ExtendedSelection)
@@ -62,13 +65,46 @@ class Ui_MainWindow(object):
         self.frame.setFrameShadow(QFrame.Plain)
         self.verticalLayout = QVBoxLayout(self.frame)
         self.verticalLayout.setObjectName(u"verticalLayout")
-        self.label_3 = QLabel(self.frame)
-        self.label_3.setObjectName(u"label_3")
-        self.label_3.setMaximumSize(QSize(16777215, 12))
+        self.frame_2 = QFrame(self.frame)
+        self.frame_2.setObjectName(u"frame_2")
+        self.frame_2.setFrameShape(QFrame.StyledPanel)
+        self.frame_2.setFrameShadow(QFrame.Raised)
+        self.search_order_entry = QLineEdit(self.frame_2)
+        self.search_order_entry.setObjectName(u"search_order_entry")
+        self.search_order_entry.setGeometry(QRect(0, 25, 100, 23))
+        self.search_order_entry.setMaximumSize(QSize(100, 16777215))
+        self.label_4 = QLabel(self.frame_2)
+        self.label_4.setObjectName(u"label_4")
+        self.label_4.setGeometry(QRect(0, 0, 71, 16))
         font1 = QFont()
         font1.setPointSize(11)
         font1.setBold(True)
-        self.label_3.setFont(font1)
+        self.label_4.setFont(font1)
+        self.search_button = QPushButton(self.frame_2)
+        self.search_button.setObjectName(u"search_button")
+        self.search_button.setGeometry(QRect(100, 25, 38, 23))
+        icon1 = QIcon()
+        icon1.addFile(u"icons/icons8-pesquisar-60.ico", QSize(), QIcon.Normal, QIcon.Off)
+        self.search_button.setIcon(icon1)
+        self.search_button.setIconSize(QSize(16, 16))
+        self.refresh_button = QPushButton(self.frame_2)
+        self.refresh_button.setObjectName(u"refresh_button")
+        self.refresh_button.setGeometry(QRect(150, 25, 38, 23))
+        icon2 = QIcon()
+        icon2.addFile(u"icons/refresh.ico", QSize(), QIcon.Normal, QIcon.Off)
+        self.refresh_button.setIcon(icon2)
+        self.refresh_button.setIconSize(QSize(16, 16))
+
+        self.verticalLayout.addWidget(self.frame_2)
+
+        self.label_3 = QLabel(self.frame)
+        self.label_3.setObjectName(u"label_3")
+        self.label_3.setMaximumSize(QSize(16777215, 15))
+        font2 = QFont()
+        font2.setPointSize(11)
+        font2.setBold(True)
+        font2.setUnderline(True)
+        self.label_3.setFont(font2)
 
         self.verticalLayout.addWidget(self.label_3)
 
@@ -104,9 +140,9 @@ class Ui_MainWindow(object):
         self.excel_report_button.setObjectName(u"excel_report_button")
         self.excel_report_button.setFont(font)
         self.excel_report_button.setCursor(QCursor(Qt.PointingHandCursor))
-        icon = QIcon()
-        icon.addFile(u"icons/excel.ico", QSize(), QIcon.Normal, QIcon.Off)
-        self.excel_report_button.setIcon(icon)
+        icon3 = QIcon()
+        icon3.addFile(u"icons/excel.ico", QSize(), QIcon.Normal, QIcon.Off)
+        self.excel_report_button.setIcon(icon3)
         self.excel_report_button.setIconSize(QSize(20, 20))
         self.excel_report_button.setAutoDefault(False)
         self.excel_report_button.setFlat(False)
@@ -117,18 +153,14 @@ class Ui_MainWindow(object):
         self.add_card_payment_button.setObjectName(u"add_card_payment_button")
         self.add_card_payment_button.setFont(font)
         self.add_card_payment_button.setCursor(QCursor(Qt.PointingHandCursor))
-        icon1 = QIcon()
-        icon1.addFile(u"icons/adicionar.ico", QSize(), QIcon.Normal, QIcon.Off)
-        self.add_card_payment_button.setIcon(icon1)
+        icon4 = QIcon()
+        icon4.addFile(u"icons/adicionar.ico", QSize(), QIcon.Normal, QIcon.Off)
+        self.add_card_payment_button.setIcon(icon4)
         self.add_card_payment_button.setIconSize(QSize(20, 20))
         self.add_card_payment_button.setAutoDefault(False)
         self.add_card_payment_button.setFlat(False)
 
         self.verticalLayout.addWidget(self.add_card_payment_button)
-
-        self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
-
-        self.verticalLayout.addItem(self.verticalSpacer)
 
 
         self.horizontalLayout.addWidget(self.frame)
@@ -152,6 +184,9 @@ class Ui_MainWindow(object):
         ___qtablewidgetitem1.setText(QCoreApplication.translate("MainWindow", u"Valor", None));
         ___qtablewidgetitem2 = self.tableWidget.horizontalHeaderItem(2)
         ___qtablewidgetitem2.setText(QCoreApplication.translate("MainWindow", u"Data", None));
+        self.label_4.setText(QCoreApplication.translate("MainWindow", u"Pedido:", None))
+        self.search_button.setText("")
+        self.refresh_button.setText("")
         self.label_3.setText(QCoreApplication.translate("MainWindow", u"Per\u00edodo para o relat\u00f3rio:", None))
         self.label.setText(QCoreApplication.translate("MainWindow", u"Data Inicial", None))
         self.label_2.setText(QCoreApplication.translate("MainWindow", u"Data Final", None))

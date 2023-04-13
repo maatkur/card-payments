@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'ui_manual_insert.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.4.2
+## Created by: Qt User Interface Compiler version 6.4.3
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -23,6 +23,9 @@ class Ui_Form(object):
         if not Form.objectName():
             Form.setObjectName(u"Form")
         Form.resize(255, 190)
+        icon = QIcon()
+        icon.addFile(u"icons/pagamento-com-cartao-de-credito.ico", QSize(), QIcon.Normal, QIcon.Off)
+        Form.setWindowIcon(icon)
         self.cashier_entry = QLineEdit(Form)
         self.cashier_entry.setObjectName(u"cashier_entry")
         self.cashier_entry.setGeometry(QRect(119, 38, 127, 21))

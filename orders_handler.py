@@ -1,5 +1,5 @@
 import sys
-from db_handler import DatabaseHandler
+from database.db_handler import DatabaseHandler
 
 
 def order_handler() -> None:

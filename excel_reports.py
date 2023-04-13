@@ -1,17 +1,17 @@
 import openpyxl
 from openpyxl.styles import Font
 import os
-from db_handler import DatabaseHandler
+from database.db_handler import DatabaseHandler
 from helpers import to_default_format
 
 
-def generate_conference_report(initial_date, final_date):
+def generate_conference_report(initial_date, final_date, store):
 
     handler = DatabaseHandler()  # Instancia o banco de dados
 
     handler.connect()  # conecta com o banco de dados
 
-    orders = handler.get_orders_to_conference(initial_date, final_date)
+    orders = handler.get_orders_to_conference(initial_date, final_date, store)
 
     workbook = openpyxl.Workbook()  # Crie um arquivo temporário
     worksheet = workbook.active  # Seleciona a folha de trabalho do excel

@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>icons/pagamento-com-cartao-de-credito.ico</normaloff>icons/pagamento-com-cartao-de-credito.ico</iconset>
+  </property>
   <widget class="QFrame" name="frame">
    <property name="geometry">
     <rect>
@@ -47,6 +51,9 @@
      <font>
       <bold>true</bold>
      </font>
+    </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
     </property>
     <property name="text">
      <string>Salvar</string>
@@ -194,7 +201,7 @@
      </size>
     </property>
     <property name="readOnly">
-     <bool>true</bool>
+     <bool>false</bool>
     </property>
    </widget>
    <widget class="QComboBox" name="installments_comboBox">
@@ -528,12 +535,56 @@
       <height>24</height>
      </rect>
     </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
+    </property>
+    <property name="toolTip">
+     <string>Excluir pagamento</string>
+    </property>
     <property name="text">
      <string/>
     </property>
     <property name="icon">
      <iconset>
       <normaloff>icons/delete.ico</normaloff>icons/delete.ico</iconset>
+    </property>
+    <property name="flat">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="plus_card_button">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>4</y>
+      <width>31</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
+    </property>
+    <property name="toolTip">
+     <string>Pagamento com mais de um cartão</string>
+    </property>
+    <property name="toolTipDuration">
+     <number>-1</number>
+    </property>
+    <property name="statusTip">
+     <string/>
+    </property>
+    <property name="whatsThis">
+     <string/>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>icons/mais.ico</normaloff>icons/mais.ico</iconset>
+    </property>
+    <property name="flat">
+     <bool>true</bool>
     </property>
    </widget>
   </widget>

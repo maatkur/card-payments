@@ -1,5 +1,5 @@
 from PySide6.QtCore import QObject, Signal
-from db_handler import DatabaseHandler
+from database.db_handler import DatabaseHandler
 
 
 class Signals(QObject):
@@ -16,6 +16,6 @@ class Signals(QObject):
 
     def run(self):
         self.db_handler.connect()
-        self.db_handler.insert_checked_orders(self.flag, self.installments, self.order_number, self.nsu,
+        self.db_handler.insert_checked_order(self.flag, self.installments, self.order_number, self.nsu,
                                               self.transaction_authorization)
         self.card_details_closed.emit()

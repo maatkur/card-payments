@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'ui_cards_details.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.4.2
+## Created by: Qt User Interface Compiler version 6.4.3
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -23,6 +23,9 @@ class Ui_Form(object):
         if not Form.objectName():
             Form.setObjectName(u"Form")
         Form.resize(330, 231)
+        icon = QIcon()
+        icon.addFile(u"icons/pagamento-com-cartao-de-credito.ico", QSize(), QIcon.Normal, QIcon.Off)
+        Form.setWindowIcon(icon)
         self.frame = QFrame(Form)
         self.frame.setObjectName(u"frame")
         self.frame.setGeometry(QRect(9, 9, 312, 211))
@@ -35,6 +38,7 @@ class Ui_Form(object):
         font = QFont()
         font.setBold(True)
         self.save_button.setFont(font)
+        self.save_button.setCursor(QCursor(Qt.PointingHandCursor))
         self.order_label = QLabel(self.frame)
         self.order_label.setObjectName(u"order_label")
         self.order_label.setGeometry(QRect(111, -5, 84, 32))
@@ -73,7 +77,7 @@ class Ui_Form(object):
         self.order_value_lineEdit.setObjectName(u"order_value_lineEdit")
         self.order_value_lineEdit.setGeometry(QRect(212, 72, 95, 22))
         self.order_value_lineEdit.setMaximumSize(QSize(100, 16777215))
-        self.order_value_lineEdit.setReadOnly(True)
+        self.order_value_lineEdit.setReadOnly(False)
         self.installments_comboBox = QComboBox(self.frame)
         self.installments_comboBox.addItem("")
         self.installments_comboBox.addItem("")
@@ -151,9 +155,20 @@ class Ui_Form(object):
         self.delete_button = QPushButton(self.frame)
         self.delete_button.setObjectName(u"delete_button")
         self.delete_button.setGeometry(QRect(275, 2, 31, 24))
-        icon = QIcon()
-        icon.addFile(u"icons/delete.ico", QSize(), QIcon.Normal, QIcon.Off)
-        self.delete_button.setIcon(icon)
+        self.delete_button.setCursor(QCursor(Qt.PointingHandCursor))
+        icon1 = QIcon()
+        icon1.addFile(u"icons/delete.ico", QSize(), QIcon.Normal, QIcon.Off)
+        self.delete_button.setIcon(icon1)
+        self.delete_button.setFlat(True)
+        self.plus_card_button = QPushButton(self.frame)
+        self.plus_card_button.setObjectName(u"plus_card_button")
+        self.plus_card_button.setGeometry(QRect(10, 4, 31, 24))
+        self.plus_card_button.setCursor(QCursor(Qt.PointingHandCursor))
+        self.plus_card_button.setToolTipDuration(-1)
+        icon2 = QIcon()
+        icon2.addFile(u"icons/mais.ico", QSize(), QIcon.Normal, QIcon.Off)
+        self.plus_card_button.setIcon(icon2)
+        self.plus_card_button.setFlat(True)
 
         self.retranslateUi(Form)
 
@@ -193,6 +208,19 @@ class Ui_Form(object):
         self.transaction_type_comboBox.setItemText(1, QCoreApplication.translate("Form", u"Cr\u00e9dito", None))
         self.transaction_type_comboBox.setItemText(2, QCoreApplication.translate("Form", u"D\u00e9bito", None))
 
+#if QT_CONFIG(tooltip)
+        self.delete_button.setToolTip(QCoreApplication.translate("Form", u"Excluir pagamento", None))
+#endif // QT_CONFIG(tooltip)
         self.delete_button.setText("")
+#if QT_CONFIG(tooltip)
+        self.plus_card_button.setToolTip(QCoreApplication.translate("Form", u"Pagamento com mais de um cart\u00e3o", None))
+#endif // QT_CONFIG(tooltip)
+#if QT_CONFIG(statustip)
+        self.plus_card_button.setStatusTip("")
+#endif // QT_CONFIG(statustip)
+#if QT_CONFIG(whatsthis)
+        self.plus_card_button.setWhatsThis("")
+#endif // QT_CONFIG(whatsthis)
+        self.plus_card_button.setText("")
     # retranslateUi
 

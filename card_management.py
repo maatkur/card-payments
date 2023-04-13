@@ -1,10 +1,12 @@
 import sys
 from datetime import datetime
-from PySide6.QtWidgets import *
+
 from PySide6.QtCore import Signal, QDate
-from ui_card_management import Ui_Form
-from db_handler import DatabaseHandler
+from PySide6.QtWidgets import *
+
+from database.db_handler import DatabaseHandler
 from helpers import to_sql_format
+from ui.ui_card_management import Ui_Form
 
 
 class CardManagement(QMainWindow):

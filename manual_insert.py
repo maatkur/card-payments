@@ -3,8 +3,8 @@ from datetime import datetime
 from PySide6 import QtCore
 from PySide6.QtWidgets import *
 from PySide6.QtCore import Signal, QDate
-from ui_manual_insert import Ui_Form
-from db_handler import DatabaseHandler
+from ui.ui_manual_insert import Ui_Form
+from database.db_handler import DatabaseHandler
 
 
 class AddPayment(QMainWindow):
@@ -12,7 +12,7 @@ class AddPayment(QMainWindow):
     today = datetime.today()
     qdate = QDate(today.year, today.month, today.day)
 
-    def __init__(self) -> None:
+    def __init__(self, store_unit) -> None:
         super(AddPayment, self).__init__()
         self.ui = Ui_Form()  # instanciar a classe Ui_form
         self.ui.setupUi(self)
@@ -27,6 +27,7 @@ class AddPayment(QMainWindow):
         self.ui.cashflow_entry.installEventFilter(self)
         self.ui.order_value_entry.installEventFilter(self)
         self.ui.order_date.installEventFilter(self)
+        self.store_unit = store_unit
 
     def eventFilter(self, widget, event) -> None:
         if event.type() == QtCore.QEvent.KeyPress:
@@ -49,9 +50,10 @@ class AddPayment(QMainWindow):
         cash_flow = self.ui.cashflow_entry.text()
         order_value = self.ui.order_value_entry.text()
         order_date = self.ui.order_date.text()
+        print(order_date)
         self.db_handler.connect()
-        self.db_handler.manually_insert_in_order_stage(order_numer, cashier_number, cash_flow, order_value, 4,
-                                                       order_date)
+        self.db_handler.manually_insert_in_order_stage(order_numer, cashier_number, cash_flow, order_value,
+                                                       self.store_unit, order_date)
 
     def handle_save_button(self) -> None:
         self.inser_order_manually()
@@ -72,5 +74,4 @@ class AddPayment(QMainWindow):
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    window = AddPayment()
-
+    window = AddPayment(5)
