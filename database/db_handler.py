@@ -240,7 +240,15 @@ class DatabaseHandler:
         return result
 
     def get_paydays_and_installments(self, initial_date, final_date) -> list:
+        # TODO: Adicionar a coluna com o valor liquido das parcelas à receber na tabela checkedOrders
         command = f"SELECT installmentValue, payday FROM checkedOrders WHERE payday BETWEEN '{initial_date}' AND '{final_date}'"
+
+        result = self._search_and_fetch(command)
+
+        return result
+
+    def get_stores(self):
+        command = """SELECT storeUnit FROM stores"""
 
         result = self._search_and_fetch(command)
 

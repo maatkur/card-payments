@@ -139,7 +139,7 @@ class CardView(QMainWindow):
             self.add_payment_window.clear_fields()
             return
 
-        self.add_payment_window = AddPayment(self.store)
+        self.add_payment_window = AddPayment()
         self.add_payment_window.clear_fields()
         self.add_payment_window.show()
         self.add_payment_window.closed.connect(self.manage_orders_table)

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>255</width>
-    <height>190</height>
+    <height>213</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -21,7 +21,7 @@
    <property name="geometry">
     <rect>
      <x>119</x>
-     <y>38</y>
+     <y>70</y>
      <width>127</width>
      <height>21</height>
     </rect>
@@ -41,7 +41,7 @@
    <property name="geometry">
     <rect>
      <x>119</x>
-     <y>94</y>
+     <y>126</y>
      <width>127</width>
      <height>21</height>
     </rect>
@@ -51,7 +51,7 @@
    <property name="geometry">
     <rect>
      <x>119</x>
-     <y>66</y>
+     <y>98</y>
      <width>127</width>
      <height>21</height>
     </rect>
@@ -79,7 +79,7 @@
    <property name="geometry">
     <rect>
      <x>9</x>
-     <y>38</y>
+     <y>70</y>
      <width>70</width>
      <height>16</height>
     </rect>
@@ -97,7 +97,7 @@
    <property name="geometry">
     <rect>
      <x>9</x>
-     <y>66</y>
+     <y>100</y>
      <width>104</width>
      <height>16</height>
     </rect>
@@ -115,7 +115,7 @@
    <property name="geometry">
     <rect>
      <x>9</x>
-     <y>94</y>
+     <y>130</y>
      <width>93</width>
      <height>16</height>
     </rect>
@@ -133,7 +133,7 @@
    <property name="geometry">
     <rect>
      <x>9</x>
-     <y>122</y>
+     <y>159</y>
      <width>81</width>
      <height>16</height>
     </rect>
@@ -151,7 +151,7 @@
    <property name="geometry">
     <rect>
      <x>96</x>
-     <y>152</y>
+     <y>184</y>
      <width>75</width>
      <height>24</height>
     </rect>
@@ -169,7 +169,7 @@
    <property name="geometry">
     <rect>
      <x>119</x>
-     <y>122</y>
+     <y>154</y>
      <width>126</width>
      <height>22</height>
     </rect>
@@ -177,6 +177,39 @@
    <property name="calendarPopup">
     <bool>true</bool>
    </property>
+  </widget>
+  <widget class="QLabel" name="label_6">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>40</y>
+     <width>43</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>Loja:</string>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="stores_comboBox">
+   <property name="geometry">
+    <rect>
+     <x>119</x>
+     <y>40</y>
+     <width>127</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <item>
+    <property name="text">
+     <string>Selecione</string>
+    </property>
+   </item>
   </widget>
  </widget>
  <resources/>
