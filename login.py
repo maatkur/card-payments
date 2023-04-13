@@ -13,7 +13,7 @@ class Ui_Login(QMainWindow, Ui_MainWindow):
     def __init__(self) -> None:
         super(Ui_Login, self).__init__()
         self.setupUi(self)
-        self.setWindowTitle("Cartões Fogões Shop | Login")
+        self.setWindowTitle("Cartões Obra Fácil | Login")
         self.user_entry.installEventFilter(self)
         self.password_entry.installEventFilter(self)
         self.login_button.installEventFilter(self)

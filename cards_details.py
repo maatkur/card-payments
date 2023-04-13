@@ -27,9 +27,9 @@ class CardDetails(QMainWindow):
         self.ui.transaction_type_comboBox.currentIndexChanged.connect(self.allow_installment_comboBox_use)
         self.ui.plus_card_button.clicked.connect(self.handle_plus_card_button)
         self.user_type = user_type
+        self.check_user_type()
         self.store = store
         self.initial_value = float(self.ui.order_value_lineEdit.text().replace(",", "."))
-        self.ui.transaction_type_comboBox.setCurrentText("Crédito")
 
         # Dispara os eventos para verificar se o botão de salvar atende os requisitos para ser ativo
         self.ui.card_flag_comboBox.currentIndexChanged.connect(self.active_save_and_plus_button)
@@ -187,9 +187,9 @@ class CardDetails(QMainWindow):
         self.close_details_window()
 
     def check_user_type(self):
-        is_admint_user = self.user_type == "True"
+        is_admin_user = self.user_type == "True"
 
-        if is_admint_user:
+        if is_admin_user:
             self.enable_delete_button()
         else:
             self.disable_delete_button()

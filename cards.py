@@ -21,12 +21,12 @@ class CardView(QMainWindow):
         super(CardView, self).__init__()
         self.ui = Ui_MainWindow()  # instanciar a classe Ui_MainWindow
         self.ui.setupUi(self)
-        self.setWindowTitle("Cartões Fogões Shop | Lançamento")
+        self.setWindowTitle("Cartões Obra Fácil | Lançamento")
         self.user_type = user_type
         self.store = store
         self.user_code = user_code
         self.ui.search_button.setDisabled(True)
-        # self.check_user_type()
+        self.check_user_type()
         self.show_payments()
         self.details_window = None
         self.add_payment_window = None
@@ -169,7 +169,7 @@ class CardView(QMainWindow):
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    window = CardView("True", 1, 15)
+    window = CardView("True", 1, 83)
     window.show()
     app.exec()
 
