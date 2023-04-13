@@ -25,9 +25,9 @@ class CardView(QMainWindow):
         self.user_type = user_type
         self.store = store
         self.user_code = user_code
+        self.manage_orders_table()
         self.ui.search_button.setDisabled(True)
-        self.check_user_type()
-        self.show_payments()
+        self.manage_payment_button_use()
         self.details_window = None
         self.add_payment_window = None
         self.ui.tableWidget.setColumnWidth(2, 88)  # Definindo a largura da coluna da data para 154 pixels
@@ -52,10 +52,10 @@ class CardView(QMainWindow):
                 if widget == self.ui.search_button:
                     self.handle_search_button()
 
-    def show_payments(self):
-        db_handler = DatabaseHandler()
-        db_handler.connect()
-        orders = db_handler.get_orders_by_store_and_cashier(self.store, self.user_code)
+    def show_payments(self, data: list):
+        # db_handler.get_orders_by_store_and_cashier(self.store, self.user_code)
+
+        orders = data
         self.ui.tableWidget.setRowCount(len(orders))
 
         for row, order in enumerate(orders):
@@ -73,15 +73,52 @@ class CardView(QMainWindow):
                 else:
                     self.ui.tableWidget.setItem(row, col, QTableWidgetItem(str(value)))
 
-        db_handler.disconnect()
-
-    def check_user_type(self):
+    def manage_payment_button_use(self):
         is_admin_user = self.user_type == "True"
 
         if is_admin_user:
             self.enable_insert_payment_button()
         else:
             self.disable_insert_payment_button()
+
+    def get_table_data(self):
+        is_admin_user = self.user_type == "True"
+
+        db_handler = DatabaseHandler()
+        db_handler.connect()
+
+        if is_admin_user:
+            data = db_handler.get_all_orders_by_store(self.store)
+        else:
+            data = db_handler.get_orders_by_store_and_cashier(self.store, self.user_code)
+
+        db_handler.disconnect()
+
+        return data
+
+    def manage_orders_table(self):
+        data = self.get_table_data()
+        self.show_payments(data)
+
+    def get_search_data(self, order_number):
+        is_admin_user = self.user_type == "True"
+
+        db_handler = DatabaseHandler()
+        db_handler.connect()
+
+        if is_admin_user:
+            data = db_handler.get_specific_order_by_store(self.store, order_number)
+        else:
+            data = db_handler.get_order_by_cashier_filter(self.store, self.user_code)
+
+        db_handler.disconnect()
+
+        return data
+
+    def manage_search_button(self):
+        order_number = self.ui.search_order_entry.text()
+        data = self.get_search_data(order_number)
+        self.show_payments(data)
 
     def handle_cell_double_click(self, row, column):
         if self.details_window is not None:
@@ -114,34 +151,11 @@ class CardView(QMainWindow):
         generate_conference_report(initial_date, final_date, self.user_code)
 
     def handle_search_button(self):
-
-        order = self.ui.search_order_entry.text()
-
-        db_handler = DatabaseHandler()
-        db_handler.connect()
-        orders = db_handler.get_orders_by_store_and_cashier_filter(self.store, self.user_code, order)
-        self.ui.tableWidget.setRowCount(len(orders))
-
-        for row, order in enumerate(orders):
-            for col, value in enumerate(order):
-                if col == 1:
-                    formatted_value = "{:.2f}".format(round(value, 2))
-                    value = formatted_value.replace(".", ",")
-                if col == 2:  # verifica se é a coluna da data
-                    if isinstance(value, datetime):
-                        order_date = value
-                    else:
-                        order_date = datetime.strptime(value, '%Y-%m-%d')
-                    formatted_date = order_date.strftime('%d/%m/%Y')
-                    self.ui.tableWidget.setItem(row, col, QTableWidgetItem(formatted_date))
-                else:
-                    self.ui.tableWidget.setItem(row, col, QTableWidgetItem(str(value)))
-
-        db_handler.disconnect()
+        self.manage_search_button()
         self.clear_fields()
 
     def handle_refresh_button(self):
-        self.show_payments()
+        self.manage_orders_table()
 
     def disable_search_button(self):
         self.ui.search_button.setDisabled(True)

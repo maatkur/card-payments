@@ -15,7 +15,7 @@ def order_handler() -> None:
     handler.insert_in_order_stage(order_number, cashier_number, cash_flow,
                                   order_value, company_unity)
 
-    handler.verify_checked_orders(order_number)
+    handler.verify_and_delete_checked_orders(order_number)
 
     handler.disconnect()
 

@@ -47,7 +47,7 @@ class CardDetails(QMainWindow):
 
         self.db_handler.connect()
 
-        order_data = self.db_handler.get_order(self.order)
+        order_data = self.db_handler.get_order_details(self.order)
 
         self.ui.order_label.setText(order_data[0][1])
         self.ui.cashier_lineEdit.setText(order_data[0][2])

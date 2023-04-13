@@ -16,10 +16,10 @@ for x in range(0, inserts):
     max_value = 5000.00
 
     order_number = randomic_order_numbers
-    cashier_number = '63'
+    cashier_number = '111'
     cash_flow = cash_flow_number
     order_value = round(random.uniform(min_value, max_value), 2)
-    company_unity = 3
+    company_unity = 1
 
     handler.insert_in_order_stage(order_number, cashier_number, cash_flow, order_value, company_unity)
 

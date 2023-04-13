@@ -99,8 +99,8 @@ class DatabaseHandler:
                 """
         self._execute_and_commit(command)
 
-    def verify_checked_orders(self, order_number: str) -> None:
-        """Deleta uma ordem do banco de dados."""
+    def verify_and_delete_checked_orders(self, order_number: str) -> None:
+        """Deleta um pedido checado do banco de dados."""
         command = f"""
             IF EXISTS (
                 SELECT orderNumber 
@@ -114,7 +114,7 @@ class DatabaseHandler:
         self._execute_and_commit(command)
 
     def get_orders_by_store_and_cashier(self, store_id, cashier_number) -> list:
-        """Seleciona os pedidos com cartão por loja"""
+        """Seleciona os pedidos com cartão por loja e caixa para visualização de user comum """
 
         command = f"""
                     SELECT orderNumber, orderValue, dateUpdate
@@ -127,21 +127,46 @@ class DatabaseHandler:
 
         return result
 
-    def get_orders_by_store_and_cashier_filter(self, store_id, cashier_number, order_number) -> list:
-        """Seleciona os pedidos com cartão por loja"""
-
+    def get_specific_order_by_store(self, store, order_number):
         command = f"""
                     SELECT orderNumber, orderValue, dateUpdate
-                    FROM orderStage
-                    JOIN stores
-                    ON orderStage.storeUnit = stores.storeUnit
-                    WHERE stores.id = {store_id} AND isCommit = 0 AND cashierNumber = {cashier_number} AND orderNumber = {order_number} ;
+                            FROM orderStage
+                            JOIN stores
+                            ON orderStage.storeUnit = stores.storeUnit
+                            WHERE stores.id = {store} AND isCommit = 0 AND orderNumber = {order_number};
                     """
         result = self._search_and_fetch(command)
 
         return result
 
-    def get_order(self, order_number) -> list:
+    def get_all_orders_by_store(self, store_id):
+        # Seleciona os pedidos por loja - Usado no Cards para visão dos gerentes
+        command = f"""
+                            SELECT orderNumber, orderValue, dateUpdate
+                            FROM orderStage
+                            JOIN stores
+                            ON orderStage.storeUnit = stores.storeUnit
+                            WHERE stores.id = {store_id} AND isCommit = 0;
+                            """
+        result = self._search_and_fetch(command)
+
+        return result
+
+    def get_order_by_cashier_filter(self, cashier_number, order_number) -> list:
+        """Seleção das caixas por pedido para o filtro de cards.py"""
+
+        command = f"""
+                    SELECT orderNumber, orderValue, dateUpdate
+                    FROM orderStage
+                    WHERE isCommit = 0 AND cashierNumber = {cashier_number} AND orderNumber = {order_number};
+                    """
+        result = self._search_and_fetch(command)
+
+        return result
+
+    def get_order_details(self, order_number) -> list:
+        # Pega um único pedido para a janela card_details
+
         command = f"""
         SELECT * FROM orderStage WHERE orderNumber = '{order_number}' AND isCommit = 0
         """
