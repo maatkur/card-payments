@@ -176,9 +176,9 @@ class DatabaseHandler:
 
         self._execute_and_commit(command)
 
-    def get_orders_to_conference(self, initial_date: str, final_date: str, store: str) -> list:
+    def get_orders_to_conference_report(self, initial_date: str, final_date: str, cashier_number: str) -> list:
 
-        command = f"""SELECT DISTINCT orderNumber, cashierNumber, cashFlow, transactionType, flag, orderValue, purchaseDate FROM checkedOrders WHERE purchaseDate BETWEEN '{initial_date}' AND '{final_date}' AND storeUnit = (SELECT storeUnit FROM stores WHERE id = '{store}')ORDER BY purchaseDate"""
+        command = f"""SELECT DISTINCT orderNumber, cashierNumber, cashFlow, transactionType, flag, installments, installmentValue, orderValue, purchaseDate FROM checkedOrders WHERE purchaseDate BETWEEN '{initial_date}' AND '{final_date}' AND cashierNumber = {cashier_number} ORDER BY purchaseDate"""
 
         result = self._search_and_fetch(command)
 

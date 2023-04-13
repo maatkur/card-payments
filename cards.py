@@ -111,7 +111,7 @@ class CardView(QMainWindow):
         initial_date = to_sql_format(self.ui.initial_date.text())
         final_date = to_sql_format(self.ui.final_date.text())
 
-        generate_conference_report(initial_date, final_date, self.store)
+        generate_conference_report(initial_date, final_date, self.user_code)
 
     def handle_search_button(self):
 
