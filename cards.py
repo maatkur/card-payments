@@ -11,6 +11,7 @@ from reports.conference_report import generate_conference_report
 from helpers import to_sql_format
 from manual_insert import AddPayment
 from ui.ui_cards import Ui_MainWindow
+from card_management import CardsManagement
 
 
 class Cards(QMainWindow):
@@ -27,19 +28,15 @@ class Cards(QMainWindow):
         self.user_code = user_code
         self.manage_orders_table()
         self.ui.search_button.setDisabled(True)
-        self.manage_payment_button_use()
+        self.manage_user_permission()
         self.details_window = None
         self.add_payment_window = None
-        self.ui.tableWidget.setColumnWidth(2, 88)  # Definindo a largura da coluna da data para 154 pixels
-        self.ui.tableWidget.cellDoubleClicked.connect(
-            self.handle_cell_double_click)  # Conectando o evento de duplo clique a um slot
-        self.ui.add_card_payment_button.clicked.connect(self.handle_add_payment_button)
-        self.ui.search_button.clicked.connect(self.handle_search_button)
+        self.cards_management_window = None
+        self.ui.tableWidget.setColumnWidth(2, 88)  # Definindo a largura da coluna da data para 88 pixels
+        self.connect_button_actions()
+        self.connect_text_changes()
         self.ui.initial_date.setDate(self.qdate)
         self.ui.final_date.setDate(self.qdate)
-        self.ui.excel_report_button.clicked.connect(self.handle_report_button)
-        self.ui.search_order_entry.textChanged.connect(self.verify_order_entry)
-        self.ui.refresh_button.clicked.connect(self.handle_refresh_button)
         self.ui.search_order_entry.installEventFilter(self)
         self.ui.search_button.installEventFilter(self)
 
@@ -51,6 +48,18 @@ class Cards(QMainWindow):
                     self.handle_search_button()
                 if widget == self.ui.search_button:
                     self.handle_search_button()
+
+    def connect_button_actions(self):
+        self.ui.tableWidget.cellDoubleClicked.connect(
+            self.handle_cell_double_click)  # Conectando o evento de duplo clique a um slot
+        self.ui.add_card_payment_button.clicked.connect(self.handle_add_payment_button)
+        self.ui.search_button.clicked.connect(self.handle_search_button)
+        self.ui.excel_report_button.clicked.connect(self.handle_report_button)
+        self.ui.refresh_button.clicked.connect(self.handle_refresh_button)
+        self.ui.management_button.clicked.connect(self.handle_management_button)
+
+    def connect_text_changes(self):
+        self.ui.search_order_entry.textChanged.connect(self.verify_order_entry)
 
     def show_payments(self, data: list):
         # db_handler.get_orders_by_store_and_cashier(self.store, self.user_code)
@@ -73,11 +82,11 @@ class Cards(QMainWindow):
                 else:
                     self.ui.tableWidget.setItem(row, col, QTableWidgetItem(str(value)))
 
-    def manage_payment_button_use(self):
+    def manage_user_permission(self):
         is_admin_user = self.user_type == "True"
 
         if is_admin_user:
-            self.enable_insert_payment_button()
+            self.enable_admin_buttons()
         else:
             self.disable_insert_payment_button()
 
@@ -151,6 +160,14 @@ class Cards(QMainWindow):
 
         generate_conference_report(initial_date, final_date, self.user_code)
 
+    def handle_management_button(self):
+        if self.cards_management_window is not None:
+            self.cards_management_window.show()
+            return
+
+        self.cards_management_window = CardsManagement()
+        self.cards_management_window.show()
+
     def handle_search_button(self):
         self.manage_search_button()
         self.clear_fields()
@@ -174,9 +191,11 @@ class Cards(QMainWindow):
 
     def disable_insert_payment_button(self):
         self.ui.add_card_payment_button.setDisabled(True)
+        self.ui.management_button.setDisabled(True)
 
-    def enable_insert_payment_button(self):
+    def enable_admin_buttons(self):
         self.ui.add_card_payment_button.setDisabled(False)
+        self.ui.management_button.setDisabled(False)
 
     def clear_fields(self):
         self.ui.search_order_entry.setText('')
