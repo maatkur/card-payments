@@ -5,8 +5,8 @@ from PySide6.QtCore import Signal, QDate, Qt, QEvent
 from PySide6.QtWidgets import *
 
 from database.db_handler import DatabaseHandler
-from helpers import to_sql_format
 from ui.ui_card_management import Ui_Form
+from reports.management_report import generate_management_report
 
 
 class CardsManagement(QMainWindow):
@@ -200,7 +200,7 @@ class CardsManagement(QMainWindow):
         self.clear_fields()
         self.clear_table()
         self.set_comboBox_default()
-        self.disable_save_button()
+        self.disable_view_widgets()
 
     def delete_checked_order(self):
         order_number = self.ui.order_view.text()
@@ -271,11 +271,18 @@ class CardsManagement(QMainWindow):
         self.ui.clear_filters_button.clicked.connect(self.handle_clear_button)
         self.ui.delete_button.clicked.connect(self.handle_delete_button)
         self.ui.save_button.clicked.connect(self.handle_save_button)
+        self.ui.excel_button.clicked.connect(self.handle_report_button)
 
     def connect_text_changes(self):
         self.ui.order_view.textChanged.connect(self.manage_edition_widgets)
         self.ui.nsu_view.textChanged.connect(self.manage_save_button)
         self.ui.authorization_view.textChanged.connect(self.manage_save_button)
+
+    def generate_report(self, data: list) -> None:
+        generate_management_report(data)
+
+    def handle_report_button(self):
+        self.generate_report(self.data)
 
     def close_details_window(self) -> None:
         self.closed.emit()  # emite o sinal closed quando a janela for fechada

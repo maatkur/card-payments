@@ -7,7 +7,7 @@ from PySide6.QtWidgets import *
 
 from cards_details import CardDetails
 from database.db_handler import DatabaseHandler
-from excel_reports import generate_conference_report
+from reports.conference_report import generate_conference_report
 from helpers import to_sql_format
 from manual_insert import AddPayment
 from ui.ui_cards import Ui_MainWindow
