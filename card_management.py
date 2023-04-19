@@ -202,9 +202,10 @@ class CardsManagement(QMainWindow):
         self.set_comboBox_default()
         self.disable_view_widgets()
 
-    def delete_checked_order(self):
+    def delete_order(self):
         order_number = self.ui.order_view.text()
         self.db_handler.connect()
+        self.db_handler.delete_staged_order(order_number)
         self.db_handler.delete_from_checkedOrders(order_number)
         self.db_handler.disconnect()
 
@@ -226,7 +227,7 @@ class CardsManagement(QMainWindow):
         result = self.show_confirmation_dialog(title, message)
 
         if result == QMessageBox.Yes:
-            self.delete_checked_order()
+            self.delete_order()
             self.handle_clear_button()
 
     def save_changes(self) -> None:
