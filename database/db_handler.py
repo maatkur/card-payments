@@ -1,5 +1,8 @@
 import pyodbc
 
+# GLOBAL CONSTANTS
+MANAGEMENT_COLUMNS = 'orderNumber, cashierNumber, cashFlow, transactionType, flag, orderValue, installments, purchaseDate, storeUnit, NSU, transactionAuthorization'
+
 
 class DatabaseHandler:
     def __init__(self):
@@ -209,35 +212,48 @@ class DatabaseHandler:
 
         return result
 
-    def get_orders_by_date_management(self, initial_date: str, final_date: str) -> list:
-        command = f"""SELECT DISTINCT orderNumber, cashierNumber, cashFlow, transactionType, flag, orderValue, purchaseDate, storeUnit, NSU, transactionAuthorization FROM checkedOrders WHERE purchaseDate BETWEEN '{initial_date}' AND '{final_date}' ORDER BY purchaseDate"""
+    def get_orders_management(self, initial_date: str = None, final_date: str = None, order: str = None,
+                              nsu_authorization: str = None, store: str = None) -> list:
 
+        if order is not None:
+            command = f"""SELECT DISTINCT {MANAGEMENT_COLUMNS} FROM checkedOrders WHERE orderNumber = '{order}'"""
+        elif nsu_authorization is not None:
+            command = f"""IF EXISTS (SELECT NSU FROM checkedOrders WHERE NSU = '{nsu_authorization}')
+                            BEGIN
+                                SELECT {MANAGEMENT_COLUMNS} FROM checkedOrders WHERE NSU = '{nsu_authorization}'
+                            END
+                        ELSE IF EXISTS (SELECT transactionAuthorization FROM checkedOrders WHERE transactionAuthorization = '{nsu_authorization}')
+                            BEGIN
+                                SELECT {MANAGEMENT_COLUMNS} FROM checkedOrders WHERE transactionAuthorization = '{nsu_authorization}'
+                            END"""
+        elif initial_date is not None and final_date is not None:
+            if store is not None:
+                command = f"""SELECT DISTINCT {MANAGEMENT_COLUMNS} FROM checkedOrders WHERE storeUnit = '{store}' AND purchaseDate BETWEEN '{initial_date}' AND '{final_date}' ORDER BY purchaseDate"""
+            else:
+                command = f"""SELECT DISTINCT {MANAGEMENT_COLUMNS} FROM checkedOrders WHERE purchaseDate BETWEEN '{initial_date}' AND '{final_date}' ORDER BY purchaseDate"""
+        else:
+            # Caso nenhum parâmetro tenha sido passado, retorna uma lista vazia
+            return []
         result = self._search_and_fetch(command)
 
         return result
 
-    def get_orders_by_number_management(self, order: str) -> list:
-        command = f"""SELECT orderNumber, cashierNumber, cashFlow, transactionType, flag, orderValue, purchaseDate, storeUnit, NSU, transactionAuthorization FROM checkedOrders WHERE orderNumber = '{order}'"""
+    def update_card_docs(self, new_nsu, new_authorization, order_number, old_nsu):
+        command = f"""UPDATE checkedOrders
 
-        result = self._search_and_fetch(command)
+                        SET  NSU = '{new_nsu}' ,transactionAuthorization = '{new_authorization}'
+                    
+                        WHERE orderNumber = {order_number} AND NSU = '{old_nsu}'
+                    """
 
-        return result
+        self._execute_and_commit(command)
 
-    def get_orders_by_nsu_or_authorization_management(self, nsu_authorization: str) -> list:
-        command = f"""IF EXISTS (SELECT NSU FROM checkedOrders WHERE NSU = '{nsu_authorization}')
-                    BEGIN
-                        SELECT orderNumber, cashierNumber, cashFlow, transactionType, flag, orderValue, purchaseDate, storeUnit, NSU, transactionAuthorization FROM checkedOrders WHERE NSU = '{nsu_authorization}'
-                    END
+    def delete_from_checkedOrders(self, order_number: str) -> None:
+        command = f"""DELETE FROM checkedOrders
 
-                ELSE IF EXISTS (SELECT transactionAuthorization FROM checkedOrders WHERE transactionAuthorization = '{nsu_authorization}')
-                    BEGIN
-                        SELECT orderNumber, cashierNumber, cashFlow, transactionType, flag, orderValue, purchaseDate, storeUnit, NSU, transactionAuthorization FROM checkedOrders WHERE transactionAuthorization = '{nsu_authorization}'
-                    END
-                  """
+                    WHERE orderNumber = {order_number}"""
 
-        result = self._search_and_fetch(command)
-
-        return result
+        self._execute_and_commit(command)
 
     def get_paydays_and_installments(self, initial_date, final_date) -> list:
         # TODO: Adicionar a coluna com o valor liquido das parcelas à receber na tabela checkedOrders
@@ -249,13 +265,6 @@ class DatabaseHandler:
 
     def get_stores(self):
         command = """SELECT storeUnit FROM stores"""
-
-        result = self._search_and_fetch(command)
-
-        return result
-
-    def management(self) -> list:
-        command = """SELECT orderNumber, cashierNumber, cashFlow, transactionType, flag, orderValue, purchaseDate, storeUnit, NSU, transactionAuthorization FROM checkedOrders WHERE storeUnit = (SELECT storeUnit from stores WHERE id = 4)"""
 
         result = self._search_and_fetch(command)
 

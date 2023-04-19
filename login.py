@@ -4,7 +4,7 @@ from PyQt6.QtWidgets import QMessageBox
 from PySide6 import QtCore
 from PySide6.QtWidgets import *
 
-from cards import CardView
+from cards import Cards
 from ui.ui_login import Ui_MainWindow
 from users_list import user_list
 
@@ -42,7 +42,7 @@ class Ui_Login(QMainWindow, Ui_MainWindow):
         if auth:
             window.close()
             if self.card_window is None:
-                self.card_window = CardView(is_admin_user, store_unity, user_code)
+                self.card_window = Cards(is_admin_user, store_unity, user_code)
                 self.card_window.show()
         else:
             self.alert.setWindowTitle("Ops!")

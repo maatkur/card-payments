@@ -93,6 +93,7 @@ class CardDetails(QMainWindow):
             self.ui.installments_comboBox.setCurrentText('1')
 
     def active_save_and_plus_button(self):
+        print(self.initial_value)
         verify_flag_selection = self.ui.card_flag_comboBox.currentText() != "Selecione"
         verify_transaction_type_selection = self.ui.transaction_type_comboBox.currentText() != "Selecione"
         verify_authorization_line_edit = len(self.ui.authorization_lineEdit.text()) > 0

@@ -13,12 +13,12 @@ from manual_insert import AddPayment
 from ui.ui_cards import Ui_MainWindow
 
 
-class CardView(QMainWindow):
+class Cards(QMainWindow):
     today = datetime.today()
     qdate = QDate(today.year, today.month, today.day)
 
     def __init__(self, user_type, store, user_code) -> None:
-        super(CardView, self).__init__()
+        super(Cards, self).__init__()
         self.ui = Ui_MainWindow()  # instanciar a classe Ui_MainWindow
         self.ui.setupUi(self)
         self.setWindowTitle("Cartões Obra Fácil | Lançamento")
@@ -145,6 +145,7 @@ class CardView(QMainWindow):
         self.add_payment_window.closed.connect(self.manage_orders_table)
 
     def handle_report_button(self):
+        # TODO: Adicionar campos de NSU e autorização no relatório de conferencia dos caixas
         initial_date = to_sql_format(self.ui.initial_date.text())
         final_date = to_sql_format(self.ui.final_date.text())
 
@@ -183,7 +184,7 @@ class CardView(QMainWindow):
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    window = CardView("True", 1, 83)
+    window = Cards("True", 1, 83)
     window.show()
     app.exec()
 
