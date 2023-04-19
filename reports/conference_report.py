@@ -17,8 +17,8 @@ def generate_conference_report(initial_date, final_date, cashier_number):
     workbook = openpyxl.Workbook()  # Crie um arquivo temporário
     worksheet = workbook.active  # Seleciona a folha de trabalho do excel
 
-    header = ["Pedido", "Caixa", "Movimento", "Transação", "Bandeira", "Parcelas", "Valor da parcela", "Valor do pedido",
-              "Data da venda"]  # Cria o cabeçalho
+    header = ["Pedido", "Caixa", "Movimento", "Transação", "Bandeira", "Valor do pedido", "Parcelas", "Valor da parcela",
+              "Data da venda", "NSU", "Autorização"]  # Cria o cabeçalho
 
     # Adiciona informações à planilha
     worksheet.append(header)
@@ -32,10 +32,12 @@ def generate_conference_report(initial_date, final_date, cashier_number):
         installment_value = order[6]
         order_value = order[7]
         purchase_date = to_default_format(order[8])
+        nsu = order[9]
+        transaction_authorization = order[10]
 
         worksheet.append(
-            [order_number, cashier, cash_flow, transaction_type, flag, installments, installment_value, order_value,
-             purchase_date])
+            [order_number, cashier, cash_flow, transaction_type, flag, order_value, installments, installment_value,
+             purchase_date, nsu, transaction_authorization])
 
     # Definir o estilo do cabeçalho em negrito
     bold_font = Font(bold=True)

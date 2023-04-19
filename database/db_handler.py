@@ -206,7 +206,7 @@ class DatabaseHandler:
 
     def get_orders_to_conference_report(self, initial_date: str, final_date: str, cashier_number: str) -> list:
 
-        command = f"""SELECT DISTINCT orderNumber, cashierNumber, cashFlow, transactionType, flag, installments, installmentValue, orderValue, purchaseDate FROM checkedOrders WHERE purchaseDate BETWEEN '{initial_date}' AND '{final_date}' AND cashierNumber = {cashier_number} ORDER BY purchaseDate"""
+        command = f"""SELECT DISTINCT orderNumber, cashierNumber, cashFlow, transactionType, flag, installments, installmentValue, orderValue, purchaseDate, NSU, transactionAuthorization FROM checkedOrders WHERE purchaseDate BETWEEN '{initial_date}' AND '{final_date}' AND cashierNumber = {cashier_number} ORDER BY flag"""
 
         result = self._search_and_fetch(command)
 

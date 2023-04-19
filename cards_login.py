@@ -5,7 +5,7 @@ from PySide6 import QtCore
 from PySide6.QtWidgets import *
 
 from cards import Cards
-from ui.ui_login import Ui_MainWindow
+from ui.ui_cards_login import Ui_MainWindow
 from users_list import user_list
 
 
