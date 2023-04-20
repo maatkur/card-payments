@@ -130,12 +130,6 @@ class Cards(QMainWindow):
         self.show_payments(data)
 
     def handle_cell_double_click(self, row, column):
-        if self.details_window is not None:
-            order = self.ui.tableWidget.item(row, 0).text()  # pega o valor da coluna "Pedido"
-            self.details_window.clear_fields()
-            self.details_window.update_data(order)
-            self.details_window.show()
-            return
 
         order = self.ui.tableWidget.item(row, 0).text()  # pega o valor da coluna "Pedido"
         self.details_window = CardDetails(order, self.user_type, self.store)
@@ -154,7 +148,6 @@ class Cards(QMainWindow):
         self.add_payment_window.closed.connect(self.manage_orders_table)
 
     def handle_report_button(self):
-        # TODO: Adicionar campos de NSU e autorização no relatório de conferencia dos caixas
         initial_date = to_sql_format(self.ui.initial_date.text())
         final_date = to_sql_format(self.ui.final_date.text())
 
