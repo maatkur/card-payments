@@ -167,8 +167,6 @@ class CardDetails(QMainWindow):
         cashier_number = self.ui.cashier_lineEdit.text()
         cash_flow = self.ui.cash_flow_lineEdit.text()
 
-        print(f"Restante: {remaining_value}, Inicial: {self.initial_value}")
-
         for installment in range(1, installments + 1):
             current_installment = f"{installment}/{installments}"
             self.db_handler.insert_checked_order(flag, 0 if transaction_type == 'debit' else installments, order_number,

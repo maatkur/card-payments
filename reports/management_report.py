@@ -29,7 +29,7 @@ def generate_management_report(data: list):
         transaction_authorization = order[10]
 
         worksheet.append(
-            [order_number, cashier, cash_flow, transaction_type, value, flag, installments, purchase_date, store, nsu,
+            [order_number, cashier, cash_flow, transaction_type, flag, value, installments, purchase_date, store, nsu,
              transaction_authorization])
 
     # Definir o estilo do cabeçalho em negrito

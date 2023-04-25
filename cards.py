@@ -12,6 +12,7 @@ from helpers import to_sql_format
 from manual_insert import AddPayment
 from ui.ui_cards import Ui_MainWindow
 from card_management import CardsManagement
+from components.dialog_window import DialogWindow
 
 
 class Cards(QMainWindow):
@@ -22,16 +23,17 @@ class Cards(QMainWindow):
         super(Cards, self).__init__()
         self.ui = Ui_MainWindow()  # instanciar a classe Ui_MainWindow
         self.ui.setupUi(self)
-        self.setWindowTitle("Cartões Obra Fácil | Lançamento")
+        self.setWindowTitle(f"Cartões Obra fácil | Lançamento")
         self.user_type = user_type
         self.store = store
         self.user_code = user_code
         self.manage_orders_table()
-        self.ui.search_button.setDisabled(True)
+        self.disable_search_button()
         self.manage_user_permission()
         self.details_window = None
         self.add_payment_window = None
         self.cards_management_window = None
+        self.dialog_window = DialogWindow()
         self.ui.tableWidget.setColumnWidth(2, 88)  # Definindo a largura da coluna da data para 88 pixels
         self.connect_button_actions()
         self.connect_text_changes()
@@ -59,10 +61,9 @@ class Cards(QMainWindow):
         self.ui.management_button.clicked.connect(self.handle_management_button)
 
     def connect_text_changes(self):
-        self.ui.search_order_entry.textChanged.connect(self.verify_order_entry)
+        self.ui.search_order_entry.textChanged.connect(self.manage_search_button)
 
     def show_payments(self, data: list):
-        # db_handler.get_orders_by_store_and_cashier(self.store, self.user_code)
 
         orders = data
         self.ui.tableWidget.setRowCount(len(orders))
@@ -88,9 +89,9 @@ class Cards(QMainWindow):
         if is_admin_user:
             self.enable_admin_buttons()
         else:
-            self.disable_insert_payment_button()
+            self.disable_admin_button()
 
-    def get_table_data(self):
+    def fetch_orders_data(self):
         is_admin_user = self.user_type == "True"
 
         db_handler = DatabaseHandler()
@@ -106,10 +107,10 @@ class Cards(QMainWindow):
         return data
 
     def manage_orders_table(self):
-        data = self.get_table_data()
+        data = self.fetch_orders_data()
         self.show_payments(data)
 
-    def get_search_data(self, order_number):
+    def fetch_filter_data(self, order_number):
         is_admin_user = self.user_type == "True"
 
         db_handler = DatabaseHandler()
@@ -124,10 +125,15 @@ class Cards(QMainWindow):
 
         return data
 
-    def manage_search_button(self):
+    def filtered_order(self):
         order_number = self.ui.search_order_entry.text()
-        data = self.get_search_data(order_number)
-        self.show_payments(data)
+        data = self.fetch_filter_data(order_number)
+        not_found = len(data) == 0
+
+        if not_found:
+            self.dialog_window.not_found()
+        else:
+            self.show_payments(data)
 
     def handle_cell_double_click(self, row, column):
 
@@ -137,11 +143,6 @@ class Cards(QMainWindow):
         self.details_window.closed.connect(self.manage_orders_table)
 
     def handle_add_payment_button(self):
-        if self.add_payment_window is not None:
-            self.add_payment_window.show()
-            self.add_payment_window.clear_fields()
-            return
-
         self.add_payment_window = AddPayment()
         self.add_payment_window.clear_fields()
         self.add_payment_window.show()
@@ -154,15 +155,11 @@ class Cards(QMainWindow):
         generate_conference_report(initial_date, final_date, self.user_code)
 
     def handle_management_button(self):
-        if self.cards_management_window is not None:
-            self.cards_management_window.show()
-            return
-
         self.cards_management_window = CardsManagement()
         self.cards_management_window.show()
 
     def handle_search_button(self):
-        self.manage_search_button()
+        self.filtered_order()
         self.clear_fields()
 
     def handle_refresh_button(self):
@@ -174,15 +171,7 @@ class Cards(QMainWindow):
     def enable_search_button(self):
         self.ui.search_button.setDisabled(False)
 
-    def verify_order_entry(self):
-        is_order_entry_filled = len(self.ui.search_order_entry.text()) == 6
-
-        if is_order_entry_filled:
-            self.enable_search_button()
-        else:
-            self.disable_search_button()
-
-    def disable_insert_payment_button(self):
+    def disable_admin_button(self):
         self.ui.add_card_payment_button.setDisabled(True)
         self.ui.management_button.setDisabled(True)
 
@@ -190,13 +179,21 @@ class Cards(QMainWindow):
         self.ui.add_card_payment_button.setDisabled(False)
         self.ui.management_button.setDisabled(False)
 
+    def manage_search_button(self):
+        is_order_entry_filled = len(self.ui.search_order_entry.text()) == 6
+
+        if is_order_entry_filled:
+            self.enable_search_button()
+        else:
+            self.disable_search_button()
+
     def clear_fields(self):
         self.ui.search_order_entry.setText('')
 
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    window = Cards("True", 1, 83)
+    window = Cards("True", 7, 15)
     window.show()
     app.exec()
 

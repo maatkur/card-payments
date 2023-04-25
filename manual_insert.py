@@ -100,7 +100,7 @@ class AddPayment(QMainWindow):
 
     def close_add_payment_window(self) -> None:
         self.closed.emit()
-        self.close()
+        self.deleteLater()
 
 
 if __name__ == "__main__":

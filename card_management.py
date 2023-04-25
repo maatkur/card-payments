@@ -7,6 +7,7 @@ from PySide6.QtWidgets import *
 from database.db_handler import DatabaseHandler
 from ui.ui_card_management import Ui_Form
 from reports.management_report import generate_management_report
+from components.dialog_window import DialogWindow
 
 
 class CardsManagement(QMainWindow):
@@ -20,6 +21,7 @@ class CardsManagement(QMainWindow):
         self.ui.setupUi(self)
         self.setWindowTitle("Manutenção")
         self.db_handler = DatabaseHandler()
+        self.dialog_window = DialogWindow()
         self.set_date()
         self.install_event_filters()
         self.fill_stores_combo_box()
@@ -99,9 +101,17 @@ class CardsManagement(QMainWindow):
         self.db_handler.connect()
 
         self.data = self.db_handler.get_orders_management(order=order, initial_date=initial_date, final_date=final_date,
-                                                       nsu_authorization=nsu_authorization, store=store)
-        self.set_data(self.data)
+                                                          nsu_authorization=nsu_authorization, store=store)
+        self.verify_data()
         self.db_handler.disconnect()
+
+    def verify_data(self):
+        not_fount = len(self.data) == 0
+
+        if not_fount:
+            self.dialog_window.not_found()
+        else:
+            self.set_data(self.data)
 
     def store_getter(self) -> list:
 
@@ -209,22 +219,11 @@ class CardsManagement(QMainWindow):
         self.db_handler.delete_from_checkedOrders(order_number)
         self.db_handler.disconnect()
 
-    def show_confirmation_dialog(self, title, message):
-        message_box = QMessageBox()
-        message_box.setIcon(QMessageBox.Warning)
-        message_box.setWindowTitle(title)
-        message_box.setText(message)
-        message_box.setStandardButtons(QMessageBox.Yes | QMessageBox.Cancel)
-        message_box.setDefaultButton(QMessageBox.Cancel)
-        result = message_box.exec()
-
-        return result
-
     def handle_delete_button(self):
         title = "Confirmar exclusão"
         message = "Tem certeza que deseja excluir?"
 
-        result = self.show_confirmation_dialog(title, message)
+        result = self.dialog_window.confirmation(title, message)
 
         if result == QMessageBox.Yes:
             self.delete_order()
@@ -243,8 +242,9 @@ class CardsManagement(QMainWindow):
 
     def handle_save_button(self):
         title = "Confirmar alterações"
-        msg = "Tem certeza que deseja salvar as alterações?"
-        result = self.show_confirmation_dialog(title, msg)
+        message = "Tem certeza que deseja salvar as alterações?"
+
+        result = self.dialog_window.confirmation(title, message)
 
         if result == QMessageBox.Yes:
             self.save_changes()
@@ -279,15 +279,12 @@ class CardsManagement(QMainWindow):
         self.ui.nsu_view.textChanged.connect(self.manage_save_button)
         self.ui.authorization_view.textChanged.connect(self.manage_save_button)
 
-    def generate_report(self, data: list) -> None:
-        generate_management_report(data)
-
     def handle_report_button(self):
-        self.generate_report(self.data)
+        generate_management_report(self.data)
 
     def close_details_window(self) -> None:
         self.closed.emit()  # emite o sinal closed quando a janela for fechada
-        self.close()
+        self.deleteLater()
 
 
 if __name__ == "__main__":
