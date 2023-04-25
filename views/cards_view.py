@@ -1,3 +1,4 @@
+import os
 import sys
 from datetime import datetime
 
@@ -5,13 +6,13 @@ from PySide6 import QtCore
 from PySide6.QtCore import QDate
 from PySide6.QtWidgets import *
 
-from cards_details import CardDetails
+from views.cards_details_view import CardDetails
 from database.db_handler import DatabaseHandler
 from reports.conference_report import generate_conference_report
 from helpers import to_sql_format
 from manual_insert import AddPayment
 from ui.ui_cards import Ui_MainWindow
-from card_management import CardsManagement
+from views.card_management_view import CardsManagement
 from components.dialog_window import DialogWindow
 
 
@@ -23,7 +24,7 @@ class Cards(QMainWindow):
         super(Cards, self).__init__()
         self.ui = Ui_MainWindow()  # instanciar a classe Ui_MainWindow
         self.ui.setupUi(self)
-        self.setWindowTitle(f"Cartões Obra fácil | Lançamento")
+        self.setWindowTitle(f"Cartões {os.getenv('COMPANY')} | Lançamento")
         self.user_type = user_type
         self.store = store
         self.user_code = user_code

@@ -24,7 +24,7 @@ class Ui_Form(object):
             Form.setObjectName(u"Form")
         Form.resize(255, 213)
         icon = QIcon()
-        icon.addFile(u"icons/pagamento-com-cartao-de-credito.ico", QSize(), QIcon.Normal, QIcon.Off)
+        icon.addFile(u"../icons/pagamento-com-cartao-de-credito.ico", QSize(), QIcon.Normal, QIcon.Off)
         Form.setWindowIcon(icon)
         self.cashier_entry = QLineEdit(Form)
         self.cashier_entry.setObjectName(u"cashier_entry")

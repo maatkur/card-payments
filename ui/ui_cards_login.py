@@ -7,6 +7,7 @@
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
+import os
 
 from PySide6.QtCore import (QCoreApplication, QMetaObject, QRect,
                             QSize, Qt)
@@ -23,7 +24,7 @@ class Ui_MainWindow(object):
             MainWindow.setObjectName(u"MainWindow")
         MainWindow.resize(454, 467)
         icon = QIcon()
-        icon.addFile(u"icons/pagamento-com-cartao-de-credito.ico", QSize(), QIcon.Normal, QIcon.Off)
+        icon.addFile(u"../icons/pagamento-com-cartao-de-credito.ico", QSize(), QIcon.Normal, QIcon.Off)
         MainWindow.setWindowIcon(icon)
         MainWindow.setStyleSheet(u"* {\n"
 "	background: #222222;\n"
@@ -46,7 +47,7 @@ class Ui_MainWindow(object):
         self.label = QLabel(self.frame)
         self.label.setObjectName(u"label")
         self.label.setGeometry(QRect(136, 40, 161, 101))
-        self.label.setPixmap(QPixmap(u"img/black_and_white_logo_only.png"))
+        self.label.setPixmap(QPixmap(f"{os.getenv('LOGO_URL')}"))
         self.label.setScaledContents(True)
         self.label.setAlignment(Qt.AlignCenter)
         self.label.setWordWrap(False)

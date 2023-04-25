@@ -1,19 +1,23 @@
+import os
 import sys
 
 from PyQt6.QtWidgets import QMessageBox
 from PySide6 import QtCore
 from PySide6.QtWidgets import *
 
-from cards import Cards
+from views.cards_view import Cards
 from ui.ui_cards_login import Ui_MainWindow
 from users_list import user_list
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 class Ui_Login(QMainWindow, Ui_MainWindow):
     def __init__(self) -> None:
         super(Ui_Login, self).__init__()
         self.setupUi(self)
-        self.setWindowTitle(f"Cartões Obra fácil | Login")
+        self.setWindowTitle(f"Cartões {os.getenv('COMPANY')} | Login")
         self.user_entry.installEventFilter(self)
         self.password_entry.installEventFilter(self)
         self.login_button.installEventFilter(self)

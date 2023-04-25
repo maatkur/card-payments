@@ -1,3 +1,5 @@
+import os
+
 import pyodbc
 
 # GLOBAL CONSTANTS
@@ -6,7 +8,7 @@ MANAGEMENT_COLUMNS = 'orderNumber, cashierNumber, cashFlow, transactionType, fla
 
 class DatabaseHandler:
     def __init__(self):
-        self.server = 'OFSERVER'
+        self.server = f'{os.getenv("SERVER")}'
         self.database = 'card_payments'
         self.user = 'sa'
         self.password = '$ervid0r'
@@ -156,7 +158,7 @@ class DatabaseHandler:
         return result
 
     def get_order_by_cashier_filter(self, cashier_number, order_number) -> list:
-        """Seleção das caixas por pedido para o filtro de cards.py"""
+        """Seleção das caixas por pedido para o filtro de cards_view.py"""
 
         command = f"""
                     SELECT orderNumber, orderValue, dateUpdate
