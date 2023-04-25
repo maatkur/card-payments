@@ -1,7 +1,7 @@
 USE [card_payments]
 GO
 
-/****** Object:  Table [dbo].[stores]    Script Date: 23/03/2023 15:40:08 ******/
+/****** Object:  Table [dbo].[stores]    Script Date: 25/04/2023 14:49:48 ******/
 SET ANSI_NULLS ON
 GO
 

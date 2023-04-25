@@ -1,7 +1,7 @@
 USE [card_payments]
 GO
 
-/****** Object:  Table [dbo].[cardFlags]    Script Date: 23/03/2023 15:37:18 ******/
+/****** Object:  Table [dbo].[cardFlags]    Script Date: 25/04/2023 14:48:43 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -11,12 +11,12 @@ GO
 CREATE TABLE [dbo].[cardFlags](
 	[id] [bigint] IDENTITY(1,1) NOT NULL,
 	[flag] [varchar](30) NOT NULL,
-	[debit] [decimal](3, 2) NULL,
-	[creditAtSight] [decimal](3, 2) NULL,
-	[tax_6x] [decimal](3, 2) NULL,
-	[tax_12x] [decimal](3, 2) NULL
+	[installments] [varchar](2) NOT NULL,
+	[tax] [decimal](3, 2) NOT NULL
 ) ON [PRIMARY]
 GO
+
+
 
 
 ('AMEX', '0', 0.00),
