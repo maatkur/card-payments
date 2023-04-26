@@ -10,7 +10,7 @@ from views.cards_details_view import CardDetails
 from database.db_handler import DatabaseHandler
 from reports.conference_report import generate_conference_report
 from helpers import to_sql_format
-from manual_insert import AddPayment
+from views.manual_insert import AddPayment
 from ui.ui_cards import Ui_MainWindow
 from views.card_management_view import CardsManagement
 from components.dialog_window import DialogWindow
