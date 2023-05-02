@@ -1,5 +1,10 @@
 import sys
+
+from dotenv import load_dotenv
+
 from database.db_handler import DatabaseHandler
+
+load_dotenv(r"F:\MK\Apps\search_payments\.env")
 
 
 def order_handler() -> None:

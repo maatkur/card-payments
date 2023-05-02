@@ -126,12 +126,17 @@ class CardDetails(QMainWindow):
         payday = paydays(sale_date, installments, transaction_type)
         order_value = self.ui.order_value_lineEdit.text().replace(",", ".")
 
-        for installment in range(1, installments + 1):
-            current_installment = f"{installment}/{installments}"
-            self.db_handler.insert_checked_order(flag, 0 if transaction_type == 'debit' else installments, order_number,
-                                                 current_installment,
-                                                 payday[installment - 1], order_value,
-                                                 nsu, transaction_authorization, transaction_type)
+        self.db_handler.insert_checked_order(flag, 0 if transaction_type == 'debit' else installments, order_number,
+                                             1,
+                                             payday[0], order_value,
+                                             nsu, transaction_authorization, transaction_type)
+
+        # for installment in range(1, installments + 1):
+        #     current_installment = f"{installment}/{installments}"
+        #     self.db_handler.insert_checked_order(flag, 0 if transaction_type == 'debit' else installments, order_number,
+        #                                          current_installment,
+        #                                          payday[installment - 1], order_value,
+        #                                          nsu, transaction_authorization, transaction_type)
 
         self.db_handler.update_stage(order_number)
         self.db_handler.disconnect()
