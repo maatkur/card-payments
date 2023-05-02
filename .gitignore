@@ -3,4 +3,9 @@ __pycache__/
 output
 old_payments.py
 .env
+<<<<<<< Updated upstream
 img
+=======
+img
+
+>>>>>>> Stashed changes
