@@ -8,6 +8,8 @@
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
+import os
+
 from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
     QMetaObject, QObject, QPoint, QRect,
     QSize, QTime, QUrl, Qt)
@@ -24,7 +26,7 @@ class Ui_Form(object):
             Form.setObjectName(u"Form")
         Form.resize(330, 231)
         icon = QIcon()
-        icon.addFile(u"icons/pagamento-com-cartao-de-credito.ico", QSize(), QIcon.Normal, QIcon.Off)
+        icon.addFile(f"{os.getenv('ICONS_PATH')}pagamento-com-cartao-de-credito.ico", QSize(), QIcon.Normal, QIcon.Off)
         Form.setWindowIcon(icon)
         self.frame = QFrame(Form)
         self.frame.setObjectName(u"frame")
@@ -157,7 +159,7 @@ class Ui_Form(object):
         self.delete_button.setGeometry(QRect(275, 2, 31, 24))
         self.delete_button.setCursor(QCursor(Qt.PointingHandCursor))
         icon1 = QIcon()
-        icon1.addFile(u"icons/delete.ico", QSize(), QIcon.Normal, QIcon.Off)
+        icon1.addFile(f"{os.getenv('ICONS_PATH')}delete.ico", QSize(), QIcon.Normal, QIcon.Off)
         self.delete_button.setIcon(icon1)
         self.delete_button.setFlat(True)
         self.plus_card_button = QPushButton(self.frame)
@@ -166,7 +168,7 @@ class Ui_Form(object):
         self.plus_card_button.setCursor(QCursor(Qt.PointingHandCursor))
         self.plus_card_button.setToolTipDuration(-1)
         icon2 = QIcon()
-        icon2.addFile(u"icons/mais.ico", QSize(), QIcon.Normal, QIcon.Off)
+        icon2.addFile(f"{os.getenv('ICONS_PATH')}mais.ico", QSize(), QIcon.Normal, QIcon.Off)
         self.plus_card_button.setIcon(icon2)
         self.plus_card_button.setFlat(True)
 
