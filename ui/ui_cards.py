@@ -8,6 +8,8 @@
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
+import os
+
 from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
     QMetaObject, QObject, QPoint, QRect,
     QSize, QTime, QUrl, Qt)
@@ -26,7 +28,7 @@ class Ui_MainWindow(object):
             MainWindow.setObjectName(u"MainWindow")
         MainWindow.resize(561, 268)
         icon = QIcon()
-        icon.addFile(u"icons/pagamento-com-cartao-de-credito.ico", QSize(), QIcon.Normal, QIcon.Off)
+        icon.addFile(f"{os.getenv('ICONS_PATH')}pagamento-com-cartao-de-credito.ico", QSize(), QIcon.Normal, QIcon.Off)
         MainWindow.setWindowIcon(icon)
         MainWindow.setStyleSheet(u"* {\n"
 "  font-family: Arial;\n"
@@ -101,7 +103,7 @@ class Ui_MainWindow(object):
         self.excel_report_button.setFont(font)
         self.excel_report_button.setCursor(QCursor(Qt.PointingHandCursor))
         icon1 = QIcon()
-        icon1.addFile(u"icons/excel.ico", QSize(), QIcon.Normal, QIcon.Off)
+        icon1.addFile(f"{os.getenv('ICONS_PATH')}excel.ico", QSize(), QIcon.Normal, QIcon.Off)
         self.excel_report_button.setIcon(icon1)
         self.excel_report_button.setIconSize(QSize(20, 20))
         self.excel_report_button.setAutoDefault(False)
@@ -112,7 +114,7 @@ class Ui_MainWindow(object):
         self.add_card_payment_button.setFont(font)
         self.add_card_payment_button.setCursor(QCursor(Qt.PointingHandCursor))
         icon2 = QIcon()
-        icon2.addFile(u"icons/adicionar.ico", QSize(), QIcon.Normal, QIcon.Off)
+        icon2.addFile(f"{os.getenv('ICONS_PATH')}adicionar.ico", QSize(), QIcon.Normal, QIcon.Off)
         self.add_card_payment_button.setIcon(icon2)
         self.add_card_payment_button.setIconSize(QSize(20, 20))
         self.add_card_payment_button.setAutoDefault(False)
@@ -121,7 +123,7 @@ class Ui_MainWindow(object):
         self.refresh_button.setObjectName(u"refresh_button")
         self.refresh_button.setGeometry(QRect(150, 10, 38, 23))
         icon3 = QIcon()
-        icon3.addFile(u"icons/refresh.ico", QSize(), QIcon.Normal, QIcon.Off)
+        icon3.addFile(f"{os.getenv('ICONS_PATH')}refresh.ico", QSize(), QIcon.Normal, QIcon.Off)
         self.refresh_button.setIcon(icon3)
         self.refresh_button.setIconSize(QSize(20, 20))
         self.refresh_button.setFlat(True)
@@ -129,7 +131,7 @@ class Ui_MainWindow(object):
         self.search_button.setObjectName(u"search_button")
         self.search_button.setGeometry(QRect(110, 10, 38, 25))
         icon4 = QIcon()
-        icon4.addFile(u"icons/icons8-pesquisar-60.ico", QSize(), QIcon.Normal, QIcon.Off)
+        icon4.addFile(f"{os.getenv('ICONS_PATH')}icons8-pesquisar-60.ico", QSize(), QIcon.Normal, QIcon.Off)
         self.search_button.setIcon(icon4)
         self.search_button.setIconSize(QSize(20, 20))
         self.search_button.setFlat(True)
@@ -143,7 +145,7 @@ class Ui_MainWindow(object):
         self.management_button.setFont(font)
         self.management_button.setCursor(QCursor(Qt.PointingHandCursor))
         icon5 = QIcon()
-        icon5.addFile(u"icons/management.ico", QSize(), QIcon.Normal, QIcon.Off)
+        icon5.addFile(f"{os.getenv('ICONS_PATH')}management.ico", QSize(), QIcon.Normal, QIcon.Off)
         self.management_button.setIcon(icon5)
         self.management_button.setIconSize(QSize(20, 20))
         self.management_button.setAutoDefault(False)

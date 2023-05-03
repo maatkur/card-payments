@@ -8,9 +8,9 @@ from PySide6.QtWidgets import *
 from views.cards_view import Cards
 from ui.ui_cards_login import Ui_MainWindow
 from users_list import user_list
-from dotenv import load_dotenv
+from config.setup_config import setup_config
 
-load_dotenv()
+setup_config()
 
 
 class Ui_Login(QMainWindow, Ui_MainWindow):
