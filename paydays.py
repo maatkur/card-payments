@@ -4,8 +4,6 @@ from workalendar.america import Brazil
 
 def paydays(payment_date, installments, transaction_type):
 
-    transaction_type = 'debit'
-
     # Instanciando o calendário do Brasil
     calendar = Brazil()
 
@@ -15,8 +13,7 @@ def paydays(payment_date, installments, transaction_type):
 
     # Define a data de vencimento da primeira parcela
     if transaction_type == "credit":
-        # due_date = payment_date + datetime.timedelta(days=30)
-        due_date = calendar.add_working_days(payment_date, 1)
+        due_date = payment_date + datetime.timedelta(days=30)
     elif transaction_type == "debit":
         due_date = calendar.add_working_days(payment_date, 1)
 
