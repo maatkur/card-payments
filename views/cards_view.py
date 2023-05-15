@@ -120,7 +120,7 @@ class Cards(QMainWindow):
         if is_admin_user:
             data = db_handler.get_specific_order_by_store(self.store, order_number)
         else:
-            data = db_handler.get_order_by_cashier_filter(self.store, self.user_code)
+            data = db_handler.get_order_by_cashier_filter(self.user_code, order_number)
 
         db_handler.disconnect()
 
@@ -181,7 +181,7 @@ class Cards(QMainWindow):
         self.ui.management_button.setDisabled(False)
 
     def manage_search_button(self):
-        is_order_entry_filled = len(self.ui.search_order_entry.text()) == 6
+        is_order_entry_filled = len(self.ui.search_order_entry.text()) >= 5
 
         if is_order_entry_filled:
             self.enable_search_button()
