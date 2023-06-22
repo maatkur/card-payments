@@ -52,7 +52,7 @@ class AddPayment(QMainWindow):
         cash_flow = self.ui.cashflow_entry.text()
         order_value = self.ui.order_value_entry.text().replace(",", ".")
         order_date = self.ui.order_date.text()
-        store = self.ui.stores_comboBox.currentIndex()
+        store = self.ui.stores_comboBox.currentText()
 
         self.db_handler.connect()
         self.db_handler.manually_insert_in_order_stage(order_numer, cashier_number, cash_flow, order_value,
@@ -86,7 +86,6 @@ class AddPayment(QMainWindow):
 
     def allow_save_button_use(self):
         store_was_selected = self.ui.stores_comboBox.currentText() != "Selecione"
-
         if store_was_selected:
             self.enable_save_button()
         else:

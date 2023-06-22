@@ -2,7 +2,7 @@ import os
 
 from dotenv import load_dotenv
 
-os.environ.setdefault('APP_ENV', 'prod')
+os.environ.setdefault('APP_ENV', 'dev')
 
 
 def setup_config():

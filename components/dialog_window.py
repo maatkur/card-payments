@@ -26,4 +26,12 @@ class DialogWindow:
         self.message_box.setStandardButtons(QMessageBox.Ok)
         self.message_box.exec()
 
+    def login_error(self):
+        title = "Ops!"
+        message = "Usuário e/ou senha inválido(s)!"
 
+        self.message_box.setIcon(QMessageBox.Warning)
+        self.message_box.setWindowTitle(title)
+        self.message_box.setText(message)
+        self.message_box.setStandardButtons(QMessageBox.Ok)
+        self.message_box.exec()

@@ -3,7 +3,7 @@ import os
 import openpyxl
 from openpyxl.styles import Font
 
-from helpers import to_default_format, to_date_string
+from helpers.date_helpers import to_default_format, to_date_string
 
 
 def generate_management_report(data: list):

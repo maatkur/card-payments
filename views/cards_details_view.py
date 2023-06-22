@@ -1,31 +1,45 @@
 import sys
-from datetime import datetime
-from PySide6.QtWidgets import *
+
 from PySide6.QtCore import Signal
-from ui.ui_cards_details import Ui_Form
+from PySide6.QtWidgets import *
+
 from database.db_handler import DatabaseHandler
-from paydays import paydays
-from helpers import to_sql_format
+from database.repositories.order_stage_repository import OrderStageRepository
+from database.repositories.card_flags_repository import CardFlagsRepository
+from database.repositories.checked_orders_repository import CheckedOrdersRepository
+from database.repositories.stores_repository import StoresRepository
+from helpers.date_helpers import to_sql_format, to_default_format
+from helpers.paydays_helper import paydays
+from ui.ui_cards_details import Ui_Form
+
+from config.setup_config import setup_config
+
+setup_config()
 
 
 class CardDetails(QMainWindow):
     closed = Signal()
 
-    def __init__(self, order, user_type, store) -> None:
+    def __init__(self, order_number, user_type, store) -> None:
         super(CardDetails, self).__init__()
         self.ui = Ui_Form()  # instanciar a classe Ui_form
         self.ui.setupUi(self)
         self.setWindowTitle("Detalhes do cartão")
         self.db_handler = DatabaseHandler()
-        self.order = order
+        self.order_stage_repository = OrderStageRepository()
+        self.checked_orders_repository = CheckedOrdersRepository()
+        self.card_flags_repository = CardFlagsRepository()
+        self.stores_repository = StoresRepository()
+        self.order_number = order_number
+        self.order_data = self.get_order_data()
         self.clear_fields()
-        self.set_data()
+        self.set_order_data()
         self.set_card_flags()
         self.ui.installments_comboBox.setDisabled(True)
         self.ui.save_button.setDisabled(True)
         self.ui.plus_card_button.setDisabled(True)
-        self.ui.transaction_type_comboBox.currentIndexChanged.connect(self.allow_installment_comboBox_use)
-        self.ui.plus_card_button.clicked.connect(self.handle_plus_card_button)
+        self.ui.transaction_type_comboBox.currentIndexChanged.connect(self.allow_installment_combobox_use)
+        self.ui.plus_card_button.clicked.connect(self.handle_multiple_card_button)
         self.user_type = user_type
         self.check_user_type()
         self.store = store
@@ -41,49 +55,82 @@ class CardDetails(QMainWindow):
         self.ui.save_button.clicked.connect(self.handle_save_button)
         self.ui.delete_button.clicked.connect(self.handle_delete_button)
 
-    def set_data(self) -> None:
+    def get_order_data(self) -> dict:
+        options = {
+            "distinct": False,
+            "query": {
+                "orderNumber": self.order_number,
+                "isCommit": 0
+            }
+        }
+
+        order_data = self.order_stage_repository.get_all(options)
+
+        if order_data:
+            # Desempacotar os valores da tupla em variáveis
+            (
+                _,  # Descartar o primeiro elemento (não utilizado)
+                order_number,
+                cashier_number,
+                cash_flow,
+                order_value,
+                store_unit,
+                purchase_date,
+                _  # Descartar o último elemento (não utilizado)
+            ) = order_data[0]
+
+            # Retornar os valores em um dicionário
+            return {
+                "orderNumber": order_number,
+                "cashierNumber": cashier_number,
+                "cashFlow": cash_flow,
+                "orderValue": order_value,
+                "storeUnit": store_unit,
+                "purchaseDate": purchase_date,
+            }
+
+    def set_order_data(self) -> None:
 
         # Carrega as informações do pedido vindas da tabela orderStage
 
-        self.db_handler.connect()
+        self.ui.order_label.setText(self.order_data["orderNumber"])
+        self.ui.cashier_lineEdit.setText(self.order_data["cashierNumber"])
+        self.ui.cash_flow_lineEdit.setText(self.order_data["cashFlow"])
 
-        order_data = self.db_handler.get_order_details(self.order)
+        formatted_value = "{:.2f}".format(round(self.order_data["orderValue"], 2)).replace(".", ",")
 
-        self.ui.order_label.setText(order_data[0][1])
-        self.ui.cashier_lineEdit.setText(order_data[0][2])
-        self.ui.cash_flow_lineEdit.setText(order_data[0][3])
-
-        formatted_value = "{:.2f}".format(round(order_data[0][4], 2)).replace(".", ",")
-
-        sale_date_string = order_data[0][6]
-        date_object = datetime.strptime(sale_date_string, "%Y-%m-%d")
-        formatted_date = date_object.strftime("%d/%m/%Y")
+        order_date = to_default_format(self.order_data["purchaseDate"])
 
         self.ui.order_value_lineEdit.setText(str(formatted_value))
-        self.ui.sale_date.setText(f"{formatted_date}")
-
-        self.db_handler.disconnect()
-
-    def update_data(self, order) -> None:
-
-        # Atualiza um novo pedido sempre que a janela de detalhes é chamada
-
-        self.order = order
-        self.set_data()
+        self.ui.sale_date.setText(f"{order_date}")
 
     def set_card_flags(self) -> None:
 
         # Busca as bandeiras de cartões no DB e carrega no combobox
 
-        self.db_handler.connect()
-        flags = self.db_handler.get_card_flags()
+        options = {
+            "select": "flag",
+            "distinct": True,
+            "order_by": ["flag"]
+        }
+
+        flags = self.card_flags_repository.get_all(options)
 
         for flag in flags:
             self.ui.card_flag_comboBox.addItem(flag[0])
 
-        self.db_handler.disconnect()
+    def get_card_tax(self, card_flag, installment):
+        options = {
+            "select": "tax",
+            "query": {
+                "flag": card_flag,
+                "installments": installment,
+            }
+        }
 
-    def allow_installment_comboBox_use(self):
+        return float(self.card_flags_repository.get_all(options)[0][0])
+
+    def allow_installment_combobox_use(self):
         is_a_credit_transaction = self.ui.transaction_type_comboBox.currentText() == "Crédito"
 
         if is_a_credit_transaction:
@@ -111,31 +158,98 @@ class CardDetails(QMainWindow):
             self.ui.plus_card_button.setDisabled(True)
 
     def handle_save_button(self) -> None:
-        # Salva um pedido com as informações necessárias na tabela 'checkedOrders'
+        self.save_order_details()
+        self.close_details_window()
 
-        self.db_handler.connect()
+    def create_debit_order(self) -> dict:
+        checked_order = {"orderNumber": self.order_number,
+                         "cashierNumber": self.order_data["cashierNumber"],
+                         "cashFlow": self.order_data["cashFlow"],
+                         "transactionType": "debit",
+                         "flag": self.ui.card_flag_comboBox.currentText(),
+                         "purchaseDate": self.order_data["purchaseDate"],
+                         "orderValue": round(float(self.ui.order_value_lineEdit.text().replace(",", ".")), 2),
+                         "storeUnit": self.order_data["storeUnit"],
+                         "NSU": self.ui.nsu_lineEdit.text(),
+                         "transactionAuthorization": self.ui.authorization_lineEdit.text(),
+                         "installments": 0,
+                         "currentInstallment": 0
+                         }
 
+        checked_order["flagTax"] = self.get_card_tax(checked_order["flag"], 0)
+
+        payday = paydays(self.order_data["purchaseDate"], 1, "debit")
+        checked_order["payday"] = payday[0]
+
+        liquid_value = round(
+            checked_order["orderValue"] - ((checked_order["orderValue"] * checked_order["flagTax"]) / 100), 2)
+
+        checked_order["liquidValue"] = liquid_value
+        checked_order["installmentValue"] = liquid_value
+
+        return checked_order
+
+    def create_credit_order(self):
+        checked_order = {"orderNumber": self.order_number,
+                         "cashierNumber": self.order_data["cashierNumber"],
+                         "cashFlow": self.order_data["cashFlow"],
+                         "transactionType": 'credit',
+                         "flag": self.ui.card_flag_comboBox.currentText(),
+                         "purchaseDate": self.order_data["purchaseDate"],
+                         "orderValue": round(float(self.ui.order_value_lineEdit.text().replace(",", ".")), 2),
+                         "storeUnit": self.order_data["storeUnit"],
+                         "NSU": self.ui.nsu_lineEdit.text(),
+                         "transactionAuthorization": self.ui.authorization_lineEdit.text(),
+                         "installments": int(self.ui.installments_comboBox.currentText()),
+                         "currentInstallment": ""
+                         }
+
+        checked_order["flagTax"] = self.get_card_tax(checked_order["flag"], checked_order["installments"])
+
+        checked_order["payday"] = paydays(self.order_data["purchaseDate"], checked_order["installments"], "credit")
+
+        liquid_value = round(
+            checked_order["orderValue"] - ((checked_order["orderValue"] * checked_order["flagTax"]) / 100), 2)
+
+        checked_order["liquidValue"] = liquid_value
+        checked_order["installmentValue"] = liquid_value
+
+        return checked_order
+
+    def save_order_details(self):
         transaction_type = self.ui.transaction_type_comboBox.currentText()
         transaction_type = 'credit' if transaction_type == 'Crédito' else 'debit'
-        flag = self.ui.card_flag_comboBox.currentText()
-        installments = int(self.ui.installments_comboBox.currentText())
-        order_number = self.order
-        nsu = self.ui.nsu_lineEdit.text()
-        transaction_authorization = self.ui.authorization_lineEdit.text()
-        sale_date = self.ui.sale_date.text().replace("/", "-")
-        payday = paydays(sale_date, installments, transaction_type)
-        order_value = self.ui.order_value_lineEdit.text().replace(",", ".")
 
-        for installment in range(1, installments + 1):
-            current_installment = f"{installment}/{installments}"
-            self.db_handler.insert_checked_order(flag, 0 if transaction_type == 'debit' else installments, order_number,
-                                                 current_installment,
-                                                 payday[installment - 1], order_value,
-                                                 nsu, transaction_authorization, transaction_type)
+        if transaction_type == "debit":
+            checked_order = self.create_debit_order()
+            self.checked_orders_repository.insert(checked_order)
 
-        self.db_handler.update_stage(order_number)
-        self.db_handler.disconnect()
-        self.close_details_window()
+        elif transaction_type == 'credit':
+            checked_order = self.create_credit_order()
+
+            for installment in range(checked_order["installments"]):
+                order_installment = checked_order.copy()
+                order_installment["currentInstallment"] = f"{installment + 1}/{order_installment['installments']}"
+                order_installment["payday"] = order_installment["payday"][installment]
+                self.checked_orders_repository.insert(order_installment)
+
+        self.order_stage_repository.commit_order(self.order_number)
+
+    def process_remaining_payment(self):
+        new_value = float(self.ui.order_value_lineEdit.text().replace(",", "."))
+        remaining_value = self.initial_value - new_value
+
+        order = {
+            "orderNumber": self.order_data["orderNumber"],
+            "cashierNumber": str(self.order_data["cashierNumber"]),
+            "cashFlow": str(self.order_data["cashFlow"]),
+            "orderValue": str(remaining_value),
+            "storeUnit": self.stores_repository.get_store_by_id(str(self.store)),
+            "isCommit": "0"
+        }
+
+        self.order_stage_repository.commit_order(self.order_number)
+        self.order_stage_repository.insert(order)
 
     def handle_delete_button(self):
         message_box = QMessageBox()
@@ -147,44 +261,18 @@ class CardDetails(QMainWindow):
         result = message_box.exec_()
         if result == QMessageBox.Yes:
             self.delete_order()
+            self.close_details_window()
 
-    def handle_plus_card_button(self):
-
-        self.db_handler.connect()
-
-        transaction_type = self.ui.transaction_type_comboBox.currentText()
-        transaction_type = 'credit' if transaction_type == 'Crédito' else 'debit'
-        flag = self.ui.card_flag_comboBox.currentText()
-        installments = int(self.ui.installments_comboBox.currentText())
-        order_number = self.order
-        nsu = self.ui.nsu_lineEdit.text()
-        transaction_authorization = self.ui.authorization_lineEdit.text()
-        sale_date = self.ui.sale_date.text().replace("/", "-")
-        payday = paydays(sale_date, installments, transaction_type)
-        order_value = self.ui.order_value_lineEdit.text().replace(",", ".")
-        remaining_value = self.initial_value - float(order_value)
-        order_date = to_sql_format(self.ui.sale_date.text())
-        cashier_number = self.ui.cashier_lineEdit.text()
-        cash_flow = self.ui.cash_flow_lineEdit.text()
-
-        for installment in range(1, installments + 1):
-            current_installment = f"{installment}/{installments}"
-            self.db_handler.insert_checked_order(flag, 0 if transaction_type == 'debit' else installments, order_number,
-                                                 current_installment,
-                                                 payday[installment - 1], order_value,
-                                                 nsu, transaction_authorization, transaction_type)
-        self.initial_value = remaining_value
-        self.db_handler.update_stage(order_number)
-        self.db_handler.manually_insert_in_order_stage(order_number, cashier_number, cash_flow, remaining_value,
-                                                       self.store, order_date)
-        self.db_handler.disconnect()
+    def handle_multiple_card_button(self):
+        self.save_order_details()
+        self.process_remaining_payment()
         self.close_details_window()
 
     def delete_order(self):
-        self.db_handler.connect()
-        self.db_handler.delete_staged_order(self.order)
-        self.db_handler.disconnect()
-        self.close_details_window()
+        options = {"orderNumber": self.order_number,
+                   "isCommit": 0}
+
+        self.order_stage_repository.delete(options)
 
     def check_user_type(self):
         is_admin_user = self.user_type == "True"
@@ -215,6 +303,6 @@ class CardDetails(QMainWindow):
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    window = CardDetails("")
+    window = CardDetails("202321", True, 5)
     window.show()
     app.exec()

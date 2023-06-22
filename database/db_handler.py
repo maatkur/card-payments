@@ -8,8 +8,8 @@ MANAGEMENT_COLUMNS = 'orderNumber, cashierNumber, cashFlow, transactionType, fla
 
 class DatabaseHandler:
     def __init__(self):
-        self.server = f'{os.getenv("SERVER")}'
-        self.database = 'card_payments'
+        self.server = os.getenv("SERVER")
+        self.database = os.getenv("DATABASE")
         self.user = 'sa'
         self.password = '$ervid0r'
         self.connection = None
@@ -69,7 +69,7 @@ class DatabaseHandler:
         self._execute_and_commit(command)
 
     def manually_insert_in_order_stage(self, order_number: str, cashier_number: str, cash_flow: str, order_value: float,
-                                       store_id: int, order_date: str) -> None:
+                                       store: str, order_date: str) -> None:
 
         #  Insere uma ordem no banco de dados de stage
 
@@ -88,7 +88,7 @@ class DatabaseHandler:
                     '{cashier_number}', 
                     '{cash_flow}',  
                     {order_value}, 
-                    (SELECT storeUnit FROM Stores WHERE ID = {store_id}),
+                    '{store}',
                     '{order_date}', 
                     0
                     )
