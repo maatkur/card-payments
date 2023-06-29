@@ -6,12 +6,12 @@ from PySide6 import QtCore
 from PySide6.QtCore import QDate
 from PySide6.QtWidgets import *
 
+from database.repositories.repository_manager import RepositoryManager
 from views.cards_details_view import CardDetails
-from database.repositories.order_stage_repository import OrderStageRepository
-from database.repositories.checked_orders_repository import CheckedOrdersRepository
 from reports.conference_report import generate_conference_report
-from helpers.date_helpers import to_sql_format
-from views.manual_insert_view import AddPayment
+from helpers.date_helpers import DateHelpers
+from helpers.widgets_helpers import WidgetHelpers
+from views.insert_payment_view import InsertPayment
 from ui.ui_cards import Ui_MainWindow
 from views.card_management_view import CardsManagement
 from components.dialog_window import DialogWindow
@@ -21,17 +21,15 @@ class Cards(QMainWindow):
     today = datetime.today()
     qdate = QDate(today.year, today.month, today.day)
 
-    def __init__(self, user_type, store, user_code) -> None:
+    def __init__(self, logged_user: dict) -> None:
         super(Cards, self).__init__()
         self.ui = Ui_MainWindow()  # instanciar a classe Ui_MainWindow
         self.ui.setupUi(self)
         self.setWindowTitle(f"Cartões {os.getenv('COMPANY')} | Lançamento")
-        self.user_type = user_type
-        self.store = store
-        self.user_code = user_code
-        self.order_stage_repository = OrderStageRepository()
-        self.checked_orders_repository = CheckedOrdersRepository()
-        self.manage_orders_table()
+        self.logged_user = logged_user
+        self.is_admin_user = self.logged_user["adminUser"]
+        self.orders_data = None
+        self.fetch_and_load_orders()
         self.disable_search_button()
         self.manage_user_permission()
         self.details_window = None
@@ -41,8 +39,11 @@ class Cards(QMainWindow):
         self.ui.tableWidget.setColumnWidth(2, 88)  # Definindo a largura da coluna da data para 88 pixels
         self.connect_button_actions()
         self.connect_text_changes()
+        self.install_event_filters()
         self.ui.initial_date.setDate(self.qdate)
         self.ui.final_date.setDate(self.qdate)
+
+    def install_event_filters(self) -> None:
         self.ui.search_order_entry.installEventFilter(self)
         self.ui.search_button.installEventFilter(self)
 
@@ -67,9 +68,9 @@ class Cards(QMainWindow):
         self.ui.management_button.clicked.connect(self.handle_management_button)
 
     def connect_text_changes(self) -> None:
-        self.ui.search_order_entry.textChanged.connect(self.manage_search_button)
+        WidgetHelpers.connect_texts_changes(self, self.manage_search_button)
 
-    def load_orders_table(self, data: list):
+    def load_orders_table(self, data: list) -> None:
 
         orders = data
         self.ui.tableWidget.setRowCount(len(orders))
@@ -90,34 +91,35 @@ class Cards(QMainWindow):
                     self.ui.tableWidget.setItem(row, col, QTableWidgetItem(str(value)))
 
     def manage_user_permission(self) -> None:
-        is_admin_user = self.user_type == "True"
 
-        if is_admin_user:
+        if self.is_admin_user:
             self.enable_admin_buttons()
         else:
             self.disable_admin_button()
 
-    def get_orders_data(self) -> list:
-        is_admin_user = self.user_type == "True"
+    def fetch_user_orders(self) -> None:
 
-        if is_admin_user:
-            data = self.order_stage_repository.get_uncommited_orders(self.store)
+        if self.is_admin_user:
+            self.orders_data = RepositoryManager.order_stage_repository().get_uncommited_orders(
+                self.logged_user["store"])
         else:
-            data = self.order_stage_repository.get_uncommited_orders(self.store, self.user_code)
+            self.orders_data = RepositoryManager.order_stage_repository().get_uncommited_orders(
+                self.logged_user["store"],
+                self.logged_user["userCode"])
 
-        return data
-
-    def manage_orders_table(self) -> None:
-        data = self.get_orders_data()
-        self.load_orders_table(data)
+    def fetch_and_load_orders(self) -> None:
+        self.fetch_user_orders()
+        self.load_orders_table(self.orders_data)
 
     def get_filtered_order(self, order_number) -> list:
-        is_admin_user = self.user_type == "True"
 
-        if is_admin_user:
-            data = self.order_stage_repository.filter_uncommited_order(self.store, order_number)
+        if self.is_admin_user:
+            data = RepositoryManager.order_stage_repository().filter_uncommited_order(self.logged_user["store"],
+                                                                                      order_number)
         else:
-            data = self.order_stage_repository.filter_uncommited_order(self.store, order_number, self.user_code)
+            data = RepositoryManager.order_stage_repository().filter_uncommited_order(self.logged_user["store"],
+                                                                                      order_number,
+                                                                                      self.logged_user["userCode"])
 
         return data
 
@@ -133,48 +135,49 @@ class Cards(QMainWindow):
 
     def handle_cell_double_click(self, row, column) -> None:
 
-        order = self.ui.tableWidget.item(row, 0).text()  # pega o valor da coluna "Pedido"
-        self.details_window = CardDetails(order, self.user_type, self.store)
+        cell_click = self.ui.tableWidget.item(row, 0).row()  # pega o valor da coluna "Pedido"
+
+        uid = self.orders_data[cell_click][-1]
+        self.details_window = CardDetails(uid, self.logged_user["adminUser"], self.logged_user["store"])
         self.details_window.show()
-        self.details_window.closed.connect(self.manage_orders_table)
+        self.details_window.closed.connect(self.fetch_and_load_orders)
 
     def handle_add_payment_button(self) -> None:
-        self.add_payment_window = AddPayment()
+        self.add_payment_window = InsertPayment()
         self.add_payment_window.clear_fields()
         self.add_payment_window.show()
-        self.add_payment_window.closed.connect(self.manage_orders_table)
+        self.add_payment_window.closed.connect(self.fetch_and_load_orders)
 
     def handle_report_button(self) -> None:
-        initial_date = to_sql_format(self.ui.initial_date.text())
-        final_date = to_sql_format(self.ui.final_date.text())
-
-        checked_orders_repository = CheckedOrdersRepository()
+        initial_date = DateHelpers.to_sql_format(self.ui.initial_date.text())
+        final_date = DateHelpers.to_sql_format(self.ui.final_date.text())
 
         options = {
             "select": "orderNumber, cashierNumber, cashFlow, transactionType, flag, installments, installmentValue, "
                       "orderValue, purchaseDate, NSU, transactionAuthorization",
             "distinct": True,
             "query": {
-                "cashierNumber": self.user_code,
+                "cashierNumber": self.logged_user["userCode"],
                 "initial_date": initial_date,
                 "final_date": final_date
             },
             "order_by": ["flag"]
         }
 
-        orders = checked_orders_repository.get_all(options)
+        orders = RepositoryManager.checked_orders_repository().get_all(options)
         generate_conference_report(orders)
 
     def handle_management_button(self) -> None:
         self.cards_management_window = CardsManagement()
         self.cards_management_window.show()
+        self.cards_management_window.closed.connect(self.fetch_and_load_orders)
 
     def handle_search_button(self) -> None:
         self.load_filtered_order()
         self.clear_fields()
 
     def handle_refresh_button(self) -> None:
-        self.manage_orders_table()
+        self.fetch_and_load_orders()
 
     def disable_search_button(self) -> None:
         self.ui.search_button.setDisabled(True)
@@ -204,8 +207,6 @@ class Cards(QMainWindow):
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    window = Cards("True", 7, 15)
+    window = Cards({"userCode": 15, "adminUser": True, "store": 5})
     window.show()
     app.exec()
-
-

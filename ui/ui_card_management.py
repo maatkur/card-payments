@@ -7,9 +7,7 @@
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
-
 import os
-
 from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
     QMetaObject, QObject, QPoint, QRect,
     QSize, QTime, QUrl, Qt)
@@ -21,6 +19,7 @@ from PySide6.QtWidgets import (QAbstractItemView, QApplication, QComboBox, QDate
     QFrame, QHeaderView, QLabel, QLineEdit,
     QPushButton, QSizePolicy, QTableWidget, QTableWidgetItem,
     QVBoxLayout, QWidget)
+
 
 class Ui_Form(object):
     def setupUi(self, Form):
@@ -48,9 +47,6 @@ class Ui_Form(object):
         self.order_entry = QLineEdit(self.frame)
         self.order_entry.setObjectName(u"order_entry")
         self.order_entry.setGeometry(QRect(270, 60, 113, 22))
-        self.nsu_authorization_entry = QLineEdit(self.frame)
-        self.nsu_authorization_entry.setObjectName(u"nsu_authorization_entry")
-        self.nsu_authorization_entry.setGeometry(QRect(400, 60, 113, 22))
         self.search_button = QPushButton(self.frame)
         self.search_button.setObjectName(u"search_button")
         self.search_button.setGeometry(QRect(680, 6, 62, 47))
@@ -69,7 +65,7 @@ class Ui_Form(object):
         self.stores_comboBox = QComboBox(self.frame)
         self.stores_comboBox.addItem("")
         self.stores_comboBox.setObjectName(u"stores_comboBox")
-        self.stores_comboBox.setGeometry(QRect(530, 60, 131, 22))
+        self.stores_comboBox.setGeometry(QRect(400, 60, 131, 22))
         self.label_10 = QLabel(self.frame)
         self.label_10.setObjectName(u"label_10")
         self.label_10.setGeometry(QRect(10, 30, 91, 16))
@@ -85,16 +81,9 @@ class Ui_Form(object):
         self.label_12.setObjectName(u"label_12")
         self.label_12.setGeometry(QRect(270, 30, 91, 16))
         self.label_12.setFont(font1)
-        self.label_13 = QLabel(self.frame)
-        self.label_13.setObjectName(u"label_13")
-        self.label_13.setGeometry(QRect(400, 30, 131, 16))
-        font2 = QFont()
-        font2.setPointSize(10)
-        font2.setBold(True)
-        self.label_13.setFont(font2)
         self.label_14 = QLabel(self.frame)
         self.label_14.setObjectName(u"label_14")
-        self.label_14.setGeometry(QRect(530, 30, 111, 16))
+        self.label_14.setGeometry(QRect(400, 30, 111, 16))
         self.label_14.setFont(font1)
         self.clear_filters_button = QPushButton(self.frame)
         self.clear_filters_button.setObjectName(u"clear_filters_button")
@@ -112,7 +101,7 @@ class Ui_Form(object):
         self.frame_2.setFrameShadow(QFrame.Raised)
         self.cashier_view = QLineEdit(self.frame_2)
         self.cashier_view.setObjectName(u"cashier_view")
-        self.cashier_view.setGeometry(QRect(10, 70, 113, 22))
+        self.cashier_view.setGeometry(QRect(130, 20, 113, 22))
         self.cashier_view.setReadOnly(True)
         self.order_view = QLineEdit(self.frame_2)
         self.order_view.setObjectName(u"order_view")
@@ -120,46 +109,46 @@ class Ui_Form(object):
         self.order_view.setReadOnly(True)
         self.transaction_view = QLineEdit(self.frame_2)
         self.transaction_view.setObjectName(u"transaction_view")
-        self.transaction_view.setGeometry(QRect(250, 70, 113, 22))
+        self.transaction_view.setGeometry(QRect(10, 70, 113, 22))
         self.transaction_view.setReadOnly(True)
         self.nsu_view = QLineEdit(self.frame_2)
         self.nsu_view.setObjectName(u"nsu_view")
-        self.nsu_view.setGeometry(QRect(380, 70, 113, 22))
+        self.nsu_view.setGeometry(QRect(130, 70, 113, 22))
         self.value_view = QLineEdit(self.frame_2)
         self.value_view.setObjectName(u"value_view")
-        self.value_view.setGeometry(QRect(130, 20, 113, 22))
+        self.value_view.setGeometry(QRect(370, 20, 113, 22))
         self.value_view.setReadOnly(True)
         self.cash_flow_view = QLineEdit(self.frame_2)
         self.cash_flow_view.setObjectName(u"cash_flow_view")
-        self.cash_flow_view.setGeometry(QRect(130, 70, 113, 22))
+        self.cash_flow_view.setGeometry(QRect(250, 20, 113, 22))
         self.label_2 = QLabel(self.frame_2)
         self.label_2.setObjectName(u"label_2")
         self.label_2.setGeometry(QRect(10, 0, 49, 16))
         self.label_2.setFont(font1)
         self.label_3 = QLabel(self.frame_2)
         self.label_3.setObjectName(u"label_3")
-        self.label_3.setGeometry(QRect(10, 50, 49, 16))
+        self.label_3.setGeometry(QRect(130, 0, 49, 16))
         self.label_4 = QLabel(self.frame_2)
         self.label_4.setObjectName(u"label_4")
-        self.label_4.setGeometry(QRect(130, 50, 81, 16))
+        self.label_4.setGeometry(QRect(250, 0, 81, 16))
         self.label_5 = QLabel(self.frame_2)
         self.label_5.setObjectName(u"label_5")
-        self.label_5.setGeometry(QRect(250, 50, 131, 16))
+        self.label_5.setGeometry(QRect(10, 50, 131, 16))
         self.label_6 = QLabel(self.frame_2)
         self.label_6.setObjectName(u"label_6")
-        self.label_6.setGeometry(QRect(130, 0, 49, 16))
+        self.label_6.setGeometry(QRect(370, 0, 49, 16))
         self.label_7 = QLabel(self.frame_2)
         self.label_7.setObjectName(u"label_7")
-        self.label_7.setGeometry(QRect(380, 50, 49, 16))
+        self.label_7.setGeometry(QRect(130, 50, 49, 16))
         self.authorization_view = QLineEdit(self.frame_2)
         self.authorization_view.setObjectName(u"authorization_view")
-        self.authorization_view.setGeometry(QRect(500, 70, 113, 22))
+        self.authorization_view.setGeometry(QRect(250, 70, 113, 22))
         self.label_8 = QLabel(self.frame_2)
         self.label_8.setObjectName(u"label_8")
-        self.label_8.setGeometry(QRect(500, 50, 91, 16))
+        self.label_8.setGeometry(QRect(250, 50, 91, 16))
         self.label_9 = QLabel(self.frame_2)
         self.label_9.setObjectName(u"label_9")
-        self.label_9.setGeometry(QRect(630, 50, 81, 16))
+        self.label_9.setGeometry(QRect(370, 50, 81, 16))
         self.save_button = QPushButton(self.frame_2)
         self.save_button.setObjectName(u"save_button")
         self.save_button.setGeometry(QRect(230, 110, 181, 24))
@@ -179,10 +168,28 @@ class Ui_Form(object):
         icon5 = QIcon()
         icon5.addFile(f"{os.getenv('ICONS_PATH')}excel.ico", QSize(), QIcon.Normal, QIcon.Off)
         self.excel_button.setIcon(icon5)
-        self.flag_view = QLineEdit(self.frame_2)
-        self.flag_view.setObjectName(u"flag_view")
-        self.flag_view.setGeometry(QRect(630, 70, 113, 22))
-        self.flag_view.setReadOnly(True)
+        self.installments_combo_box = QComboBox(self.frame_2)
+        self.installments_combo_box.addItem("")
+        self.installments_combo_box.addItem("")
+        self.installments_combo_box.addItem("")
+        self.installments_combo_box.addItem("")
+        self.installments_combo_box.addItem("")
+        self.installments_combo_box.addItem("")
+        self.installments_combo_box.addItem("")
+        self.installments_combo_box.addItem("")
+        self.installments_combo_box.addItem("")
+        self.installments_combo_box.addItem("")
+        self.installments_combo_box.addItem("")
+        self.installments_combo_box.addItem("")
+        self.installments_combo_box.addItem("")
+        self.installments_combo_box.setObjectName(u"installments_combo_box")
+        self.installments_combo_box.setGeometry(QRect(520, 70, 62, 22))
+        self.flags_combo_box = QComboBox(self.frame_2)
+        self.flags_combo_box.setObjectName(u"flags_combo_box")
+        self.flags_combo_box.setGeometry(QRect(370, 70, 141, 22))
+        self.label_13 = QLabel(self.frame_2)
+        self.label_13.setObjectName(u"label_13")
+        self.label_13.setGeometry(QRect(520, 50, 81, 16))
         self.frame_3 = QFrame(Form)
         self.frame_3.setObjectName(u"frame_3")
         self.frame_3.setGeometry(QRect(9, 115, 769, 200))
@@ -195,40 +202,40 @@ class Ui_Form(object):
         self.tableWidget = QTableWidget(self.frame_3)
         if (self.tableWidget.columnCount() < 11):
             self.tableWidget.setColumnCount(11)
-        font3 = QFont()
-        font3.setBold(True)
+        font2 = QFont()
+        font2.setBold(True)
         __qtablewidgetitem = QTableWidgetItem()
-        __qtablewidgetitem.setFont(font3);
+        __qtablewidgetitem.setFont(font2);
         self.tableWidget.setHorizontalHeaderItem(0, __qtablewidgetitem)
         __qtablewidgetitem1 = QTableWidgetItem()
-        __qtablewidgetitem1.setFont(font3);
+        __qtablewidgetitem1.setFont(font2);
         self.tableWidget.setHorizontalHeaderItem(1, __qtablewidgetitem1)
         __qtablewidgetitem2 = QTableWidgetItem()
-        __qtablewidgetitem2.setFont(font3);
+        __qtablewidgetitem2.setFont(font2);
         self.tableWidget.setHorizontalHeaderItem(2, __qtablewidgetitem2)
         __qtablewidgetitem3 = QTableWidgetItem()
-        __qtablewidgetitem3.setFont(font3);
+        __qtablewidgetitem3.setFont(font2);
         self.tableWidget.setHorizontalHeaderItem(3, __qtablewidgetitem3)
         __qtablewidgetitem4 = QTableWidgetItem()
-        __qtablewidgetitem4.setFont(font3);
+        __qtablewidgetitem4.setFont(font2);
         self.tableWidget.setHorizontalHeaderItem(4, __qtablewidgetitem4)
         __qtablewidgetitem5 = QTableWidgetItem()
-        __qtablewidgetitem5.setFont(font3);
+        __qtablewidgetitem5.setFont(font2);
         self.tableWidget.setHorizontalHeaderItem(5, __qtablewidgetitem5)
         __qtablewidgetitem6 = QTableWidgetItem()
-        __qtablewidgetitem6.setFont(font3);
+        __qtablewidgetitem6.setFont(font2);
         self.tableWidget.setHorizontalHeaderItem(6, __qtablewidgetitem6)
         __qtablewidgetitem7 = QTableWidgetItem()
-        __qtablewidgetitem7.setFont(font3);
+        __qtablewidgetitem7.setFont(font2);
         self.tableWidget.setHorizontalHeaderItem(7, __qtablewidgetitem7)
         __qtablewidgetitem8 = QTableWidgetItem()
-        __qtablewidgetitem8.setFont(font3);
+        __qtablewidgetitem8.setFont(font2);
         self.tableWidget.setHorizontalHeaderItem(8, __qtablewidgetitem8)
         __qtablewidgetitem9 = QTableWidgetItem()
-        __qtablewidgetitem9.setFont(font3);
+        __qtablewidgetitem9.setFont(font2);
         self.tableWidget.setHorizontalHeaderItem(9, __qtablewidgetitem9)
         __qtablewidgetitem10 = QTableWidgetItem()
-        __qtablewidgetitem10.setFont(font3);
+        __qtablewidgetitem10.setFont(font2);
         self.tableWidget.setHorizontalHeaderItem(10, __qtablewidgetitem10)
         self.tableWidget.setObjectName(u"tableWidget")
         self.tableWidget.setMaximumSize(QSize(16777215, 200))
@@ -252,7 +259,6 @@ class Ui_Form(object):
         self.label_10.setText(QCoreApplication.translate("Form", u"Data Inicial", None))
         self.label_11.setText(QCoreApplication.translate("Form", u"Data Final", None))
         self.label_12.setText(QCoreApplication.translate("Form", u"Pedido", None))
-        self.label_13.setText(QCoreApplication.translate("Form", u"NSU / Autoriza\u00e7\u00e3o", None))
         self.label_14.setText(QCoreApplication.translate("Form", u"Loja", None))
         self.clear_filters_button.setText("")
         self.label_2.setText(QCoreApplication.translate("Form", u"Pedido", None))
@@ -266,6 +272,21 @@ class Ui_Form(object):
         self.save_button.setText(QCoreApplication.translate("Form", u"Salvar altera\u00e7\u00f5es", None))
         self.delete_button.setText(QCoreApplication.translate("Form", u"Deletar", None))
         self.excel_button.setText(QCoreApplication.translate("Form", u"Excel", None))
+        self.installments_combo_box.setItemText(0, QCoreApplication.translate("Form", u"0", None))
+        self.installments_combo_box.setItemText(1, QCoreApplication.translate("Form", u"1", None))
+        self.installments_combo_box.setItemText(2, QCoreApplication.translate("Form", u"2", None))
+        self.installments_combo_box.setItemText(3, QCoreApplication.translate("Form", u"3", None))
+        self.installments_combo_box.setItemText(4, QCoreApplication.translate("Form", u"4", None))
+        self.installments_combo_box.setItemText(5, QCoreApplication.translate("Form", u"5", None))
+        self.installments_combo_box.setItemText(6, QCoreApplication.translate("Form", u"6", None))
+        self.installments_combo_box.setItemText(7, QCoreApplication.translate("Form", u"7", None))
+        self.installments_combo_box.setItemText(8, QCoreApplication.translate("Form", u"8", None))
+        self.installments_combo_box.setItemText(9, QCoreApplication.translate("Form", u"9", None))
+        self.installments_combo_box.setItemText(10, QCoreApplication.translate("Form", u"10", None))
+        self.installments_combo_box.setItemText(11, QCoreApplication.translate("Form", u"11", None))
+        self.installments_combo_box.setItemText(12, QCoreApplication.translate("Form", u"12", None))
+
+        self.label_13.setText(QCoreApplication.translate("Form", u"Parcelas", None))
         ___qtablewidgetitem = self.tableWidget.horizontalHeaderItem(0)
         ___qtablewidgetitem.setText(QCoreApplication.translate("Form", u"Pedido", None));
         ___qtablewidgetitem1 = self.tableWidget.horizontalHeaderItem(1)

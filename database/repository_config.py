@@ -90,6 +90,7 @@ class RepositoryConfig:
         if options.get('order_by'):
             order_by = ", ".join(options['order_by'])
             command += f" ORDER BY {order_by}"
+
         return self._search_and_fetch_all(command)
 
     def delete(self, options: dict) -> None:

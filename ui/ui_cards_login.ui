@@ -170,6 +170,9 @@ color: #ffffff;</string>
      </property>
     </widget>
     <widget class="QPushButton" name="login_button">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="geometry">
       <rect>
        <x>180</x>

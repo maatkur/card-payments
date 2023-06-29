@@ -4,7 +4,7 @@ import openpyxl
 from openpyxl.styles import Font
 
 from database.repositories.checked_orders_repository import CheckedOrdersRepository
-from helpers.date_helpers import to_default_format, to_date_string
+from helpers.date_helpers import DateHelpers
 
 
 def generate_conference_report(data):
@@ -27,7 +27,7 @@ def generate_conference_report(data):
         installments = order[5]
         installment_value = order[6]
         order_value = order[7]
-        purchase_date = to_default_format(order[8])
+        purchase_date = DateHelpers.to_default_format(order[8])
         nsu = order[9]
         transaction_authorization = order[10]
 
@@ -42,7 +42,7 @@ def generate_conference_report(data):
 
     # Salva o arquivo temporário
     user = os.getlogin()
-    date = to_date_string()
+    date = DateHelpers.to_date_string()
     temp_filename = rf'C:\Users\{user}\Desktop\cartoes{date}.xlsx'
     workbook.save(temp_filename)
 

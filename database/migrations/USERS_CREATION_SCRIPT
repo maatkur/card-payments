@@ -1,0 +1,21 @@
+USE [card_payments_dev]
+GO
+
+/****** Object:  Table [dbo].[users]    Script Date: 26/06/2023 13:14:52 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[users](
+	[id] [bigint] IDENTITY(1,1) NOT NULL,
+	[userCode] [varchar](5) NOT NULL,
+	[userName] [varchar](50) NOT NULL,
+	[password] [varchar](60) NOT NULL,
+	[adminUser] [bit] NULL,
+	[store] [varchar](3) NULL
+) ON [PRIMARY]
+GO
+
+

@@ -89,7 +89,7 @@ class DatabaseHandler:
                     '{cash_flow}',  
                     {order_value}, 
                     '{store}',
-                    '{order_date}', 
+                    '{order_date}',
                     0
                     )
                  """
