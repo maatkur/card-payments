@@ -16,7 +16,7 @@ setup_config()
 
 
 class CardsManagement(QMainWindow):
-    closed = Signal()
+    update_order = Signal()
     today = datetime.today()
     qdate = QDate(today.year, today.month, today.day)
 
@@ -256,6 +256,7 @@ class CardsManagement(QMainWindow):
             self.delete_order()
             self.uncommit_order()
             self.handle_clear_button()
+            self.update_order.emit()
 
     def update_order_changes(self) -> None:
 
@@ -352,10 +353,6 @@ class CardsManagement(QMainWindow):
 
     def handle_report_button(self) -> None:
         generate_management_report(self.table_data)
-
-    def close_event(self, event) -> None:
-        self.closed.emit()  # emite o sinal closed quando a janela for fechada
-        event.accept()
 
 
 if __name__ == "__main__":

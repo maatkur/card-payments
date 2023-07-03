@@ -148,6 +148,11 @@ class Cards(QMainWindow):
         self.add_payment_window.show()
         self.add_payment_window.closed.connect(self.fetch_and_load_orders)
 
+    def handle_management_button(self) -> None:
+        self.cards_management_window = CardsManagement()
+        self.cards_management_window.show()
+        self.cards_management_window.update_order.connect(self.fetch_and_load_orders)
+
     def handle_report_button(self) -> None:
         initial_date = DateHelpers.to_sql_format(self.ui.initial_date.text())
         final_date = DateHelpers.to_sql_format(self.ui.final_date.text())
@@ -166,11 +171,6 @@ class Cards(QMainWindow):
 
         orders = RepositoryManager.checked_orders_repository().get_all(options)
         generate_conference_report(orders)
-
-    def handle_management_button(self) -> None:
-        self.cards_management_window = CardsManagement()
-        self.cards_management_window.show()
-        self.cards_management_window.closed.connect(self.fetch_and_load_orders)
 
     def handle_search_button(self) -> None:
         self.load_filtered_order()
