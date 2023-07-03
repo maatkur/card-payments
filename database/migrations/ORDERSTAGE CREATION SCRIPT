@@ -1,7 +1,7 @@
-USE [card_payments]
+USE [card_payments_dev]
 GO
 
-/****** Object:  Table [dbo].[orderStage]    Script Date: 25/04/2023 14:49:24 ******/
+/****** Object:  Table [dbo].[orderStage]    Script Date: 03/07/2023 11:16:53 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -17,6 +17,7 @@ CREATE TABLE [dbo].[orderStage](
 	[storeUnit] [varchar](20) NULL,
 	[dateUpdate] [date] NULL,
 	[isCommit] [bit] NOT NULL,
+	[uId] [varchar](36) NULL,
 PRIMARY KEY CLUSTERED
 (
 	[id] ASC

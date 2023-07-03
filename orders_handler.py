@@ -1,28 +1,29 @@
+import os
 import sys
+
 
 from dotenv import load_dotenv
 
-from database.db_handler import DatabaseHandler
+from database.repositories.repository_manager import RepositoryManager
 
-load_dotenv(r"F:\MK\Apps\search_payments\.env")
+from helpers.uuid_helpers import UuidHelpers
+
+load_dotenv(r"C:\Users\Matheus\PycharmProjects\trykat-card\development.env")
 
 
 def order_handler() -> None:
-    handler = DatabaseHandler()
-    handler.connect()
 
-    order_number = str(sys.argv[1])
-    cashier_number = str(sys.argv[2])
-    cash_flow = str(sys.argv[3])
-    order_value = float(sys.argv[4])
-    company_unity = int(sys.argv[5])
+    order = {"orderNumber": str(sys.argv[1]),
+             "cashierNumber": str(sys.argv[2]),
+             "cashFlow": str(sys.argv[3]),
+             "orderValue": str(sys.argv[4]),
+             "storeUnit": RepositoryManager.stores_repository().get_store_by_id(str(sys.argv[5])),
+             "isCommit": "0",
+             "uId": UuidHelpers.generate_uuid()}
 
-    handler.insert_in_order_stage(order_number, cashier_number, cash_flow,
-                                  order_value, company_unity)
+    RepositoryManager.order_stage_repository().insert(order)
 
-    handler.verify_and_delete_checked_orders(order_number)
-
-    handler.disconnect()
+    RepositoryManager.checked_orders_repository().delete({"orderNumber": order["orderNumber"]})
 
 
 if __name__ == "__main__":

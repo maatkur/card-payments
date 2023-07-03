@@ -7,16 +7,17 @@
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
+
 import os
-
-from PySide6.QtCore import (QCoreApplication, QMetaObject, QRect,
-                            QSize, Qt)
-from PySide6.QtGui import (QCursor,
-                           QFont, QIcon,
-                           QPixmap)
-from PySide6.QtWidgets import (QFrame, QLabel, QLineEdit,
-                               QPushButton, QSizePolicy, QWidget)
-
+from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
+    QMetaObject, QObject, QPoint, QRect,
+    QSize, QTime, QUrl, Qt)
+from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
+    QFont, QFontDatabase, QGradient, QIcon,
+    QImage, QKeySequence, QLinearGradient, QPainter,
+    QPalette, QPixmap, QRadialGradient, QTransform)
+from PySide6.QtWidgets import (QApplication, QFrame, QLabel, QLineEdit,
+    QMainWindow, QPushButton, QSizePolicy, QWidget)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -24,7 +25,7 @@ class Ui_MainWindow(object):
             MainWindow.setObjectName(u"MainWindow")
         MainWindow.resize(454, 467)
         icon = QIcon()
-        icon.addFile(f"{os.getenv('ICONS_PATH')}pagamento-com-cartao-de-credito.ico", QSize(), QIcon.Normal, QIcon.Off)
+        icon.addFile(f"{os.getenv('ICONS_PATH')}/pagamento-com-cartao-de-credito.ico", QSize(), QIcon.Normal, QIcon.Off)
         MainWindow.setWindowIcon(icon)
         MainWindow.setStyleSheet(u"* {\n"
 "	background: #222222;\n"
@@ -85,6 +86,7 @@ class Ui_MainWindow(object):
         self.password_entry.setAlignment(Qt.AlignCenter)
         self.login_button = QPushButton(self.frame_2)
         self.login_button.setObjectName(u"login_button")
+        self.login_button.setEnabled(False)
         self.login_button.setGeometry(QRect(180, 150, 75, 24))
         self.login_button.setFont(font1)
         self.login_button.setCursor(QCursor(Qt.PointingHandCursor))

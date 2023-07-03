@@ -3,7 +3,7 @@ import os
 import openpyxl
 from openpyxl.styles import Font
 
-from helpers import to_default_format, to_date_string
+from helpers.date_helpers import DateHelpers
 
 
 def generate_management_report(data: list):
@@ -23,7 +23,7 @@ def generate_management_report(data: list):
         flag = order[4]
         value = order[5]
         installments = order[6]
-        purchase_date = to_default_format(order[7])
+        purchase_date = DateHelpers.to_default_format(order[7])
         store = order[8]
         nsu = order[9]
         transaction_authorization = order[10]
@@ -39,7 +39,7 @@ def generate_management_report(data: list):
 
     # Salva o arquivo temporário
     user = os.getlogin()
-    date = to_date_string()
+    date = DateHelpers.to_date_string()
     temp_filename = rf'C:\Users\{user}\Desktop\gerenciamento{date}.xlsx'
     workbook.save(temp_filename)
 

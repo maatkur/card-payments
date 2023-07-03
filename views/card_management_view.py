@@ -4,14 +4,19 @@ from datetime import datetime
 from PySide6.QtCore import Signal, QDate, Qt, QEvent
 from PySide6.QtWidgets import *
 
-from database.db_handler import DatabaseHandler
+from database.repositories.repository_manager import RepositoryManager
 from ui.ui_card_management import Ui_Form
 from reports.management_report import generate_management_report
 from components.dialog_window import DialogWindow
+from helpers.date_helpers import DateHelpers
+from helpers.order_helpers import OrderHelpers
+from config.setup_config import setup_config
+
+setup_config()
 
 
 class CardsManagement(QMainWindow):
-    closed = Signal()
+    update_order = Signal()
     today = datetime.today()
     qdate = QDate(today.year, today.month, today.day)
 
@@ -20,17 +25,21 @@ class CardsManagement(QMainWindow):
         self.ui = Ui_Form()  # instanciar a classe Ui_form
         self.ui.setupUi(self)
         self.setWindowTitle("Manutenção")
-        self.db_handler = DatabaseHandler()
         self.dialog_window = DialogWindow()
         self.set_date()
         self.install_event_filters()
         self.fill_stores_combo_box()
+        self.set_card_flags()
         self.disable_view_widgets()
         self.connect_button_actions()
-        self.connect_text_changes()
-        self.data = None
-        self.nsu = None
-        self.authorization = None
+        self.table_data = None
+        self.clicked_order_data = None
+
+    def install_event_filters(self):
+        self.ui.initial_date.installEventFilter(self)
+        self.ui.final_date.installEventFilter(self)
+        self.ui.order_entry.installEventFilter(self)
+        self.ui.search_button.installEventFilter(self)
 
     def eventFilter(self, widget, event):
         if event.type() == QEvent.KeyPress:
@@ -41,24 +50,16 @@ class CardsManagement(QMainWindow):
                 if widget == self.ui.final_date:
                     self.ui.order_entry.setFocus()
                 if widget == self.ui.order_entry:
-                    self.ui.nsu_authorization_entry.setFocus()
-                if widget == self.ui.nsu_authorization_entry:
                     self.ui.search_button.setFocus()
                 if widget == self.ui.search_button:
                     self.handle_search_button()
-
-    def install_event_filters(self):
-        self.ui.initial_date.installEventFilter(self)
-        self.ui.final_date.installEventFilter(self)
-        self.ui.order_entry.installEventFilter(self)
-        self.ui.nsu_authorization_entry.installEventFilter(self)
-        self.ui.search_button.installEventFilter(self)
+        return False
 
     def set_data(self, data: list) -> None:
         data = data
 
         num_rows = len(data)
-        num_columns = len(data[0])
+        num_columns = len(data[0]) - 1
 
         self.ui.tableWidget.setRowCount(num_rows)
         self.ui.tableWidget.setColumnCount(num_columns)
@@ -85,72 +86,93 @@ class CardsManagement(QMainWindow):
         self.enable_excel_button()
 
     def handle_search_button(self) -> None:
+        self.get_filtered_orders()
+        self.verify_data()
+
+    def get_filtered_orders(self) -> None:
         initial_date = self.ui.initial_date.text()
         final_date = self.ui.final_date.text()
-        order = self.ui.order_entry.text()
-        nsu_authorization = self.ui.nsu_authorization_entry.text()
-        store = self.ui.stores_comboBox.currentText()
+        order_number = self.ui.order_entry.text()
+        store_unit = self.ui.stores_comboBox.currentText()
 
-        if len(order) == 0:
-            order = None
-        if len(nsu_authorization) == 0:
-            nsu_authorization = None
-        if store == "Todas":
-            store = None
+        order_entry_filled = len(order_number) > 0
+        store_is_selected = store_unit != "Todas"
+        query = {}
 
-        self.db_handler.connect()
+        if order_entry_filled:
+            query["orderNumber"] = order_number
+        else:
+            query["initial_date"] = DateHelpers.to_sql_format(initial_date)
+            query["final_date"] = DateHelpers.to_sql_format(final_date)
+            if store_is_selected:
+                query["storeUnit"] = store_unit
 
-        self.data = self.db_handler.get_orders_management(order=order, initial_date=initial_date, final_date=final_date,
-                                                          nsu_authorization=nsu_authorization, store=store)
-        self.verify_data()
-        self.db_handler.disconnect()
+        self.table_data = RepositoryManager.checked_orders_repository().get_all_by(query)
 
     def verify_data(self):
-        not_fount = len(self.data) == 0
+        not_fount = len(self.table_data) == 0
 
         if not_fount:
             self.dialog_window.not_found()
         else:
-            self.set_data(self.data)
+            self.set_data(self.table_data)
 
     def store_getter(self) -> list:
 
-        self.db_handler.connect()
-        stores = self.db_handler.get_stores()
-        self.db_handler.disconnect()
+        stores = RepositoryManager.stores_repository().get_all_stores()
 
         return stores
 
-    def fill_stores_combo_box(self):
+    def fill_stores_combo_box(self) -> None:
         stores = self.store_getter()
         for store in stores:
-            self.ui.stores_comboBox.addItem(store[0])
+            self.ui.stores_comboBox.addItem(store)
+
+    def set_card_flags(self) -> None:
+
+        # Busca as bandeiras de cartões no DB e carrega no combobox
+
+        options = {
+            "select": "flag",
+            "distinct": True,
+            "order_by": ["flag"]
+        }
+
+        flags = RepositoryManager.card_flags_repository().get_all(options)
+
+        for flag in flags:
+            self.ui.flags_combo_box.addItem(flag[0])
 
     def handle_cell_double_click(self, row) -> None:
-        order = self.ui.tableWidget.item(row, 0).text()
-        cashier = self.ui.tableWidget.item(row, 1).text()
-        cash_flow = self.ui.tableWidget.item(row, 2).text()
-        transaction_type = self.ui.tableWidget.item(row, 3).text()
-        flag = self.ui.tableWidget.item(row, 4).text()
-        order_value = self.ui.tableWidget.item(row, 5).text()
-        nsu = self.ui.tableWidget.item(row, 9).text()
-        self.nsu = nsu
-        authorization = self.ui.tableWidget.item(row, 10).text()
-        self.authorization = authorization
+        clicked_row = self.ui.tableWidget.item(row, 0).row()
+        uid = self.table_data[clicked_row][-1]
+        self.get_clicked_order_data(uid)
+        self.fill_view_fields(self.clicked_order_data)
+        self.manage_edition_widgets()
+        self.connect_text_changes()
 
-        self.ui.order_view.setText(order)
-        self.ui.cashier_view.setText(cashier)
-        self.ui.cash_flow_view.setText(cash_flow)
-        self.ui.transaction_view.setText(transaction_type)
-        self.ui.flag_view.setText(flag)
+    def get_clicked_order_data(self, uid: str) -> None:
+
+        self.clicked_order_data = RepositoryManager.checked_orders_repository().get_first({"uId": uid})
+
+    def fill_view_fields(self, order_data: dict) -> None:
+        order_value = round(float(order_data["orderValue"]), 2)
+        order_value = str(order_value)
+
+        self.ui.order_view.setText(order_data["orderNumber"])
+        self.ui.cashier_view.setText(order_data["cashierNumber"])
         self.ui.value_view.setText(order_value)
-        self.ui.nsu_view.setText(nsu)
-        self.ui.authorization_view.setText(authorization)
+        self.ui.cash_flow_view.setText(order_data["cashFlow"])
+        self.ui.transaction_view.setText("Crédito" if order_data["transactionType"] == "credit" else "Débito")
+        self.ui.flags_combo_box.setCurrentText(order_data["flag"])
+        self.ui.installments_combo_box.setCurrentText(order_data["installments"])
+        self.ui.nsu_view.setText(order_data["NSU"])
+        self.ui.authorization_view.setText(order_data["transactionAuthorization"])
 
     def enable_excel_button(self) -> None:
-        is_table_filled = self.ui.tableWidget.rowCount() > 0
+        table_filled = self.ui.tableWidget.rowCount() > 0
 
-        if is_table_filled:
+        if table_filled:
             self.ui.excel_button.setDisabled(False)
         else:
             self.ui.excel_button.setDisabled(True)
@@ -163,7 +185,8 @@ class CardsManagement(QMainWindow):
         self.ui.cash_flow_view.setDisabled(False)
         self.ui.authorization_view.setDisabled(False)
         self.ui.transaction_view.setDisabled(False)
-        self.ui.flag_view.setDisabled(False)
+        self.ui.flags_combo_box.setDisabled(False)
+        self.ui.installments_combo_box.setDisabled(False)
         self.ui.delete_button.setDisabled(False)
         self.ui.excel_button.setDisabled(False)
 
@@ -175,7 +198,8 @@ class CardsManagement(QMainWindow):
         self.ui.cash_flow_view.setDisabled(True)
         self.ui.authorization_view.setDisabled(True)
         self.ui.transaction_view.setDisabled(True)
-        self.ui.flag_view.setDisabled(True)
+        self.ui.flags_combo_box.setDisabled(True)
+        self.ui.installments_combo_box.setDisabled(True)
         self.ui.delete_button.setDisabled(True)
         self.ui.save_button.setDisabled(True)
         self.ui.excel_button.setDisabled(True)
@@ -202,22 +226,25 @@ class CardsManagement(QMainWindow):
         else:
             self.disable_view_widgets()
 
-    def set_comboBox_default(self) -> None:
-        self.ui.stores_comboBox.setCurrentText("Selecione")
+    def set_combo_box_default(self) -> None:
+        self.ui.stores_comboBox.setCurrentText("Todas")
+        self.ui.flags_combo_box.setCurrentText("Selecione")
+        self.ui.installments_combo_box.setCurrentText("1")
 
     def handle_clear_button(self) -> None:
         self.set_date()
         self.clear_fields()
         self.clear_table()
-        self.set_comboBox_default()
+        self.set_combo_box_default()
         self.disable_view_widgets()
 
     def delete_order(self):
-        order_number = self.ui.order_view.text()
-        self.db_handler.connect()
-        self.db_handler.delete_staged_order(order_number)
-        self.db_handler.delete_from_checkedOrders(order_number)
-        self.db_handler.disconnect()
+
+        options = {"uId": self.clicked_order_data["uId"]}
+        RepositoryManager.checked_orders_repository().delete(options)
+
+    def uncommit_order(self):
+        RepositoryManager.order_stage_repository().uncommit_order(self.clicked_order_data["uId"])
 
     def handle_delete_button(self):
         title = "Confirmar exclusão"
@@ -227,18 +254,38 @@ class CardsManagement(QMainWindow):
 
         if result == QMessageBox.Yes:
             self.delete_order()
+            self.uncommit_order()
             self.handle_clear_button()
+            self.update_order.emit()
 
-    def save_changes(self) -> None:
-        new_nsu = self.ui.nsu_view.text()
-        new_authorization = self.ui.authorization_view.text()
-        order = self.ui.order_view.text()
-        old_nsu = self.nsu
+    def update_order_changes(self) -> None:
 
-        self.db_handler.connect()
-        self.db_handler.update_card_docs(new_nsu, new_authorization, order, old_nsu)
+        changes = self.check_order_changes()
+        changes["uId"] = self.clicked_order_data["uId"]
 
-        self.db_handler.disconnect()
+        if changes.get("nsu") or changes.get("transactionAuthorization"):
+
+            RepositoryManager.checked_orders_repository().update(changes)
+
+        elif changes.get("flag") or changes.get("installments"):
+            self.delete_order()
+
+            order = self.clicked_order_data
+            order["transactionAuthorization"] = self.ui.authorization_view.text()
+            order["flag"] = self.ui.flags_combo_box.currentText()
+            order["installments"] = self.ui.installments_combo_box.currentText()
+            order["transactionType"] = self.ui.transaction_view.text()
+            order["nsu"] = self.ui.nsu_view.text()
+            order["transactionAuthorization"] = self.ui.authorization_view.text()
+            order["flag"] = self.ui.flags_combo_box.currentText()
+            order["installments"] = self.ui.installments_combo_box.currentText()
+
+            checked_order = OrderHelpers.create_checked_order(order)
+
+            if type(checked_order) == dict:
+                RepositoryManager.checked_orders_repository().insert_debit_order(checked_order)
+            else:
+                RepositoryManager.checked_orders_repository().inser_credit_order(checked_order)
 
     def handle_save_button(self):
         title = "Confirmar alterações"
@@ -247,26 +294,50 @@ class CardsManagement(QMainWindow):
         result = self.dialog_window.confirmation(title, message)
 
         if result == QMessageBox.Yes:
-            self.save_changes()
+            self.update_order_changes()
             self.handle_search_button()
             self.disable_save_button()
+            self.clear_fields()
+            self.disable_view_widgets()
 
-    def manage_save_button(self):
-        authorization_changed = self.ui.authorization_view.text() != self.authorization
-        nsu_changed = self.ui.nsu_view.text() != self.nsu
+    def manage_save_button(self) -> None:
 
-        if authorization_changed or nsu_changed:
+        changes = self.check_order_changes()
+
+        if changes:
+            print(changes)
             self.enable_save_button()
         else:
             self.disable_save_button()
 
-    def enable_save_button(self):
+    def check_order_changes(self) -> dict:
+        nsu_was_changed = self.clicked_order_data["NSU"] != self.ui.nsu_view.text()
+        authorization_was_changed = self.clicked_order_data[
+                                        "transactionAuthorization"] != self.ui.authorization_view.text()
+        installments_was_changed = self.clicked_order_data[
+                                       "installments"] != self.ui.installments_combo_box.currentText()
+        flag_was_changed = self.clicked_order_data["flag"] != self.ui.flags_combo_box.currentText()
+
+        changes = {}
+
+        if nsu_was_changed:
+            changes["nsu"] = self.ui.nsu_view.text()
+        if authorization_was_changed:
+            changes["transactionAuthorization"] = self.ui.authorization_view.text()
+        if installments_was_changed:
+            changes["installments"] = self.ui.installments_combo_box.currentText()
+        if flag_was_changed:
+            changes["flag"] = self.ui.flags_combo_box.currentText()
+
+        return changes
+
+    def enable_save_button(self) -> None:
         self.ui.save_button.setDisabled(False)
 
-    def disable_save_button(self):
+    def disable_save_button(self) -> None:
         self.ui.save_button.setDisabled(True)
 
-    def connect_button_actions(self):
+    def connect_button_actions(self) -> None:
         self.ui.tableWidget.cellDoubleClicked.connect(self.handle_cell_double_click)
         self.ui.search_button.clicked.connect(self.handle_search_button)
         self.ui.clear_filters_button.clicked.connect(self.handle_clear_button)
@@ -274,17 +345,14 @@ class CardsManagement(QMainWindow):
         self.ui.save_button.clicked.connect(self.handle_save_button)
         self.ui.excel_button.clicked.connect(self.handle_report_button)
 
-    def connect_text_changes(self):
-        self.ui.order_view.textChanged.connect(self.manage_edition_widgets)
+    def connect_text_changes(self) -> None:
         self.ui.nsu_view.textChanged.connect(self.manage_save_button)
         self.ui.authorization_view.textChanged.connect(self.manage_save_button)
+        self.ui.installments_combo_box.currentTextChanged.connect(self.manage_save_button)
+        self.ui.flags_combo_box.currentTextChanged.connect(self.manage_save_button)
 
-    def handle_report_button(self):
-        generate_management_report(self.data)
-
-    def close_details_window(self) -> None:
-        self.closed.emit()  # emite o sinal closed quando a janela for fechada
-        self.deleteLater()
+    def handle_report_button(self) -> None:
+        generate_management_report(self.table_data)
 
 
 if __name__ == "__main__":
