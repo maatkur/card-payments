@@ -70,6 +70,19 @@ class CheckedOrdersRepository(RepositoryConfig):
 
         self._execute_and_commit(command, values)
 
+    def update_by_nsu_auth(self, data: dict): # FUNCAO TEMPORARIA PARA O AJUSTE DOS UID´s
+        nsu = data.get("NSU")
+        auth = data.get("transactionAuthorization")
+        if not nsu or not auth:
+            raise ValueError("NSU and transactionAuthorization are required for updating data.")
+
+        fields = ", ".join([f"{key} = ?" for key in data.keys()])
+        values = tuple(data.values())
+        command = f"UPDATE {self.table_name} SET {fields} WHERE NSU = ? AND transactionAuthorization = ?"
+        values += (nsu, auth)
+
+        self._execute_and_commit(command, values)
+
     def insert_debit_order(self, debit_order: dict) -> None:
 
         self.insert(debit_order)
