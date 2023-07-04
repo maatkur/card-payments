@@ -1,10 +1,7 @@
 import pyodbc
 import os
 
-from dotenv import load_dotenv
 from helpers.dict_helper import dict_merge, dict_to_query
-
-load_dotenv("./development.env")
 
 
 class RepositoryConfig:
@@ -40,7 +37,6 @@ class RepositoryConfig:
                 cursor.execute(command, values)
             else:
                 cursor.execute(command)
-
             self.connection.commit()
             self._disconnect()
         except pyodbc.Error as e:

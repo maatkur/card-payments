@@ -111,27 +111,25 @@ class Cards(QMainWindow):
         self.fetch_user_orders()
         self.load_orders_table(self.orders_data)
 
-    def get_filtered_order(self, order_number) -> list:
+    def get_filtered_order(self, order_number) -> None:
 
         if self.is_admin_user:
-            data = RepositoryManager.order_stage_repository().filter_uncommited_order(self.logged_user["store"],
+            self.orders_data = RepositoryManager.order_stage_repository().filter_uncommited_order(self.logged_user["store"],
                                                                                       order_number)
         else:
-            data = RepositoryManager.order_stage_repository().filter_uncommited_order(self.logged_user["store"],
+            self.orders_data = RepositoryManager.order_stage_repository().filter_uncommited_order(self.logged_user["store"],
                                                                                       order_number,
                                                                                       self.logged_user["userCode"])
 
-        return data
-
     def load_filtered_order(self) -> None:
         order_number = self.ui.search_order_entry.text()
-        data = self.get_filtered_order(order_number)
-        not_found = len(data) == 0
+        self.get_filtered_order(order_number)
+        not_found = len(self.orders_data) == 0
 
         if not_found:
             self.dialog_window.not_found()
         else:
-            self.load_orders_table(data)
+            self.load_orders_table(self.orders_data)
 
     def handle_cell_double_click(self, row, column) -> None:
 
