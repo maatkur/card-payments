@@ -3,6 +3,7 @@ from database.repositories.stores_repository import StoresRepository
 from database.repositories.card_flags_repository import CardFlagsRepository
 from database.repositories.order_stage_repository import OrderStageRepository
 from database.repositories.checked_orders_repository import CheckedOrdersRepository
+from database.repositories.old_payments_repository import OldPaymentsRepository
 
 
 class RepositoryManager:
@@ -11,6 +12,7 @@ class RepositoryManager:
     _card_flags_repository = None
     _order_stage_repository = None
     _checked_orders_repository = None
+    _old_payments_repository = None
 
     @staticmethod
     def users_repository():
@@ -41,3 +43,9 @@ class RepositoryManager:
         if RepositoryManager._checked_orders_repository is None:
             RepositoryManager._checked_orders_repository = CheckedOrdersRepository()
         return RepositoryManager._checked_orders_repository
+
+    @staticmethod
+    def old_payments_repository():
+        if RepositoryManager._old_payments_repository is None:
+            RepositoryManager._old_payments_repository = OldPaymentsRepository()
+        return RepositoryManager._old_payments_repository
