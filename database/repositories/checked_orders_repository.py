@@ -9,8 +9,9 @@ class CheckedOrdersRepository(RepositoryConfig):
 
     def get_all_by(self, query):
         options = {
-            "select": "orderNumber, cashierNumber, cashFlow, transactionType, flag, orderValue, currentInstallment, "
+            "select": "orderNumber, cashierNumber, cashFlow, transactionType, flag, orderValue, installments, "
                       "purchaseDate, storeUnit, NSU, transactionAuthorization, uId",
+            "distinct": True,
             "query": query}
 
         return self.get_all(options)

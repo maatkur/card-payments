@@ -4,7 +4,7 @@ from database.repositories.repository_manager import RepositoryManager
 from helpers.date_helpers import DateHelpers
 from dotenv import load_dotenv
 
-load_dotenv(r"f:\MK\Apps.env")
+load_dotenv(r"F:\MK\Apps\cards_login_view\.env")
 
 
 def search():

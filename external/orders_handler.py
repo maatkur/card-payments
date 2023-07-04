@@ -8,7 +8,7 @@ from database.repositories.repository_manager import RepositoryManager
 
 from helpers.uuid_helpers import UuidHelpers
 
-load_dotenv(r"/development.env")
+load_dotenv(r"F:\MK\Apps\cards_login_view\.env")
 
 
 def order_handler() -> None:
