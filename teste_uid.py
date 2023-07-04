@@ -37,4 +37,4 @@ for pedido in pedidos:
     stage_order["uId"] = order_uid
     RepositoryManager.order_stage_repository().insert(stage_order)
     RepositoryManager.checked_orders_repository().update_by_nsu_auth(
-        {"NSU": NSU, "transactionAuthorization": auto, "uId": order_uid})
+        {"NSU": NSU, "transactionAuthorization": auto, "uId": order_uid, "orderNumber": order_number})
