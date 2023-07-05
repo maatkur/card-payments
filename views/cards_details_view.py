@@ -121,6 +121,7 @@ class CardDetails(QMainWindow):
         order = self.order_data
         order["nsu"] = self.ui.nsu_lineEdit.text()
         order["transactionAuthorization"] = self.ui.authorization_lineEdit.text()
+        order["orderValue"] = self.ui.order_value_lineEdit.text().replace(",", ".")
         order["flag"] = self.ui.card_flag_comboBox.currentText()
         order["installments"] = self.ui.installments_comboBox.currentText()
         order["transactionType"] = transaction_type
@@ -137,11 +138,12 @@ class CardDetails(QMainWindow):
     def process_remaining_payment(self):
         new_value = float(self.ui.order_value_lineEdit.text().replace(",", "."))
         remaining_value = self.initial_value - new_value
-
+        print(remaining_value)
         order = {
             "orderNumber": self.order_data["orderNumber"],
             "cashierNumber": str(self.order_data["cashierNumber"]),
             "cashFlow": str(self.order_data["cashFlow"]),
+            "dateUpdate": self.order_data["purchaseDate"],
             "orderValue": str(remaining_value),
             "storeUnit": RepositoryManager.stores_repository().get_store_by_id(str(self.store)),
             "isCommit": "0",

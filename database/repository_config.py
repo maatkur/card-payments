@@ -34,6 +34,7 @@ class RepositoryConfig:
             self._connect()
             cursor = self.connection.cursor()
             if values:
+                print(command, values)
                 cursor.execute(command, values)
             else:
                 cursor.execute(command)
