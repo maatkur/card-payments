@@ -1,4 +1,4 @@
-from PySide6.QtWidgets import QLineEdit
+from PySide6.QtWidgets import QLineEdit, QTableWidget
 
 
 class WidgetHelpers:
@@ -16,3 +16,11 @@ class WidgetHelpers:
             if lineedit.text().strip() == '':
                 return False  # Se um line edit estiver vazio, retorna False
         return True  # Todos os line edits estão preenchidos
+
+    @staticmethod
+    def clear_table(window):
+        tables_widgets = window.findChildren(QTableWidget)
+
+        for table in tables_widgets:
+            table.clearContents()
+            table.setRowCount(0)

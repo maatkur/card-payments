@@ -1,8 +1,5 @@
-from payments_conciliation import teste_cielo
-from dotenv import load_dotenv
 from database.repositories.repository_manager import RepositoryManager
-
-load_dotenv('./development.env')
+from payments_conciliation import teste_cielo
 
 
 def match_payments():
@@ -50,11 +47,3 @@ def match_payments():
             not_found_payments.append(payment)
 
     return old_found_payments, found_payments, not_found_payments
-
-
-if __name__ == "__main__":
-    dd = match_payments()
-    # print(f"Pagamentos novos encontrados: {len(found_payments)}")
-    # print(f"Pagamentos antigos encontrados: {len(old_found_payments)}")
-    # print(f"Pagamentos não encontrados: {len(not_found_payments)}")
-    # print(f"Total: {len(cielo_payments)}")

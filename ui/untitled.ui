@@ -94,6 +94,19 @@
        <string>Data de pagamento segundo operadora</string>
       </property>
      </widget>
+     <widget class="QPushButton" name="clear_button">
+      <property name="geometry">
+       <rect>
+        <x>1130</x>
+        <y>20</y>
+        <width>75</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Limpar</string>
+      </property>
+     </widget>
     </widget>
     <widget class="QFrame" name="frame_3">
      <property name="geometry">
