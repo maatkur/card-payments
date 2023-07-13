@@ -71,7 +71,7 @@ class CheckedOrdersRepository(RepositoryConfig):
 
         self._execute_and_commit(command, values)
 
-    def update_by_nsu_auth(self, data: dict): # FUNCAO TEMPORARIA PARA O AJUSTE DOS UID´s
+    def update_by_nsu_auth(self, data: dict):  # FUNCAO TEMPORARIA PARA O AJUSTE DOS UID´s
         nsu = data.get("NSU")
         auth = data.get("transactionAuthorization")
         order_number = data.get("orderNumber")
@@ -106,3 +106,54 @@ class CheckedOrdersRepository(RepositoryConfig):
 
         return self._search_and_fetch_all(query)
 
+    def get_conciliations(self, query):
+        options = {
+            "select": "orderNumber, transactionType, flag, installments, installmentValue, currentInstallment, "
+                      "purchaseDate, payday, flagTax, liquidValue, NSU, transactionAuthorization, uId",
+            "query": query
+        }
+
+        payment = self.get_all(options)
+
+        if payment:
+            # Desempacotar os valores da tupla em variáveis
+            (
+                order_number,
+                transaction_type,
+                flag,
+                installments,
+                installment_value,
+                current_installment,
+                purchase_date,
+                payday,
+                flag_tax,
+                liquid_value,
+                nsu,
+                transaction_authorization,
+                uid
+            ) = payment[0]
+            return {
+                "orderNumber": order_number,
+                "transactionType": transaction_type,
+                "flag": flag,
+                "installments": installments,
+                "installmentValue": installment_value,
+                "currentInstallment": current_installment[2:],
+                "purchaseDate": purchase_date,
+                "payday": payday,
+                "flagTax": flag_tax,
+                "liquidValue": liquid_value,
+                "NSU": nsu,
+                "transactionAuthorization": transaction_authorization,
+                "uId": uid
+            }
+        return payment
+
+    def teste_conciliations(self):
+
+        command = f"""SELECT orderNumber, transactionType, flag, installments, installmentValue, currentInstallment, 
+                            purchaseDate, flagTax, liquidValue, NSU, transactionAuthorization, uId FROM checkedOrders
+                            WHERE payday = '2023-07-06'
+                    """
+
+        return self._search_and_fetch_all(command)

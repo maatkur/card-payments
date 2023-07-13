@@ -17,3 +17,40 @@ class OldPaymentsRepository(RepositoryConfig):
         query = f"SELECT installmentValue, payday FROM {self.table_name} WHERE payday BETWEEN '{initial_date}' AND '{final_date}'"
 
         return self._search_and_fetch_all(query)
+
+    def get_conciliations(self, query):
+        options = {
+            "select": "payday, tax, installmentValue, currentInstallment, installments, NSU, transactionAuthorization",
+            "query": query
+        }
+
+        payment = self.get_all(options)
+
+        if payment:
+            # Desempacotar os valores da tupla em variáveis
+            (
+                payday,
+                tax,
+                installment_value,
+                current_installment,
+                installments,
+                nsu,
+                transaction_authorization
+            ) = payment[0]
+            return {
+                "payday": payday,
+                "tax": tax,
+                "installmentValue": installment_value,
+                "currentInstallment": current_installment,
+                "installments": installments,
+                "NSU": nsu,
+                "transactionAuthorization": transaction_authorization
+            }
+        return payment
+
+    def teste_conciliations(self):
+
+        command = """SELECT payday, tax, installmentValue, currentInstallment, installments, NSU, 
+                        transactionAuthorization FROM oldPayments WHERE payday = '2023-07-06'"""
+
+        return self._search_and_fetch_all(command)

@@ -11,6 +11,7 @@ from ui.ui_cards_login import Ui_MainWindow
 from views.cards_view import Cards
 from helpers.widgets_helpers import WidgetHelpers
 
+
 setup_config()
 
 
