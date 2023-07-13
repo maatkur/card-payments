@@ -30,16 +30,16 @@ def teste_cielo():
         cielo_payment = {
             "transactionType": cielo_transaction_type,
             "flag": row["Bandeira"],
+            "payday": DateHelpers.to_sql_format(cielo_payday),
+            "flagTax": row["Taxas (%)"].replace(",", "."),
+            "purchaseDate": DateHelpers.to_sql_format(row["Data da autorização da venda"]),
             "installments": "1" if "Crédito à vista" in cielo_transaction_type else str(row["Quantidade de parcelas"]),
-            "oldInstallments": str(row["Quantidade de parcelas"]),
             "currentInstallment": "1" if "Crédito à vista" in cielo_transaction_type else str(row["Número da parcela"]),
-            "oldCurrentInstallment": str(row["Número da parcela"]),
             "installmentValue": processar_valor(row["Valor líquido"]),
             "NSU": str(row["NSU"]),
             "transactionAuthorization": str(row["Código de autorização"]),
-            "purchaseDate": DateHelpers.to_sql_format(row["Data da autorização da venda"]),
-            "flagTax": row["Taxas (%)"].replace(",", "."),
-            "payday": DateHelpers.to_sql_format(cielo_payday)
+            "oldCurrentInstallment": str(row["Número da parcela"]),
+            "oldInstallments": str(row["Quantidade de parcelas"])
         }
 
         cielo_payments.append(cielo_payment)

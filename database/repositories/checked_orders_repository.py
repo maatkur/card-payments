@@ -149,11 +149,14 @@ class CheckedOrdersRepository(RepositoryConfig):
             }
         return payment
 
-    def teste_conciliations(self):
+    def get_unconciliated_orders(self, date_period: dict) -> list:
+
+        initial_date = date_period["initial_date"]
+        final_date = date_period["final_date"]
 
         command = f"""SELECT orderNumber, transactionType, flag, installments, installmentValue, currentInstallment, 
-                            purchaseDate, flagTax, liquidValue, NSU, transactionAuthorization, uId FROM checkedOrders
-                            WHERE payday = '2023-07-06'
-                    """
+                        purchaseDate, payday, flagTax, liquidValue, NSU, transactionAuthorization, uId 
+                            FROM checkedOrders WHERE payday BETWEEN '{initial_date}' AND '{final_date}' 
+                                AND conciliated = 0"""
 
         return self._search_and_fetch_all(command)

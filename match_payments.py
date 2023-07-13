@@ -7,8 +7,6 @@ load_dotenv('./development.env')
 
 def match_payments():
     cielo_payments = teste_cielo()
-    old_payments = RepositoryManager.old_payments_repository().teste_conciliations()
-    checked_orders = RepositoryManager.checked_orders_repository().teste_conciliations()
 
     found_payments = []
     old_found_payments = []
