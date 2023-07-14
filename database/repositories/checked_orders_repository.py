@@ -157,6 +157,19 @@ class CheckedOrdersRepository(RepositoryConfig):
         command = f"""SELECT orderNumber, transactionType, flag, installments, installmentValue, currentInstallment, 
                         purchaseDate, payday, flagTax, liquidValue, NSU, transactionAuthorization, uId 
                             FROM checkedOrders WHERE payday BETWEEN '{initial_date}' AND '{final_date}' 
-                                AND conciliated = 0"""
+                                AND conciliated = 0 ORDER BY orderNumber"""
 
         return self._search_and_fetch_all(command)
+
+    def conciliate_orders(self, order: dict) -> None:
+
+        payday = order.get("payday")
+        current_installment = order.get("currentInstallment")
+        uid = order.get("uId")
+
+        command = f"""UPDATE checkedOrders
+                        SET payday = '{payday}', conciliated = 1
+                        WHERE uId = '{uid}' AND currentInstallment = '{current_installment}'
+        """
+
+        self._execute_and_commit(command)

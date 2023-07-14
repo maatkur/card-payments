@@ -32,7 +32,7 @@ def teste_cielo():
             "purchaseDate": DateHelpers.to_sql_format(row["Data da autorização da venda"]),
             "installments": "1" if "Crédito à vista" in cielo_transaction_type else str(row["Quantidade de parcelas"]),
             "currentInstallment": "1" if "Crédito à vista" in cielo_transaction_type else str(row["Número da parcela"]),
-            "installmentValue": StringHelpers.clear_excel_caracters(row["Valor líquido"]),
+            "installmentValue": float(StringHelpers.clear_excel_caracters(row["Valor líquido"])),
             "NSU": str(row["NSU"]),
             "transactionAuthorization": str(row["Código de autorização"]),
             "oldCurrentInstallment": str(row["Número da parcela"]),

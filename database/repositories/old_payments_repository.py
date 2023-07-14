@@ -20,7 +20,8 @@ class OldPaymentsRepository(RepositoryConfig):
 
     def get_conciliations(self, query):
         options = {
-            "select": "payday, tax, installmentValue, currentInstallment, installments, NSU, transactionAuthorization",
+            "select": "payday, tax, installmentValue, currentInstallment, "
+                      "installments, NSU, transactionAuthorization, uId",
             "query": query
         }
 
@@ -35,7 +36,8 @@ class OldPaymentsRepository(RepositoryConfig):
                 current_installment,
                 installments,
                 nsu,
-                transaction_authorization
+                transaction_authorization,
+                uid
             ) = payment[0]
             return {
                 "payday": payday,
@@ -44,7 +46,8 @@ class OldPaymentsRepository(RepositoryConfig):
                 "currentInstallment": current_installment,
                 "installments": installments,
                 "NSU": nsu,
-                "transactionAuthorization": transaction_authorization
+                "transactionAuthorization": transaction_authorization,
+                "uId": uid
             }
         return payment
 
@@ -53,8 +56,35 @@ class OldPaymentsRepository(RepositoryConfig):
         initial_date = date_period["initial_date"]
         final_date = date_period["final_date"]
 
-        command = f"""SELECT payday, tax, installmentValue, currentInstallment, installments, NSU, transactionAuthorization 
-                            FROM oldPayments WHERE payday BETWEEN '{initial_date}' AND '{final_date}' 
-                            AND conciliated = 0"""
+        command = f"""SELECT payday, tax, installmentValue, currentInstallment, installments, 
+                        NSU, transactionAuthorization, uId 
+                             FROM oldPayments WHERE payday BETWEEN '{initial_date}' AND '{final_date}' 
+                                AND conciliated = 0"""
 
         return self._search_and_fetch_all(command)
+
+    def update_by_nsu_auth(self, data: dict):  # FUNCAO TEMPORARIA PARA O AJUSTE DOS UID´s
+        nsu = data.get("NSU")
+        auth = data.get("transactionAuthorization")
+        if not nsu or not auth:
+            raise ValueError("NSU and transactionAuthorization are required for updating data.")
+
+        fields = ", ".join([f"{key} = ?" for key in data.keys()])
+        values = tuple(data.values())
+        command = f"UPDATE {self.table_name} SET {fields} WHERE NSU = ? AND transactionAuthorization = ?"
+        values += (nsu, auth)
+
+        self._execute_and_commit(command, values)
+
+    def conciliate_orders(self, order: dict) -> None:
+
+        payday = order.get("payday")
+        current_installment = order.get("currentInstallment")
+        uid = order.get("uId")
+
+        command = f"""UPDATE oldPayments
+                        SET payday = '{payday}', conciliated = 1
+                        WHERE uId = '{uid}' AND currentInstallment = '{current_installment}'
+        """
+
+        self._execute_and_commit(command)

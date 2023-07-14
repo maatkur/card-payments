@@ -24,26 +24,19 @@ def match_payments():
             "currentInstallment": payment["oldCurrentInstallment"]
         })
 
-        if (
-                payment_search
-                and payment["currentInstallment"] == payment_search["currentInstallment"]
-                and payment["NSU"] == payment_search["NSU"]
-                and payment["transactionAuthorization"] == payment_search["transactionAuthorization"]
-        ):
+        if payment_search:
+            payment_search["payday"] = payment["payday"]
             found_payments.append(payment_search)
             payment_was_found = True
 
-        if (
-                old_payments_search
-                and not payment_was_found
-                and payment["oldCurrentInstallment"] == old_payments_search["currentInstallment"]
-                and payment["NSU"] == old_payments_search["NSU"]
-                and payment["transactionAuthorization"] == old_payments_search["transactionAuthorization"]
-        ):
+        if old_payments_search:
+            old_payments_search["payday"] = payment["payday"]
             old_found_payments.append(old_payments_search)
             payment_was_found = True
 
         if not payment_was_found:
             not_found_payments.append(payment)
+
+    found_payments = sorted(found_payments, key=lambda x: x['orderNumber'])
 
     return old_found_payments, found_payments, not_found_payments

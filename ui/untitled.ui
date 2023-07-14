@@ -62,7 +62,7 @@
        <bool>true</bool>
       </property>
      </widget>
-     <widget class="QPushButton" name="excel_search_button">
+     <widget class="QPushButton" name="conciliation_search_button">
       <property name="geometry">
        <rect>
         <x>100</x>
@@ -97,14 +97,27 @@
      <widget class="QPushButton" name="clear_button">
       <property name="geometry">
        <rect>
-        <x>1130</x>
-        <y>20</y>
+        <x>180</x>
+        <y>23</y>
         <width>75</width>
-        <height>24</height>
+        <height>25</height>
        </rect>
       </property>
       <property name="text">
-       <string>Limpar</string>
+       <string>Nova busca</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="conciliate_button">
+      <property name="geometry">
+       <rect>
+        <x>260</x>
+        <y>23</y>
+        <width>131</width>
+        <height>25</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Conciliar pagamentos </string>
       </property>
      </widget>
     </widget>
@@ -529,7 +542,7 @@
      <widget class="QLabel" name="total_unconciliated_label">
       <property name="geometry">
        <rect>
-        <x>375</x>
+        <x>560</x>
         <y>318</y>
         <width>241</width>
         <height>20</height>
@@ -1037,7 +1050,7 @@
      <widget class="QLabel" name="total_conciliation_label">
       <property name="geometry">
        <rect>
-        <x>560</x>
+        <x>780</x>
         <y>270</y>
         <width>201</width>
         <height>20</height>
