@@ -268,19 +268,16 @@ class PaymentsConciliation(QMainWindow):
             )
 
     def manage_conciliations(self):
-        payments = None
         current_index = self.ui.conciliation_tab.currentIndex()
 
         if current_index == 0:
             self.conciliate_payments()
-            payments = len(self.found_payments)
 
         if current_index == 1:
             self.conciliate_old_payments()
-            payments = len(self.old_found_payments)
 
-        tab_text = self.ui.conciliation_tab.tabText(current_index)
-        DialogWindowManager.dialog().successful_conciliation(f"{payments} {tab_text} conciliados com sucesso!")
+        self.retrieve_carrier_payments()
+        DialogWindowManager.dialog().successful_conciliation(f"Pagamentos conciliados com sucesso!")
 
     def clear_conciliate_tables(self) -> None:
         conciliation_tables = [self.ui.old_table, self.ui.new_table, self.ui.not_found_table]

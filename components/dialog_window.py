@@ -48,7 +48,7 @@ class DialogWindow:
     def successful_conciliation(self, message: str) -> None:
         title = "Conciliado com sucesso!"
 
-        self.message_box.setIcon(QMessageBox.Warning)
+        self.message_box.setIcon(QMessageBox.Information)
         self.message_box.setWindowTitle(title)
         self.message_box.setText(message)
         self.message_box.setStandardButtons(QMessageBox.Ok)
