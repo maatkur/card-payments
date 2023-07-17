@@ -109,7 +109,7 @@ class CheckedOrdersRepository(RepositoryConfig):
     def get_conciliations(self, query):
         options = {
             "select": "orderNumber, transactionType, flag, installments, installmentValue, currentInstallment, "
-                      "purchaseDate, payday, flagTax, liquidValue, NSU, transactionAuthorization, uId",
+                      "purchaseDate, payday, flagTax, liquidValue, NSU, transactionAuthorization, uId, conciliated",
             "query": query
         }
 
@@ -130,7 +130,8 @@ class CheckedOrdersRepository(RepositoryConfig):
                 liquid_value,
                 nsu,
                 transaction_authorization,
-                uid
+                uid,
+                conciliated
             ) = payment[0]
             return {
                 "orderNumber": order_number,
@@ -138,14 +139,15 @@ class CheckedOrdersRepository(RepositoryConfig):
                 "flag": flag,
                 "installments": installments,
                 "installmentValue": installment_value,
-                "currentInstallment": current_installment[2:],
+                "currentInstallment": current_installment,
                 "purchaseDate": purchase_date,
                 "payday": payday,
                 "flagTax": flag_tax,
                 "liquidValue": liquid_value,
                 "NSU": nsu,
                 "transactionAuthorization": transaction_authorization,
-                "uId": uid
+                "uId": uid,
+                "conciliated": conciliated
             }
         return payment
 
@@ -171,5 +173,7 @@ class CheckedOrdersRepository(RepositoryConfig):
                         SET payday = '{payday}', conciliated = 1
                         WHERE uId = '{uid}' AND currentInstallment = '{current_installment}'
         """
+
+        print(command)
 
         self._execute_and_commit(command)

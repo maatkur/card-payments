@@ -21,7 +21,7 @@ class OldPaymentsRepository(RepositoryConfig):
     def get_conciliations(self, query):
         options = {
             "select": "payday, tax, installmentValue, currentInstallment, "
-                      "installments, NSU, transactionAuthorization, uId",
+                      "installments, NSU, transactionAuthorization, uId, conciliated",
             "query": query
         }
 
@@ -37,7 +37,8 @@ class OldPaymentsRepository(RepositoryConfig):
                 installments,
                 nsu,
                 transaction_authorization,
-                uid
+                uid,
+                conciliated
             ) = payment[0]
             return {
                 "payday": payday,
@@ -47,7 +48,8 @@ class OldPaymentsRepository(RepositoryConfig):
                 "installments": installments,
                 "NSU": nsu,
                 "transactionAuthorization": transaction_authorization,
-                "uId": uid
+                "uId": uid,
+                "conciliated": conciliated
             }
         return payment
 

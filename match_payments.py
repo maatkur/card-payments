@@ -1,9 +1,9 @@
 from database.repositories.repository_manager import RepositoryManager
-from payments_conciliation import teste_cielo
+from carrier_excel import load_excel_payments
 
 
 def match_payments():
-    cielo_payments = teste_cielo()
+    cielo_payments = load_excel_payments()
 
     found_payments = []
     old_found_payments = []

@@ -6,12 +6,16 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1261</width>
+    <width>1020</width>
     <height>729</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>../icons/pagamento-com-cartao-de-credito.ico</normaloff>../icons/pagamento-com-cartao-de-credito.ico</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QFrame" name="frame">
@@ -38,16 +42,19 @@
        <height>51</height>
       </rect>
      </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb( 240, 240, 240);</string>
+     </property>
      <property name="frameShape">
       <enum>QFrame::StyledPanel</enum>
      </property>
      <property name="frameShadow">
       <enum>QFrame::Raised</enum>
      </property>
-     <widget class="QDateEdit" name="excel_initial_date">
+     <widget class="QDateEdit" name="conciliation_initial_date">
       <property name="geometry">
        <rect>
-        <x>0</x>
+        <x>60</x>
         <y>25</y>
         <width>91</width>
         <height>22</height>
@@ -65,14 +72,18 @@
      <widget class="QPushButton" name="conciliation_search_button">
       <property name="geometry">
        <rect>
-        <x>100</x>
+        <x>320</x>
         <y>23</y>
-        <width>75</width>
+        <width>80</width>
         <height>25</height>
        </rect>
       </property>
       <property name="text">
        <string>Pesquisar</string>
+      </property>
+      <property name="icon">
+       <iconset>
+        <normaloff>../icons/icons8-pesquisar-60.ico</normaloff>../icons/icons8-pesquisar-60.ico</iconset>
       </property>
      </widget>
      <widget class="QLabel" name="label_2">
@@ -97,27 +108,92 @@
      <widget class="QPushButton" name="clear_button">
       <property name="geometry">
        <rect>
-        <x>180</x>
+        <x>408</x>
         <y>23</y>
-        <width>75</width>
+        <width>85</width>
         <height>25</height>
        </rect>
       </property>
       <property name="text">
        <string>Nova busca</string>
       </property>
+      <property name="icon">
+       <iconset>
+        <normaloff>../icons/filtro-limpo.ico</normaloff>../icons/filtro-limpo.ico</iconset>
+      </property>
      </widget>
      <widget class="QPushButton" name="conciliate_button">
       <property name="geometry">
        <rect>
-        <x>260</x>
+        <x>499</x>
         <y>23</y>
-        <width>131</width>
+        <width>161</width>
         <height>25</height>
        </rect>
       </property>
       <property name="text">
        <string>Conciliar pagamentos </string>
+      </property>
+      <property name="icon">
+       <iconset>
+        <normaloff>../icons/acordo.ico</normaloff>../icons/acordo.ico</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>20</width>
+        <height>20</height>
+       </size>
+      </property>
+     </widget>
+     <widget class="QDateEdit" name="conciliation_final_date">
+      <property name="geometry">
+       <rect>
+        <x>200</x>
+        <y>25</y>
+        <width>91</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="calendarPopup">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_3">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>30</y>
+        <width>49</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>Inicial:</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_4">
+      <property name="geometry">
+       <rect>
+        <x>160</x>
+        <y>30</y>
+        <width>36</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>Final:</string>
       </property>
      </widget>
     </widget>
@@ -142,7 +218,7 @@
      <widget class="QDateEdit" name="unconciliated_initial_date">
       <property name="geometry">
        <rect>
-        <x>0</x>
+        <x>60</x>
         <y>22</y>
         <width>91</width>
         <height>22</height>
@@ -160,7 +236,7 @@
      <widget class="QDateEdit" name="unconciliated_final_date">
       <property name="geometry">
        <rect>
-        <x>100</x>
+        <x>200</x>
         <y>22</y>
         <width>91</width>
         <height>22</height>
@@ -197,14 +273,18 @@
      <widget class="QPushButton" name="unconciliated_search_button">
       <property name="geometry">
        <rect>
-        <x>200</x>
+        <x>320</x>
         <y>20</y>
-        <width>75</width>
+        <width>80</width>
         <height>25</height>
        </rect>
       </property>
       <property name="text">
        <string>Pesquisar</string>
+      </property>
+      <property name="icon">
+       <iconset>
+        <normaloff>../icons/icons8-pesquisar-60.ico</normaloff>../icons/icons8-pesquisar-60.ico</iconset>
       </property>
      </widget>
      <widget class="QTabWidget" name="unconciliated_tab">
@@ -212,7 +292,7 @@
        <rect>
         <x>0</x>
         <y>50</y>
-        <width>1231</width>
+        <width>991</width>
         <height>291</height>
        </rect>
       </property>
@@ -236,7 +316,7 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>1225</width>
+          <width>981</width>
           <height>261</height>
          </rect>
         </property>
@@ -345,7 +425,7 @@
         </column>
         <column>
          <property name="text">
-          <string>Data do crédito</string>
+          <string>Data do crédito pela operadora</string>
          </property>
          <property name="font">
           <font>
@@ -438,7 +518,7 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>741</width>
+          <width>621</width>
           <height>261</height>
          </rect>
         </property>
@@ -447,7 +527,7 @@
         </property>
         <column>
          <property name="text">
-          <string>Data do crédito</string>
+          <string>Data do crédito pela operadora</string>
          </property>
          <property name="font">
           <font>
@@ -542,7 +622,7 @@
      <widget class="QLabel" name="total_unconciliated_label">
       <property name="geometry">
        <rect>
-        <x>560</x>
+        <x>740</x>
         <y>318</y>
         <width>241</width>
         <height>20</height>
@@ -556,6 +636,44 @@
       </property>
       <property name="text">
        <string/>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_5">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>28</y>
+        <width>49</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>Inicial:</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_6">
+      <property name="geometry">
+       <rect>
+        <x>160</x>
+        <y>28</y>
+        <width>36</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>Final:</string>
       </property>
      </widget>
     </widget>
@@ -582,7 +700,7 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>1231</width>
+        <width>991</width>
         <height>291</height>
        </rect>
       </property>
@@ -606,7 +724,7 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>1221</width>
+          <width>981</width>
           <height>261</height>
          </rect>
         </property>
@@ -712,7 +830,7 @@
         </column>
         <column>
          <property name="text">
-          <string>Data do crédito</string>
+          <string>Data do crédito pela operadora</string>
          </property>
          <property name="font">
           <font>
@@ -786,7 +904,7 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>741</width>
+          <width>621</width>
           <height>261</height>
          </rect>
         </property>
@@ -801,7 +919,7 @@
         </property>
         <column>
          <property name="text">
-          <string>Data do crédito</string>
+          <string>Data do crédito pela operadora</string>
          </property>
          <property name="font">
           <font>
@@ -901,7 +1019,7 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>1002</width>
+          <width>921</width>
           <height>261</height>
          </rect>
         </property>
@@ -942,7 +1060,7 @@
         </column>
         <column>
          <property name="text">
-          <string>Data do crédito</string>
+          <string>Data do crédito pela operadora</string>
          </property>
          <property name="font">
           <font>
@@ -1050,7 +1168,7 @@
      <widget class="QLabel" name="total_conciliation_label">
       <property name="geometry">
        <rect>
-        <x>780</x>
+        <x>790</x>
         <y>270</y>
         <width>201</width>
         <height>20</height>

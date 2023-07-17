@@ -157,8 +157,10 @@ class Cards(QMainWindow):
         self.cards_management_window.update_order.connect(self.fetch_and_load_orders)
 
     def handle_conciliation_button(self) -> None:
-        self.payments_conciliation_windoow = PaymentsConciliation()
-        self.payments_conciliation_windoow.show()
+        if self.payments_conciliation_windoow is None:
+            self.payments_conciliation_windoow = PaymentsConciliation()
+        else:
+            self.payments_conciliation_windoow.show()
 
     def handle_report_button(self) -> None:
         initial_date = DateHelpers.to_sql_format(self.ui.initial_date.text())
