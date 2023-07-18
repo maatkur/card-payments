@@ -1,4 +1,4 @@
-from PySide6.QtWidgets import QLineEdit, QTableWidget
+from PySide6.QtWidgets import QLineEdit, QTableWidget, QPushButton
 
 
 class WidgetHelpers:
@@ -16,6 +16,12 @@ class WidgetHelpers:
             if lineedit.text().strip() == '':
                 return False  # Se um line edit estiver vazio, retorna False
         return True  # Todos os line edits estão preenchidos
+
+    @staticmethod
+    def manage_buttons(window, set_disabled: bool):
+        buttons = window.findChildren(QPushButton)  # Obtém todos os line edits da tela
+        for button in buttons:
+            button.setDisabled(set_disabled)
 
     @staticmethod
     def clear_table(window):

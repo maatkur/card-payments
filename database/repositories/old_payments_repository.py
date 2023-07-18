@@ -90,3 +90,15 @@ class OldPaymentsRepository(RepositoryConfig):
         """
 
         self._execute_and_commit(command)
+
+    def update(self, data: dict):
+        uid = data.pop("uId", None)
+        if uid is None:
+            raise ValueError("UID is required for updating data.")
+
+        fields = ", ".join([f"{key} = ?" for key in data.keys()])
+        values = tuple(data.values())
+        command = f"UPDATE {self.table_name} SET {fields} WHERE uid = ?"
+        values += (uid,)
+
+        self._execute_and_commit(command, values)

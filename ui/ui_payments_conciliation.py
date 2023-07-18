@@ -7,7 +7,6 @@
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
-
 from os import getenv
 from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
     QMetaObject, QObject, QPoint, QRect,
@@ -20,6 +19,7 @@ from PySide6.QtWidgets import (QAbstractItemView, QAbstractScrollArea, QApplicat
     QFrame, QHeaderView, QLabel, QMainWindow,
     QPushButton, QSizePolicy, QTabWidget, QTableWidget,
     QTableWidgetItem, QWidget)
+
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -224,6 +224,7 @@ class Ui_MainWindow(object):
         self.old_unconciliated_table.setObjectName(u"old_unconciliated_table")
         self.old_unconciliated_table.setGeometry(QRect(0, 0, 621, 261))
         self.old_unconciliated_table.setStyleSheet(u"background-color: rgb(254, 255, 197);")
+        self.old_unconciliated_table.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.unconciliated_tab.addTab(self.tab_5, "")
         self.total_unconciliated_label = QLabel(self.frame_3)
         self.total_unconciliated_label.setObjectName(u"total_unconciliated_label")

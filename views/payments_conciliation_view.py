@@ -11,8 +11,10 @@ from database.repositories.repository_manager import RepositoryManager
 from helpers.date_helpers import DateHelpers
 
 from ui.ui_payments_conciliation import Ui_MainWindow
+from views.quick_management_view import QuickManagement
 from components.dialog_window_manager import DialogWindowManager
 from carrier_excel import CarrierExcel
+from helpers.widgets_helpers import WidgetHelpers
 
 setup_config()
 
@@ -33,10 +35,12 @@ class PaymentsConciliation(QMainWindow):
         self.disable_conciliate_button()
         self.file_path = fr"c:\users\{getlogin()}\desktop\recebimentocielo.xlsx"
         self.setWindowTitle(f"Conciliação de pagamentos - {os.getenv('COMPANY')}")
+        self.quick_management_window = None
 
     def verify_file(self):
 
         if exists(self.file_path):
+            WidgetHelpers.manage_buttons(self, set_disabled=True)
             self.retrieve_carrier_payments()
         else:
             DialogWindowManager.dialog().file_not_found(f"O arquivo {self.file_path} não foi encontrado!")
@@ -47,6 +51,7 @@ class PaymentsConciliation(QMainWindow):
                                              "final_date": self.ui.conciliation_final_date.text()
                                              })
         self.old_found_payments, self.found_payments, self.not_found_payments = carrier_excel.match_payments()
+        WidgetHelpers.manage_buttons(self, set_disabled=False)
         self.manage_conciliation_tables()
 
     def load_new_payments_payments(self) -> None:
@@ -276,8 +281,20 @@ class PaymentsConciliation(QMainWindow):
         if current_index == 1:
             self.conciliate_old_payments()
 
+        self.sucess_dialog(current_index)
         self.retrieve_carrier_payments()
-        DialogWindowManager.dialog().successful_conciliation(f"Pagamentos conciliados com sucesso!")
+
+    def sucess_dialog(self, tab_index) -> None:
+
+        tabs = {0:
+                    {"payments_quantity": len(self.found_payments),
+                     "tab_name": "Pagamentos atuais"},
+                1: {"payments_quantity": len(self.old_found_payments),
+                    "tab_name": "Pagamentos conexão"}
+                }
+
+        DialogWindowManager.dialog().successful_conciliation(
+            f"{tabs[tab_index]['payments_quantity']} {tabs[tab_index]['tab_name']} conciliados com sucesso!")
 
     def clear_conciliate_tables(self) -> None:
         conciliation_tables = [self.ui.old_table, self.ui.new_table, self.ui.not_found_table]
@@ -327,6 +344,41 @@ class PaymentsConciliation(QMainWindow):
         self.ui.unconciliated_search_button.clicked.connect(self.manage_unconciliated_tables)
         self.ui.clear_button.clicked.connect(self.clear_widgets)
         self.ui.conciliate_button.clicked.connect(self.manage_conciliations)
+        self.ui.unconciliated_table.cellDoubleClicked.connect(self.handle_cell_double_click)
+        self.ui.old_unconciliated_table.cellDoubleClicked.connect(self.handle_cell_double_click)
+
+    def handle_cell_double_click(self, row):
+        selecte_tab = self.ui.unconciliated_tab.currentIndex()
+        quick_management_data = {}
+
+        tabs = {0: {
+            "tab_table": self.ui.unconciliated_table,
+            "payments": self.unconciliated_payments},
+            1: {
+            "tab_table": self.ui.old_unconciliated_table,
+            "payments": self.old_unconciliated}
+        }
+
+        clicked_row = tabs[selecte_tab]["tab_table"].item(row, 0).row()
+
+        if selecte_tab == 0:
+            quick_management_data = {
+                "NSU": tabs[selecte_tab]["payments"][clicked_row][10],
+                "transactionAuthorization": tabs[selecte_tab]["payments"][clicked_row][11],
+                "uId": tabs[selecte_tab]["payments"][clicked_row][12],
+                "repository": "checkedOrders"
+            }
+        if selecte_tab == 1:
+            quick_management_data = {
+                "NSU": tabs[selecte_tab]["payments"][clicked_row][5],
+                "transactionAuthorization": tabs[selecte_tab]["payments"][clicked_row][6],
+                "uId": tabs[selecte_tab]["payments"][clicked_row][7],
+                "repository": "oldPayments"
+            }
+
+        self.quick_management_window = QuickManagement(quick_management_data)
+        self.quick_management_window.show()
+        self.quick_management_window.closed.connect(self.manage_unconciliated_tables)
 
 
 if __name__ == "__main__":

@@ -525,6 +525,9 @@
         <property name="styleSheet">
          <string notr="true">background-color: rgb(254, 255, 197);</string>
         </property>
+        <property name="selectionBehavior">
+         <enum>QAbstractItemView::SelectRows</enum>
+        </property>
         <column>
          <property name="text">
           <string>Data do crédito pela operadora</string>
