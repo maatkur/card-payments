@@ -1,4 +1,6 @@
-from PySide6.QtWidgets import QLineEdit, QTableWidget, QPushButton
+from PySide6.QtWidgets import QLineEdit, QTableWidget, QPushButton, QDateEdit
+from PySide6.QtCore import QDate
+from datetime import datetime
 
 
 class WidgetHelpers:
@@ -30,3 +32,12 @@ class WidgetHelpers:
         for table in tables_widgets:
             table.clearContents()
             table.setRowCount(0)
+
+    @staticmethod
+    def set_current_date(window):
+        date_widgets = window.findChildren(QDateEdit)
+        today = datetime.today()
+        qdate = QDate(today.year, today.month, today.day)
+
+        for date_edit in date_widgets:
+            date_edit.setDate(qdate)

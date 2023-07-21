@@ -159,6 +159,7 @@ class Cards(QMainWindow):
     def handle_conciliation_button(self) -> None:
         if self.payments_conciliation_windoow is None:
             self.payments_conciliation_windoow = PaymentsConciliation()
+            self.payments_conciliation_windoow.show()
         else:
             self.payments_conciliation_windoow.show()
 

@@ -106,10 +106,11 @@ class CheckedOrdersRepository(RepositoryConfig):
 
         return self._search_and_fetch_all(query)
 
-    def get_conciliations(self, query):
+    def get_unconciliated_order(self, query):
         options = {
             "select": "orderNumber, transactionType, flag, installments, installmentValue, currentInstallment, "
-                      "purchaseDate, payday, flagTax, liquidValue, NSU, transactionAuthorization, uId, conciliated",
+                      "purchaseDate, payday, flagTax, liquidValue, NSU, transactionAuthorization, "
+                      "status, uId, conciliated",
             "query": query
         }
 
@@ -130,6 +131,7 @@ class CheckedOrdersRepository(RepositoryConfig):
                 liquid_value,
                 nsu,
                 transaction_authorization,
+                status,
                 uid,
                 conciliated
             ) = payment[0]
@@ -146,6 +148,7 @@ class CheckedOrdersRepository(RepositoryConfig):
                 "liquidValue": liquid_value,
                 "NSU": nsu,
                 "transactionAuthorization": transaction_authorization,
+                "status": status,
                 "uId": uid,
                 "conciliated": conciliated
             }
@@ -157,7 +160,7 @@ class CheckedOrdersRepository(RepositoryConfig):
         final_date = date_period["final_date"]
 
         command = f"""SELECT orderNumber, transactionType, flag, installments, installmentValue, currentInstallment, 
-                        purchaseDate, payday, flagTax, liquidValue, NSU, transactionAuthorization, uId 
+                        purchaseDate, payday, flagTax, liquidValue, NSU, transactionAuthorization, status, uId 
                             FROM checkedOrders WHERE payday BETWEEN '{initial_date}' AND '{final_date}' 
                                 AND conciliated = 0 ORDER BY orderNumber"""
 
@@ -167,13 +170,47 @@ class CheckedOrdersRepository(RepositoryConfig):
 
         payday = order.get("payday")
         current_installment = order.get("currentInstallment")
+        status = order.get("status")
         uid = order.get("uId")
 
         command = f"""UPDATE checkedOrders
-                        SET payday = '{payday}', conciliated = 1
+                        SET payday = '{payday}', conciliated = 1, status = '{status}'
                         WHERE uId = '{uid}' AND currentInstallment = '{current_installment}'
         """
 
         print(command)
 
         self._execute_and_commit(command)
+
+    def get_conciliateds(self, date_period: dict) -> list:
+
+        initial_date = date_period["initial_date"]
+        final_date = date_period["final_date"]
+
+        command = f"""SELECT orderNumber, transactionType, flag, installments, installmentValue, currentInstallment, 
+                        purchaseDate, payday, flagTax, liquidValue, NSU, transactionAuthorization, status, uId 
+                            FROM checkedOrders WHERE payday BETWEEN '{initial_date}' AND '{final_date}' 
+                                AND conciliated = 1 ORDER BY orderNumber"""
+
+        return self._search_and_fetch_all(command)
+
+    def update_order_status(self, data: dict):
+
+        uid = data.pop("uId", None)
+        current_installment = data.pop("currentInstallment", None)
+        if uid is None:
+            raise ValueError("UID is required for updating data.")
+
+        fields = ", ".join([f"{key} = ?" for key in data.keys()])
+        values = tuple(data.values())
+        command = f"UPDATE {self.table_name} SET {fields} WHERE uid = ? AND currentInstallment = ?"
+        values += (uid, current_installment)
+
+        self._execute_and_commit(command, values)
+
+    def get_payments_status(self):
+
+        return self.get_all({
+            "select": "status",
+            "distinct": True
+        })

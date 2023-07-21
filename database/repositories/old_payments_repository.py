@@ -18,10 +18,10 @@ class OldPaymentsRepository(RepositoryConfig):
 
         return self._search_and_fetch_all(query)
 
-    def get_conciliations(self, query):
+    def get_unconciliated_order(self, query):
         options = {
             "select": "payday, tax, installmentValue, currentInstallment, "
-                      "installments, NSU, transactionAuthorization, uId, conciliated",
+                      "installments, NSU, transactionAuthorization, status, uId, conciliated",
             "query": query
         }
 
@@ -37,6 +37,7 @@ class OldPaymentsRepository(RepositoryConfig):
                 installments,
                 nsu,
                 transaction_authorization,
+                status,
                 uid,
                 conciliated
             ) = payment[0]
@@ -48,6 +49,7 @@ class OldPaymentsRepository(RepositoryConfig):
                 "installments": installments,
                 "NSU": nsu,
                 "transactionAuthorization": transaction_authorization,
+                "status": status,
                 "uId": uid,
                 "conciliated": conciliated
             }
@@ -59,7 +61,7 @@ class OldPaymentsRepository(RepositoryConfig):
         final_date = date_period["final_date"]
 
         command = f"""SELECT payday, tax, installmentValue, currentInstallment, installments, 
-                        NSU, transactionAuthorization, uId 
+                        NSU, transactionAuthorization, status, uId 
                              FROM oldPayments WHERE payday BETWEEN '{initial_date}' AND '{final_date}' 
                                 AND conciliated = 0"""
 
@@ -82,10 +84,11 @@ class OldPaymentsRepository(RepositoryConfig):
 
         payday = order.get("payday")
         current_installment = order.get("currentInstallment")
+        status = order.get("status")
         uid = order.get("uId")
 
         command = f"""UPDATE oldPayments
-                        SET payday = '{payday}', conciliated = 1
+                        SET payday = '{payday}', conciliated = 1, status = '{status}'
                         WHERE uId = '{uid}' AND currentInstallment = '{current_installment}'
         """
 
@@ -102,3 +105,36 @@ class OldPaymentsRepository(RepositoryConfig):
         values += (uid,)
 
         self._execute_and_commit(command, values)
+
+    def get_conciliateds(self, date_period: dict) -> list:
+
+        initial_date = date_period["initial_date"]
+        final_date = date_period["final_date"]
+
+        command = f"""SELECT payday, tax, installmentValue, currentInstallment, installments, 
+                        NSU, transactionAuthorization, status, uId 
+                             FROM oldPayments WHERE payday BETWEEN '{initial_date}' AND '{final_date}' 
+                                AND conciliated = 1"""
+
+        return self._search_and_fetch_all(command)
+
+    def update_order_status(self, data: dict):
+
+        uid = data.pop("uId", None)
+        current_installment = data.pop("currentInstallment", None)
+        if uid is None:
+            raise ValueError("UID is required for updating data.")
+
+        fields = ", ".join([f"{key} = ?" for key in data.keys()])
+        values = tuple(data.values())
+        command = f"UPDATE {self.table_name} SET {fields} WHERE uid = ? AND currentInstallment = ?"
+        values += (uid, current_installment)
+
+        self._execute_and_commit(command, values)
+
+    def get_payments_status(self):
+
+        return self.get_all({
+            "select": "status",
+            "distinct": True
+        })

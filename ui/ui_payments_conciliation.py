@@ -20,12 +20,11 @@ from PySide6.QtWidgets import (QAbstractItemView, QAbstractScrollArea, QApplicat
     QPushButton, QSizePolicy, QTabWidget, QTableWidget,
     QTableWidgetItem, QWidget)
 
-
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(1020, 729)
+        MainWindow.resize(1135, 729)
         icon = QIcon()
         icon.addFile(f"{getenv('ICONS_PATH')}pagamento-com-cartao-de-credito.ico", QSize(), QIcon.Normal, QIcon.Off)
         MainWindow.setWindowIcon(icon)
@@ -116,7 +115,7 @@ class Ui_MainWindow(object):
         self.unconciliated_search_button.setIcon(icon1)
         self.unconciliated_tab = QTabWidget(self.frame_3)
         self.unconciliated_tab.setObjectName(u"unconciliated_tab")
-        self.unconciliated_tab.setGeometry(QRect(0, 50, 991, 291))
+        self.unconciliated_tab.setGeometry(QRect(0, 50, 1113, 291))
         font3 = QFont()
         font3.setBold(True)
         self.unconciliated_tab.setFont(font3)
@@ -124,8 +123,8 @@ class Ui_MainWindow(object):
         self.tab_4 = QWidget()
         self.tab_4.setObjectName(u"tab_4")
         self.unconciliated_table = QTableWidget(self.tab_4)
-        if (self.unconciliated_table.columnCount() < 12):
-            self.unconciliated_table.setColumnCount(12)
+        if (self.unconciliated_table.columnCount() < 13):
+            self.unconciliated_table.setColumnCount(13)
         __qtablewidgetitem = QTableWidgetItem()
         __qtablewidgetitem.setTextAlignment(Qt.AlignCenter);
         __qtablewidgetitem.setFont(font3);
@@ -174,8 +173,12 @@ class Ui_MainWindow(object):
         __qtablewidgetitem11.setTextAlignment(Qt.AlignCenter);
         __qtablewidgetitem11.setFont(font3);
         self.unconciliated_table.setHorizontalHeaderItem(11, __qtablewidgetitem11)
+        __qtablewidgetitem12 = QTableWidgetItem()
+        __qtablewidgetitem12.setTextAlignment(Qt.AlignCenter);
+        __qtablewidgetitem12.setFont(font3);
+        self.unconciliated_table.setHorizontalHeaderItem(12, __qtablewidgetitem12)
         self.unconciliated_table.setObjectName(u"unconciliated_table")
-        self.unconciliated_table.setGeometry(QRect(0, 0, 981, 261))
+        self.unconciliated_table.setGeometry(QRect(0, 0, 1111, 261))
         self.unconciliated_table.setStyleSheet(u"background-color: rgb(254, 255, 197);")
         self.unconciliated_table.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContents)
         self.unconciliated_table.setEditTriggers(QAbstractItemView.NoEditTriggers)
@@ -191,38 +194,42 @@ class Ui_MainWindow(object):
         self.tab_5 = QWidget()
         self.tab_5.setObjectName(u"tab_5")
         self.old_unconciliated_table = QTableWidget(self.tab_5)
-        if (self.old_unconciliated_table.columnCount() < 7):
-            self.old_unconciliated_table.setColumnCount(7)
-        __qtablewidgetitem12 = QTableWidgetItem()
-        __qtablewidgetitem12.setTextAlignment(Qt.AlignCenter);
-        __qtablewidgetitem12.setFont(font3);
-        self.old_unconciliated_table.setHorizontalHeaderItem(0, __qtablewidgetitem12)
+        if (self.old_unconciliated_table.columnCount() < 8):
+            self.old_unconciliated_table.setColumnCount(8)
         __qtablewidgetitem13 = QTableWidgetItem()
         __qtablewidgetitem13.setTextAlignment(Qt.AlignCenter);
         __qtablewidgetitem13.setFont(font3);
-        self.old_unconciliated_table.setHorizontalHeaderItem(1, __qtablewidgetitem13)
+        self.old_unconciliated_table.setHorizontalHeaderItem(0, __qtablewidgetitem13)
         __qtablewidgetitem14 = QTableWidgetItem()
         __qtablewidgetitem14.setTextAlignment(Qt.AlignCenter);
         __qtablewidgetitem14.setFont(font3);
-        self.old_unconciliated_table.setHorizontalHeaderItem(2, __qtablewidgetitem14)
+        self.old_unconciliated_table.setHorizontalHeaderItem(1, __qtablewidgetitem14)
         __qtablewidgetitem15 = QTableWidgetItem()
         __qtablewidgetitem15.setTextAlignment(Qt.AlignCenter);
         __qtablewidgetitem15.setFont(font3);
-        self.old_unconciliated_table.setHorizontalHeaderItem(3, __qtablewidgetitem15)
+        self.old_unconciliated_table.setHorizontalHeaderItem(2, __qtablewidgetitem15)
         __qtablewidgetitem16 = QTableWidgetItem()
         __qtablewidgetitem16.setTextAlignment(Qt.AlignCenter);
         __qtablewidgetitem16.setFont(font3);
-        self.old_unconciliated_table.setHorizontalHeaderItem(4, __qtablewidgetitem16)
+        self.old_unconciliated_table.setHorizontalHeaderItem(3, __qtablewidgetitem16)
         __qtablewidgetitem17 = QTableWidgetItem()
         __qtablewidgetitem17.setTextAlignment(Qt.AlignCenter);
         __qtablewidgetitem17.setFont(font3);
-        self.old_unconciliated_table.setHorizontalHeaderItem(5, __qtablewidgetitem17)
+        self.old_unconciliated_table.setHorizontalHeaderItem(4, __qtablewidgetitem17)
         __qtablewidgetitem18 = QTableWidgetItem()
         __qtablewidgetitem18.setTextAlignment(Qt.AlignCenter);
         __qtablewidgetitem18.setFont(font3);
-        self.old_unconciliated_table.setHorizontalHeaderItem(6, __qtablewidgetitem18)
+        self.old_unconciliated_table.setHorizontalHeaderItem(5, __qtablewidgetitem18)
+        __qtablewidgetitem19 = QTableWidgetItem()
+        __qtablewidgetitem19.setTextAlignment(Qt.AlignCenter);
+        __qtablewidgetitem19.setFont(font3);
+        self.old_unconciliated_table.setHorizontalHeaderItem(6, __qtablewidgetitem19)
+        __qtablewidgetitem20 = QTableWidgetItem()
+        __qtablewidgetitem20.setTextAlignment(Qt.AlignCenter);
+        __qtablewidgetitem20.setFont(font3);
+        self.old_unconciliated_table.setHorizontalHeaderItem(7, __qtablewidgetitem20)
         self.old_unconciliated_table.setObjectName(u"old_unconciliated_table")
-        self.old_unconciliated_table.setGeometry(QRect(0, 0, 621, 261))
+        self.old_unconciliated_table.setGeometry(QRect(0, 0, 741, 261))
         self.old_unconciliated_table.setStyleSheet(u"background-color: rgb(254, 255, 197);")
         self.old_unconciliated_table.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.unconciliated_tab.addTab(self.tab_5, "")
@@ -246,103 +253,112 @@ class Ui_MainWindow(object):
         self.frame_4.setFrameShadow(QFrame.Raised)
         self.conciliation_tab = QTabWidget(self.frame_4)
         self.conciliation_tab.setObjectName(u"conciliation_tab")
-        self.conciliation_tab.setGeometry(QRect(0, 0, 991, 291))
+        self.conciliation_tab.setGeometry(QRect(0, 0, 1111, 291))
         self.conciliation_tab.setFont(font3)
         self.conciliation_tab.setTabPosition(QTabWidget.South)
         self.tab = QWidget()
         self.tab.setObjectName(u"tab")
         self.new_table = QTableWidget(self.tab)
-        if (self.new_table.columnCount() < 12):
-            self.new_table.setColumnCount(12)
-        __qtablewidgetitem19 = QTableWidgetItem()
-        __qtablewidgetitem19.setTextAlignment(Qt.AlignCenter);
-        __qtablewidgetitem19.setFont(font3);
-        self.new_table.setHorizontalHeaderItem(0, __qtablewidgetitem19)
-        __qtablewidgetitem20 = QTableWidgetItem()
-        __qtablewidgetitem20.setTextAlignment(Qt.AlignCenter);
-        __qtablewidgetitem20.setFont(font3);
-        self.new_table.setHorizontalHeaderItem(1, __qtablewidgetitem20)
+        if (self.new_table.columnCount() < 13):
+            self.new_table.setColumnCount(13)
         __qtablewidgetitem21 = QTableWidgetItem()
         __qtablewidgetitem21.setTextAlignment(Qt.AlignCenter);
         __qtablewidgetitem21.setFont(font3);
-        self.new_table.setHorizontalHeaderItem(2, __qtablewidgetitem21)
+        self.new_table.setHorizontalHeaderItem(0, __qtablewidgetitem21)
         __qtablewidgetitem22 = QTableWidgetItem()
         __qtablewidgetitem22.setTextAlignment(Qt.AlignCenter);
         __qtablewidgetitem22.setFont(font3);
-        self.new_table.setHorizontalHeaderItem(3, __qtablewidgetitem22)
+        self.new_table.setHorizontalHeaderItem(1, __qtablewidgetitem22)
         __qtablewidgetitem23 = QTableWidgetItem()
         __qtablewidgetitem23.setTextAlignment(Qt.AlignCenter);
         __qtablewidgetitem23.setFont(font3);
-        self.new_table.setHorizontalHeaderItem(4, __qtablewidgetitem23)
+        self.new_table.setHorizontalHeaderItem(2, __qtablewidgetitem23)
         __qtablewidgetitem24 = QTableWidgetItem()
         __qtablewidgetitem24.setTextAlignment(Qt.AlignCenter);
         __qtablewidgetitem24.setFont(font3);
-        self.new_table.setHorizontalHeaderItem(5, __qtablewidgetitem24)
+        self.new_table.setHorizontalHeaderItem(3, __qtablewidgetitem24)
         __qtablewidgetitem25 = QTableWidgetItem()
         __qtablewidgetitem25.setTextAlignment(Qt.AlignCenter);
         __qtablewidgetitem25.setFont(font3);
-        self.new_table.setHorizontalHeaderItem(6, __qtablewidgetitem25)
+        self.new_table.setHorizontalHeaderItem(4, __qtablewidgetitem25)
         __qtablewidgetitem26 = QTableWidgetItem()
         __qtablewidgetitem26.setTextAlignment(Qt.AlignCenter);
         __qtablewidgetitem26.setFont(font3);
-        self.new_table.setHorizontalHeaderItem(7, __qtablewidgetitem26)
+        self.new_table.setHorizontalHeaderItem(5, __qtablewidgetitem26)
         __qtablewidgetitem27 = QTableWidgetItem()
         __qtablewidgetitem27.setTextAlignment(Qt.AlignCenter);
         __qtablewidgetitem27.setFont(font3);
-        self.new_table.setHorizontalHeaderItem(8, __qtablewidgetitem27)
+        self.new_table.setHorizontalHeaderItem(6, __qtablewidgetitem27)
         __qtablewidgetitem28 = QTableWidgetItem()
         __qtablewidgetitem28.setTextAlignment(Qt.AlignCenter);
         __qtablewidgetitem28.setFont(font3);
-        self.new_table.setHorizontalHeaderItem(9, __qtablewidgetitem28)
+        self.new_table.setHorizontalHeaderItem(7, __qtablewidgetitem28)
         __qtablewidgetitem29 = QTableWidgetItem()
         __qtablewidgetitem29.setTextAlignment(Qt.AlignCenter);
         __qtablewidgetitem29.setFont(font3);
-        self.new_table.setHorizontalHeaderItem(10, __qtablewidgetitem29)
+        self.new_table.setHorizontalHeaderItem(8, __qtablewidgetitem29)
         __qtablewidgetitem30 = QTableWidgetItem()
         __qtablewidgetitem30.setTextAlignment(Qt.AlignCenter);
         __qtablewidgetitem30.setFont(font3);
-        self.new_table.setHorizontalHeaderItem(11, __qtablewidgetitem30)
+        self.new_table.setHorizontalHeaderItem(9, __qtablewidgetitem30)
+        __qtablewidgetitem31 = QTableWidgetItem()
+        __qtablewidgetitem31.setTextAlignment(Qt.AlignCenter);
+        __qtablewidgetitem31.setFont(font3);
+        self.new_table.setHorizontalHeaderItem(10, __qtablewidgetitem31)
+        __qtablewidgetitem32 = QTableWidgetItem()
+        __qtablewidgetitem32.setTextAlignment(Qt.AlignCenter);
+        __qtablewidgetitem32.setFont(font3);
+        self.new_table.setHorizontalHeaderItem(11, __qtablewidgetitem32)
+        __qtablewidgetitem33 = QTableWidgetItem()
+        __qtablewidgetitem33.setTextAlignment(Qt.AlignCenter);
+        __qtablewidgetitem33.setFont(font3);
+        self.new_table.setHorizontalHeaderItem(12, __qtablewidgetitem33)
         self.new_table.setObjectName(u"new_table")
-        self.new_table.setGeometry(QRect(0, 0, 981, 261))
+        self.new_table.setGeometry(QRect(0, 0, 1103, 261))
         self.new_table.setStyleSheet(u"background-color: rgb(208, 255, 169);")
+        self.new_table.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContents)
         self.new_table.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.new_table.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.conciliation_tab.addTab(self.tab, "")
         self.tab_2 = QWidget()
         self.tab_2.setObjectName(u"tab_2")
         self.old_table = QTableWidget(self.tab_2)
-        if (self.old_table.columnCount() < 7):
-            self.old_table.setColumnCount(7)
-        __qtablewidgetitem31 = QTableWidgetItem()
-        __qtablewidgetitem31.setTextAlignment(Qt.AlignCenter);
-        __qtablewidgetitem31.setFont(font3);
-        self.old_table.setHorizontalHeaderItem(0, __qtablewidgetitem31)
-        __qtablewidgetitem32 = QTableWidgetItem()
-        __qtablewidgetitem32.setTextAlignment(Qt.AlignCenter);
-        __qtablewidgetitem32.setFont(font3);
-        self.old_table.setHorizontalHeaderItem(1, __qtablewidgetitem32)
-        __qtablewidgetitem33 = QTableWidgetItem()
-        __qtablewidgetitem33.setTextAlignment(Qt.AlignCenter);
-        __qtablewidgetitem33.setFont(font3);
-        self.old_table.setHorizontalHeaderItem(2, __qtablewidgetitem33)
+        if (self.old_table.columnCount() < 8):
+            self.old_table.setColumnCount(8)
         __qtablewidgetitem34 = QTableWidgetItem()
         __qtablewidgetitem34.setTextAlignment(Qt.AlignCenter);
         __qtablewidgetitem34.setFont(font3);
-        self.old_table.setHorizontalHeaderItem(3, __qtablewidgetitem34)
+        self.old_table.setHorizontalHeaderItem(0, __qtablewidgetitem34)
         __qtablewidgetitem35 = QTableWidgetItem()
         __qtablewidgetitem35.setTextAlignment(Qt.AlignCenter);
         __qtablewidgetitem35.setFont(font3);
-        self.old_table.setHorizontalHeaderItem(4, __qtablewidgetitem35)
+        self.old_table.setHorizontalHeaderItem(1, __qtablewidgetitem35)
         __qtablewidgetitem36 = QTableWidgetItem()
         __qtablewidgetitem36.setTextAlignment(Qt.AlignCenter);
         __qtablewidgetitem36.setFont(font3);
-        self.old_table.setHorizontalHeaderItem(5, __qtablewidgetitem36)
+        self.old_table.setHorizontalHeaderItem(2, __qtablewidgetitem36)
         __qtablewidgetitem37 = QTableWidgetItem()
         __qtablewidgetitem37.setTextAlignment(Qt.AlignCenter);
         __qtablewidgetitem37.setFont(font3);
-        self.old_table.setHorizontalHeaderItem(6, __qtablewidgetitem37)
+        self.old_table.setHorizontalHeaderItem(3, __qtablewidgetitem37)
+        __qtablewidgetitem38 = QTableWidgetItem()
+        __qtablewidgetitem38.setTextAlignment(Qt.AlignCenter);
+        __qtablewidgetitem38.setFont(font3);
+        self.old_table.setHorizontalHeaderItem(4, __qtablewidgetitem38)
+        __qtablewidgetitem39 = QTableWidgetItem()
+        __qtablewidgetitem39.setTextAlignment(Qt.AlignCenter);
+        __qtablewidgetitem39.setFont(font3);
+        self.old_table.setHorizontalHeaderItem(5, __qtablewidgetitem39)
+        __qtablewidgetitem40 = QTableWidgetItem()
+        __qtablewidgetitem40.setTextAlignment(Qt.AlignCenter);
+        __qtablewidgetitem40.setFont(font3);
+        self.old_table.setHorizontalHeaderItem(6, __qtablewidgetitem40)
+        __qtablewidgetitem41 = QTableWidgetItem()
+        __qtablewidgetitem41.setTextAlignment(Qt.AlignCenter);
+        __qtablewidgetitem41.setFont(font3);
+        self.old_table.setHorizontalHeaderItem(7, __qtablewidgetitem41)
         self.old_table.setObjectName(u"old_table")
-        self.old_table.setGeometry(QRect(0, 0, 621, 261))
+        self.old_table.setGeometry(QRect(0, 0, 741, 261))
         self.old_table.setStyleSheet(u"background-color: rgb(208, 255, 169);")
         self.old_table.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.old_table.setSelectionBehavior(QAbstractItemView.SelectRows)
@@ -350,50 +366,54 @@ class Ui_MainWindow(object):
         self.tab_3 = QWidget()
         self.tab_3.setObjectName(u"tab_3")
         self.not_found_table = QTableWidget(self.tab_3)
-        if (self.not_found_table.columnCount() < 10):
-            self.not_found_table.setColumnCount(10)
-        __qtablewidgetitem38 = QTableWidgetItem()
-        __qtablewidgetitem38.setTextAlignment(Qt.AlignCenter);
-        __qtablewidgetitem38.setFont(font3);
-        self.not_found_table.setHorizontalHeaderItem(0, __qtablewidgetitem38)
-        __qtablewidgetitem39 = QTableWidgetItem()
-        __qtablewidgetitem39.setTextAlignment(Qt.AlignCenter);
-        __qtablewidgetitem39.setFont(font3);
-        self.not_found_table.setHorizontalHeaderItem(1, __qtablewidgetitem39)
-        __qtablewidgetitem40 = QTableWidgetItem()
-        __qtablewidgetitem40.setTextAlignment(Qt.AlignCenter);
-        __qtablewidgetitem40.setFont(font3);
-        self.not_found_table.setHorizontalHeaderItem(2, __qtablewidgetitem40)
-        __qtablewidgetitem41 = QTableWidgetItem()
-        __qtablewidgetitem41.setTextAlignment(Qt.AlignCenter);
-        __qtablewidgetitem41.setFont(font3);
-        self.not_found_table.setHorizontalHeaderItem(3, __qtablewidgetitem41)
+        if (self.not_found_table.columnCount() < 11):
+            self.not_found_table.setColumnCount(11)
         __qtablewidgetitem42 = QTableWidgetItem()
         __qtablewidgetitem42.setTextAlignment(Qt.AlignCenter);
         __qtablewidgetitem42.setFont(font3);
-        self.not_found_table.setHorizontalHeaderItem(4, __qtablewidgetitem42)
+        self.not_found_table.setHorizontalHeaderItem(0, __qtablewidgetitem42)
         __qtablewidgetitem43 = QTableWidgetItem()
         __qtablewidgetitem43.setTextAlignment(Qt.AlignCenter);
         __qtablewidgetitem43.setFont(font3);
-        self.not_found_table.setHorizontalHeaderItem(5, __qtablewidgetitem43)
+        self.not_found_table.setHorizontalHeaderItem(1, __qtablewidgetitem43)
         __qtablewidgetitem44 = QTableWidgetItem()
         __qtablewidgetitem44.setTextAlignment(Qt.AlignCenter);
         __qtablewidgetitem44.setFont(font3);
-        self.not_found_table.setHorizontalHeaderItem(6, __qtablewidgetitem44)
+        self.not_found_table.setHorizontalHeaderItem(2, __qtablewidgetitem44)
         __qtablewidgetitem45 = QTableWidgetItem()
         __qtablewidgetitem45.setTextAlignment(Qt.AlignCenter);
         __qtablewidgetitem45.setFont(font3);
-        self.not_found_table.setHorizontalHeaderItem(7, __qtablewidgetitem45)
+        self.not_found_table.setHorizontalHeaderItem(3, __qtablewidgetitem45)
         __qtablewidgetitem46 = QTableWidgetItem()
         __qtablewidgetitem46.setTextAlignment(Qt.AlignCenter);
         __qtablewidgetitem46.setFont(font3);
-        self.not_found_table.setHorizontalHeaderItem(8, __qtablewidgetitem46)
+        self.not_found_table.setHorizontalHeaderItem(4, __qtablewidgetitem46)
         __qtablewidgetitem47 = QTableWidgetItem()
         __qtablewidgetitem47.setTextAlignment(Qt.AlignCenter);
         __qtablewidgetitem47.setFont(font3);
-        self.not_found_table.setHorizontalHeaderItem(9, __qtablewidgetitem47)
+        self.not_found_table.setHorizontalHeaderItem(5, __qtablewidgetitem47)
+        __qtablewidgetitem48 = QTableWidgetItem()
+        __qtablewidgetitem48.setTextAlignment(Qt.AlignCenter);
+        __qtablewidgetitem48.setFont(font3);
+        self.not_found_table.setHorizontalHeaderItem(6, __qtablewidgetitem48)
+        __qtablewidgetitem49 = QTableWidgetItem()
+        __qtablewidgetitem49.setTextAlignment(Qt.AlignCenter);
+        __qtablewidgetitem49.setFont(font3);
+        self.not_found_table.setHorizontalHeaderItem(7, __qtablewidgetitem49)
+        __qtablewidgetitem50 = QTableWidgetItem()
+        __qtablewidgetitem50.setTextAlignment(Qt.AlignCenter);
+        __qtablewidgetitem50.setFont(font3);
+        self.not_found_table.setHorizontalHeaderItem(8, __qtablewidgetitem50)
+        __qtablewidgetitem51 = QTableWidgetItem()
+        __qtablewidgetitem51.setTextAlignment(Qt.AlignCenter);
+        __qtablewidgetitem51.setFont(font3);
+        self.not_found_table.setHorizontalHeaderItem(9, __qtablewidgetitem51)
+        __qtablewidgetitem52 = QTableWidgetItem()
+        __qtablewidgetitem52.setTextAlignment(Qt.AlignCenter);
+        __qtablewidgetitem52.setFont(font3);
+        self.not_found_table.setHorizontalHeaderItem(10, __qtablewidgetitem52)
         self.not_found_table.setObjectName(u"not_found_table")
-        self.not_found_table.setGeometry(QRect(0, 0, 921, 261))
+        self.not_found_table.setGeometry(QRect(0, 0, 997, 261))
         self.not_found_table.setStyleSheet(u"background-color: rgb(255, 152, 154);")
         self.not_found_table.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.not_found_table.setSelectionBehavior(QAbstractItemView.SelectRows)
@@ -447,86 +467,96 @@ class Ui_MainWindow(object):
         ___qtablewidgetitem10.setText(QCoreApplication.translate("MainWindow", u"NSU", None));
         ___qtablewidgetitem11 = self.unconciliated_table.horizontalHeaderItem(11)
         ___qtablewidgetitem11.setText(QCoreApplication.translate("MainWindow", u"Autoriza\u00e7\u00e3o", None));
+        ___qtablewidgetitem12 = self.unconciliated_table.horizontalHeaderItem(12)
+        ___qtablewidgetitem12.setText(QCoreApplication.translate("MainWindow", u"Status do recebimento", None));
         self.total_conciliation_label_2.setText("")
         self.unconciliated_tab.setTabText(self.unconciliated_tab.indexOf(self.tab_4), QCoreApplication.translate("MainWindow", u"N\u00e3o conciliados atuais", None))
-        ___qtablewidgetitem12 = self.old_unconciliated_table.horizontalHeaderItem(0)
-        ___qtablewidgetitem12.setText(QCoreApplication.translate("MainWindow", u"Data do cr\u00e9dito pela operadora", None));
-        ___qtablewidgetitem13 = self.old_unconciliated_table.horizontalHeaderItem(1)
-        ___qtablewidgetitem13.setText(QCoreApplication.translate("MainWindow", u"Taxa", None));
-        ___qtablewidgetitem14 = self.old_unconciliated_table.horizontalHeaderItem(2)
-        ___qtablewidgetitem14.setText(QCoreApplication.translate("MainWindow", u"Valor da parcela", None));
-        ___qtablewidgetitem15 = self.old_unconciliated_table.horizontalHeaderItem(3)
-        ___qtablewidgetitem15.setText(QCoreApplication.translate("MainWindow", u"N\u00b0 da parcela", None));
-        ___qtablewidgetitem16 = self.old_unconciliated_table.horizontalHeaderItem(4)
-        ___qtablewidgetitem16.setText(QCoreApplication.translate("MainWindow", u"Parcelas", None));
-        ___qtablewidgetitem17 = self.old_unconciliated_table.horizontalHeaderItem(5)
-        ___qtablewidgetitem17.setText(QCoreApplication.translate("MainWindow", u"NSU", None));
-        ___qtablewidgetitem18 = self.old_unconciliated_table.horizontalHeaderItem(6)
-        ___qtablewidgetitem18.setText(QCoreApplication.translate("MainWindow", u"Autoriza\u00e7\u00e3o", None));
+        ___qtablewidgetitem13 = self.old_unconciliated_table.horizontalHeaderItem(0)
+        ___qtablewidgetitem13.setText(QCoreApplication.translate("MainWindow", u"Data do cr\u00e9dito pela operadora", None));
+        ___qtablewidgetitem14 = self.old_unconciliated_table.horizontalHeaderItem(1)
+        ___qtablewidgetitem14.setText(QCoreApplication.translate("MainWindow", u"Taxa", None));
+        ___qtablewidgetitem15 = self.old_unconciliated_table.horizontalHeaderItem(2)
+        ___qtablewidgetitem15.setText(QCoreApplication.translate("MainWindow", u"Valor da parcela", None));
+        ___qtablewidgetitem16 = self.old_unconciliated_table.horizontalHeaderItem(3)
+        ___qtablewidgetitem16.setText(QCoreApplication.translate("MainWindow", u"N\u00b0 da parcela", None));
+        ___qtablewidgetitem17 = self.old_unconciliated_table.horizontalHeaderItem(4)
+        ___qtablewidgetitem17.setText(QCoreApplication.translate("MainWindow", u"Parcelas", None));
+        ___qtablewidgetitem18 = self.old_unconciliated_table.horizontalHeaderItem(5)
+        ___qtablewidgetitem18.setText(QCoreApplication.translate("MainWindow", u"NSU", None));
+        ___qtablewidgetitem19 = self.old_unconciliated_table.horizontalHeaderItem(6)
+        ___qtablewidgetitem19.setText(QCoreApplication.translate("MainWindow", u"Autoriza\u00e7\u00e3o", None));
+        ___qtablewidgetitem20 = self.old_unconciliated_table.horizontalHeaderItem(7)
+        ___qtablewidgetitem20.setText(QCoreApplication.translate("MainWindow", u"Status do recebimento", None));
         self.unconciliated_tab.setTabText(self.unconciliated_tab.indexOf(self.tab_5), QCoreApplication.translate("MainWindow", u"N\u00e3o conciliados conex\u00e3o", None))
         self.total_unconciliated_label.setText("")
         self.label_5.setText(QCoreApplication.translate("MainWindow", u"Inicial:", None))
         self.label_6.setText(QCoreApplication.translate("MainWindow", u"Final:", None))
-        ___qtablewidgetitem19 = self.new_table.horizontalHeaderItem(0)
-        ___qtablewidgetitem19.setText(QCoreApplication.translate("MainWindow", u"Pedido", None));
-        ___qtablewidgetitem20 = self.new_table.horizontalHeaderItem(1)
-        ___qtablewidgetitem20.setText(QCoreApplication.translate("MainWindow", u"Transa\u00e7\u00e3o", None));
-        ___qtablewidgetitem21 = self.new_table.horizontalHeaderItem(2)
-        ___qtablewidgetitem21.setText(QCoreApplication.translate("MainWindow", u"Bandeira", None));
-        ___qtablewidgetitem22 = self.new_table.horizontalHeaderItem(3)
-        ___qtablewidgetitem22.setText(QCoreApplication.translate("MainWindow", u"Parcelas", None));
-        ___qtablewidgetitem23 = self.new_table.horizontalHeaderItem(4)
-        ___qtablewidgetitem23.setText(QCoreApplication.translate("MainWindow", u"Valor da parcela", None));
-        ___qtablewidgetitem24 = self.new_table.horizontalHeaderItem(5)
-        ___qtablewidgetitem24.setText(QCoreApplication.translate("MainWindow", u"N\u00b0 da parcela", None));
-        ___qtablewidgetitem25 = self.new_table.horizontalHeaderItem(6)
-        ___qtablewidgetitem25.setText(QCoreApplication.translate("MainWindow", u"Data da compra", None));
-        ___qtablewidgetitem26 = self.new_table.horizontalHeaderItem(7)
-        ___qtablewidgetitem26.setText(QCoreApplication.translate("MainWindow", u"Data do cr\u00e9dito pela operadora", None));
-        ___qtablewidgetitem27 = self.new_table.horizontalHeaderItem(8)
-        ___qtablewidgetitem27.setText(QCoreApplication.translate("MainWindow", u"Taxa", None));
-        ___qtablewidgetitem28 = self.new_table.horizontalHeaderItem(9)
-        ___qtablewidgetitem28.setText(QCoreApplication.translate("MainWindow", u"Valor l\u00edquido", None));
-        ___qtablewidgetitem29 = self.new_table.horizontalHeaderItem(10)
-        ___qtablewidgetitem29.setText(QCoreApplication.translate("MainWindow", u"NSU", None));
-        ___qtablewidgetitem30 = self.new_table.horizontalHeaderItem(11)
-        ___qtablewidgetitem30.setText(QCoreApplication.translate("MainWindow", u"Autoriza\u00e7\u00e3o", None));
+        ___qtablewidgetitem21 = self.new_table.horizontalHeaderItem(0)
+        ___qtablewidgetitem21.setText(QCoreApplication.translate("MainWindow", u"Pedido", None));
+        ___qtablewidgetitem22 = self.new_table.horizontalHeaderItem(1)
+        ___qtablewidgetitem22.setText(QCoreApplication.translate("MainWindow", u"Transa\u00e7\u00e3o", None));
+        ___qtablewidgetitem23 = self.new_table.horizontalHeaderItem(2)
+        ___qtablewidgetitem23.setText(QCoreApplication.translate("MainWindow", u"Bandeira", None));
+        ___qtablewidgetitem24 = self.new_table.horizontalHeaderItem(3)
+        ___qtablewidgetitem24.setText(QCoreApplication.translate("MainWindow", u"Parcelas", None));
+        ___qtablewidgetitem25 = self.new_table.horizontalHeaderItem(4)
+        ___qtablewidgetitem25.setText(QCoreApplication.translate("MainWindow", u"Valor da parcela", None));
+        ___qtablewidgetitem26 = self.new_table.horizontalHeaderItem(5)
+        ___qtablewidgetitem26.setText(QCoreApplication.translate("MainWindow", u"N\u00b0 da parcela", None));
+        ___qtablewidgetitem27 = self.new_table.horizontalHeaderItem(6)
+        ___qtablewidgetitem27.setText(QCoreApplication.translate("MainWindow", u"Data da compra", None));
+        ___qtablewidgetitem28 = self.new_table.horizontalHeaderItem(7)
+        ___qtablewidgetitem28.setText(QCoreApplication.translate("MainWindow", u"Data do cr\u00e9dito pela operadora", None));
+        ___qtablewidgetitem29 = self.new_table.horizontalHeaderItem(8)
+        ___qtablewidgetitem29.setText(QCoreApplication.translate("MainWindow", u"Taxa", None));
+        ___qtablewidgetitem30 = self.new_table.horizontalHeaderItem(9)
+        ___qtablewidgetitem30.setText(QCoreApplication.translate("MainWindow", u"Valor l\u00edquido", None));
+        ___qtablewidgetitem31 = self.new_table.horizontalHeaderItem(10)
+        ___qtablewidgetitem31.setText(QCoreApplication.translate("MainWindow", u"NSU", None));
+        ___qtablewidgetitem32 = self.new_table.horizontalHeaderItem(11)
+        ___qtablewidgetitem32.setText(QCoreApplication.translate("MainWindow", u"Autoriza\u00e7\u00e3o", None));
+        ___qtablewidgetitem33 = self.new_table.horizontalHeaderItem(12)
+        ___qtablewidgetitem33.setText(QCoreApplication.translate("MainWindow", u"Status do recebimento", None));
         self.conciliation_tab.setTabText(self.conciliation_tab.indexOf(self.tab), QCoreApplication.translate("MainWindow", u"Pagamentos atuais", None))
-        ___qtablewidgetitem31 = self.old_table.horizontalHeaderItem(0)
-        ___qtablewidgetitem31.setText(QCoreApplication.translate("MainWindow", u"Data do cr\u00e9dito pela operadora", None));
-        ___qtablewidgetitem32 = self.old_table.horizontalHeaderItem(1)
-        ___qtablewidgetitem32.setText(QCoreApplication.translate("MainWindow", u"Taxa", None));
-        ___qtablewidgetitem33 = self.old_table.horizontalHeaderItem(2)
-        ___qtablewidgetitem33.setText(QCoreApplication.translate("MainWindow", u"Valor da parcela", None));
-        ___qtablewidgetitem34 = self.old_table.horizontalHeaderItem(3)
-        ___qtablewidgetitem34.setText(QCoreApplication.translate("MainWindow", u"N\u00b0 da parcela", None));
-        ___qtablewidgetitem35 = self.old_table.horizontalHeaderItem(4)
-        ___qtablewidgetitem35.setText(QCoreApplication.translate("MainWindow", u"Parcelas", None));
-        ___qtablewidgetitem36 = self.old_table.horizontalHeaderItem(5)
-        ___qtablewidgetitem36.setText(QCoreApplication.translate("MainWindow", u"NSU", None));
-        ___qtablewidgetitem37 = self.old_table.horizontalHeaderItem(6)
-        ___qtablewidgetitem37.setText(QCoreApplication.translate("MainWindow", u"Autoriza\u00e7\u00e3o", None));
+        ___qtablewidgetitem34 = self.old_table.horizontalHeaderItem(0)
+        ___qtablewidgetitem34.setText(QCoreApplication.translate("MainWindow", u"Data do cr\u00e9dito pela operadora", None));
+        ___qtablewidgetitem35 = self.old_table.horizontalHeaderItem(1)
+        ___qtablewidgetitem35.setText(QCoreApplication.translate("MainWindow", u"Taxa", None));
+        ___qtablewidgetitem36 = self.old_table.horizontalHeaderItem(2)
+        ___qtablewidgetitem36.setText(QCoreApplication.translate("MainWindow", u"Valor da parcela", None));
+        ___qtablewidgetitem37 = self.old_table.horizontalHeaderItem(3)
+        ___qtablewidgetitem37.setText(QCoreApplication.translate("MainWindow", u"N\u00b0 da parcela", None));
+        ___qtablewidgetitem38 = self.old_table.horizontalHeaderItem(4)
+        ___qtablewidgetitem38.setText(QCoreApplication.translate("MainWindow", u"Parcelas", None));
+        ___qtablewidgetitem39 = self.old_table.horizontalHeaderItem(5)
+        ___qtablewidgetitem39.setText(QCoreApplication.translate("MainWindow", u"NSU", None));
+        ___qtablewidgetitem40 = self.old_table.horizontalHeaderItem(6)
+        ___qtablewidgetitem40.setText(QCoreApplication.translate("MainWindow", u"Autoriza\u00e7\u00e3o", None));
+        ___qtablewidgetitem41 = self.old_table.horizontalHeaderItem(7)
+        ___qtablewidgetitem41.setText(QCoreApplication.translate("MainWindow", u"Status do recebimento", None));
         self.conciliation_tab.setTabText(self.conciliation_tab.indexOf(self.tab_2), QCoreApplication.translate("MainWindow", u"Pagamentos conex\u00e3o", None))
-        ___qtablewidgetitem38 = self.not_found_table.horizontalHeaderItem(0)
-        ___qtablewidgetitem38.setText(QCoreApplication.translate("MainWindow", u"Transa\u00e7\u00e3o", None));
-        ___qtablewidgetitem39 = self.not_found_table.horizontalHeaderItem(1)
-        ___qtablewidgetitem39.setText(QCoreApplication.translate("MainWindow", u"Bandeira", None));
-        ___qtablewidgetitem40 = self.not_found_table.horizontalHeaderItem(2)
-        ___qtablewidgetitem40.setText(QCoreApplication.translate("MainWindow", u"Data do cr\u00e9dito pela operadora", None));
-        ___qtablewidgetitem41 = self.not_found_table.horizontalHeaderItem(3)
-        ___qtablewidgetitem41.setText(QCoreApplication.translate("MainWindow", u"Taxa", None));
-        ___qtablewidgetitem42 = self.not_found_table.horizontalHeaderItem(4)
-        ___qtablewidgetitem42.setText(QCoreApplication.translate("MainWindow", u"Data da compra", None));
-        ___qtablewidgetitem43 = self.not_found_table.horizontalHeaderItem(5)
-        ___qtablewidgetitem43.setText(QCoreApplication.translate("MainWindow", u"Parcelas", None));
-        ___qtablewidgetitem44 = self.not_found_table.horizontalHeaderItem(6)
-        ___qtablewidgetitem44.setText(QCoreApplication.translate("MainWindow", u"N\u00b0 da parcela", None));
-        ___qtablewidgetitem45 = self.not_found_table.horizontalHeaderItem(7)
-        ___qtablewidgetitem45.setText(QCoreApplication.translate("MainWindow", u"Valor da parcela", None));
-        ___qtablewidgetitem46 = self.not_found_table.horizontalHeaderItem(8)
-        ___qtablewidgetitem46.setText(QCoreApplication.translate("MainWindow", u"NSU", None));
-        ___qtablewidgetitem47 = self.not_found_table.horizontalHeaderItem(9)
-        ___qtablewidgetitem47.setText(QCoreApplication.translate("MainWindow", u"Autoriza\u00e7\u00e3o", None));
+        ___qtablewidgetitem42 = self.not_found_table.horizontalHeaderItem(0)
+        ___qtablewidgetitem42.setText(QCoreApplication.translate("MainWindow", u"Transa\u00e7\u00e3o", None));
+        ___qtablewidgetitem43 = self.not_found_table.horizontalHeaderItem(1)
+        ___qtablewidgetitem43.setText(QCoreApplication.translate("MainWindow", u"Bandeira", None));
+        ___qtablewidgetitem44 = self.not_found_table.horizontalHeaderItem(2)
+        ___qtablewidgetitem44.setText(QCoreApplication.translate("MainWindow", u"Data do cr\u00e9dito pela operadora", None));
+        ___qtablewidgetitem45 = self.not_found_table.horizontalHeaderItem(3)
+        ___qtablewidgetitem45.setText(QCoreApplication.translate("MainWindow", u"Taxa", None));
+        ___qtablewidgetitem46 = self.not_found_table.horizontalHeaderItem(4)
+        ___qtablewidgetitem46.setText(QCoreApplication.translate("MainWindow", u"Data da compra", None));
+        ___qtablewidgetitem47 = self.not_found_table.horizontalHeaderItem(5)
+        ___qtablewidgetitem47.setText(QCoreApplication.translate("MainWindow", u"Parcelas", None));
+        ___qtablewidgetitem48 = self.not_found_table.horizontalHeaderItem(6)
+        ___qtablewidgetitem48.setText(QCoreApplication.translate("MainWindow", u"N\u00b0 da parcela", None));
+        ___qtablewidgetitem49 = self.not_found_table.horizontalHeaderItem(7)
+        ___qtablewidgetitem49.setText(QCoreApplication.translate("MainWindow", u"Valor da parcela", None));
+        ___qtablewidgetitem50 = self.not_found_table.horizontalHeaderItem(8)
+        ___qtablewidgetitem50.setText(QCoreApplication.translate("MainWindow", u"NSU", None));
+        ___qtablewidgetitem51 = self.not_found_table.horizontalHeaderItem(9)
+        ___qtablewidgetitem51.setText(QCoreApplication.translate("MainWindow", u"Autoriza\u00e7\u00e3o", None));
+        ___qtablewidgetitem52 = self.not_found_table.horizontalHeaderItem(10)
+        ___qtablewidgetitem52.setText(QCoreApplication.translate("MainWindow", u"Status do recebimento", None));
         self.conciliation_tab.setTabText(self.conciliation_tab.indexOf(self.tab_3), QCoreApplication.translate("MainWindow", u"Pagamentos n\u00e3o encontrados", None))
         self.total_conciliation_label.setText("")
     # retranslateUi

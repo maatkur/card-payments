@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1020</width>
+    <width>1135</width>
     <height>729</height>
    </rect>
   </property>
@@ -292,7 +292,7 @@
        <rect>
         <x>0</x>
         <y>50</y>
-        <width>991</width>
+        <width>1113</width>
         <height>291</height>
        </rect>
       </property>
@@ -316,7 +316,7 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>981</width>
+          <width>1111</width>
           <height>261</height>
          </rect>
         </property>
@@ -488,6 +488,19 @@
           <set>AlignCenter</set>
          </property>
         </column>
+        <column>
+         <property name="text">
+          <string>Status do recebimento</string>
+         </property>
+         <property name="font">
+          <font>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="textAlignment">
+          <set>AlignCenter</set>
+         </property>
+        </column>
        </widget>
        <widget class="QLabel" name="total_conciliation_label_2">
         <property name="geometry">
@@ -518,7 +531,7 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>621</width>
+          <width>741</width>
           <height>261</height>
          </rect>
         </property>
@@ -619,6 +632,19 @@
           <set>AlignCenter</set>
          </property>
         </column>
+        <column>
+         <property name="text">
+          <string>Status do recebimento</string>
+         </property>
+         <property name="font">
+          <font>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="textAlignment">
+          <set>AlignCenter</set>
+         </property>
+        </column>
        </widget>
       </widget>
      </widget>
@@ -703,7 +729,7 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>991</width>
+        <width>1111</width>
         <height>291</height>
        </rect>
       </property>
@@ -727,12 +753,15 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>981</width>
+          <width>1103</width>
           <height>261</height>
          </rect>
         </property>
         <property name="styleSheet">
          <string notr="true">background-color: rgb(208, 255, 169);</string>
+        </property>
+        <property name="sizeAdjustPolicy">
+         <enum>QAbstractScrollArea::AdjustToContents</enum>
         </property>
         <property name="editTriggers">
          <set>QAbstractItemView::NoEditTriggers</set>
@@ -896,6 +925,19 @@
           <set>AlignCenter</set>
          </property>
         </column>
+        <column>
+         <property name="text">
+          <string>Status do recebimento</string>
+         </property>
+         <property name="font">
+          <font>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="textAlignment">
+          <set>AlignCenter</set>
+         </property>
+        </column>
        </widget>
       </widget>
       <widget class="QWidget" name="tab_2">
@@ -907,7 +949,7 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>621</width>
+          <width>741</width>
           <height>261</height>
          </rect>
         </property>
@@ -1011,6 +1053,19 @@
           <set>AlignCenter</set>
          </property>
         </column>
+        <column>
+         <property name="text">
+          <string>Status do recebimento</string>
+         </property>
+         <property name="font">
+          <font>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="textAlignment">
+          <set>AlignCenter</set>
+         </property>
+        </column>
        </widget>
       </widget>
       <widget class="QWidget" name="tab_3">
@@ -1022,7 +1077,7 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>921</width>
+          <width>997</width>
           <height>261</height>
          </rect>
         </property>
@@ -1155,6 +1210,19 @@
         <column>
          <property name="text">
           <string>Autorização</string>
+         </property>
+         <property name="font">
+          <font>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="textAlignment">
+          <set>AlignCenter</set>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Status do recebimento</string>
          </property>
          <property name="font">
           <font>

@@ -1,9 +1,7 @@
 import os
 from os import getlogin
 from os.path import exists
-from datetime import datetime
 
-from PySide6.QtCore import QDate
 from PySide6.QtWidgets import *
 
 from config.setup_config import setup_config
@@ -46,11 +44,12 @@ class PaymentsConciliation(QMainWindow):
             DialogWindowManager.dialog().file_not_found(f"O arquivo {self.file_path} não foi encontrado!")
 
     def retrieve_carrier_payments(self):
+        WidgetHelpers.manage_buttons(self, set_disabled=True)
         carrier_excel = CarrierExcel(self.file_path)
         carrier_excel.load_carrier_payments({"initial_date": self.ui.conciliation_initial_date.text(),
                                              "final_date": self.ui.conciliation_final_date.text()
                                              })
-        self.old_found_payments, self.found_payments, self.not_found_payments = carrier_excel.match_payments()
+        self.old_found_payments, self.found_payments, self.not_found_payments = carrier_excel.find_payments()
         WidgetHelpers.manage_buttons(self, set_disabled=False)
         self.manage_conciliation_tables()
 
@@ -147,11 +146,6 @@ class PaymentsConciliation(QMainWindow):
         self.set_conciliation_values()
 
     def load_unconciliated(self) -> None:
-        date_period = {'initial_date': DateHelpers.to_sql_format(self.ui.unconciliated_initial_date.text()),
-                       'final_date': DateHelpers.to_sql_format(self.ui.unconciliated_final_date.text())}
-
-        self.unconciliated_payments = RepositoryManager.checked_orders_repository().get_unconciliated_orders(
-            date_period)
 
         data = self.unconciliated_payments
 
@@ -235,13 +229,7 @@ class PaymentsConciliation(QMainWindow):
         self.set_unconciliated_values()
 
     def set_current_date(self):
-        today = datetime.today()
-        qdate = QDate(today.year, today.month, today.day)
-
-        self.ui.conciliation_initial_date.setDate(qdate)
-        self.ui.conciliation_final_date.setDate(qdate)
-        self.ui.unconciliated_initial_date.setDate(qdate)
-        self.ui.unconciliated_final_date.setDate(qdate)
+        WidgetHelpers.set_current_date(self)
 
     def enable_conciliate_button(self) -> None:
         self.ui.conciliate_button.setDisabled(False)
@@ -261,6 +249,7 @@ class PaymentsConciliation(QMainWindow):
             RepositoryManager.checked_orders_repository().conciliate_orders(
                 {"payday": payment["payday"],
                  "currentInstallment": payment["currentInstallment"],
+                 "status": payment["status"],
                  "uId": payment["uId"]}
             )
 
@@ -269,6 +258,7 @@ class PaymentsConciliation(QMainWindow):
             RepositoryManager.old_payments_repository().conciliate_orders(
                 {"payday": payment["payday"],
                  "currentInstallment": payment["currentInstallment"],
+                 "status": payment["status"],
                  "uId": payment["uId"]}
             )
 
