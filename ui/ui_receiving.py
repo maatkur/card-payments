@@ -88,6 +88,10 @@ class Ui_MainWindow(object):
         icon2.addFile(f"{getenv('ICONS_PATH')}filtro-limpo.ico", QSize(), QIcon.Normal, QIcon.Off)
         self.clear_button.setIcon(icon2)
         self.status_combo_box = QComboBox(self.frame_2)
+        self.status_combo_box.addItem("")
+        self.status_combo_box.addItem("")
+        self.status_combo_box.addItem("")
+        self.status_combo_box.addItem("")
         self.status_combo_box.setObjectName(u"status_combo_box")
         self.status_combo_box.setGeometry(QRect(720, 40, 111, 22))
         self.label_5 = QLabel(self.frame_2)
@@ -233,6 +237,11 @@ class Ui_MainWindow(object):
         self.excel_button.setText(QCoreApplication.translate("MainWindow", u"Gerar excel", None))
         self.search_button.setText(QCoreApplication.translate("MainWindow", u"Pesquisar", None))
         self.clear_button.setText(QCoreApplication.translate("MainWindow", u"Nova busca", None))
+        self.status_combo_box.setItemText(0, QCoreApplication.translate("MainWindow", u"Todos", None))
+        self.status_combo_box.setItemText(1, QCoreApplication.translate("MainWindow", u"Agendado", None))
+        self.status_combo_box.setItemText(2, QCoreApplication.translate("MainWindow", u"Pago", None))
+        self.status_combo_box.setItemText(3, QCoreApplication.translate("MainWindow", u"Enviado Banco", None))
+
         self.label_5.setText(QCoreApplication.translate("MainWindow", u"Status:", None))
         ___qtablewidgetitem = self.new_table.horizontalHeaderItem(0)
         ___qtablewidgetitem.setText(QCoreApplication.translate("MainWindow", u"Pedido", None));

@@ -35,8 +35,10 @@ class RepositoryConfig:
             cursor = self.connection.cursor()
             if values:
                 cursor.execute(command, values)
+                print(command, values)
             else:
                 cursor.execute(command)
+                print(command)
             self.connection.commit()
             self._disconnect()
         except pyodbc.Error as e:

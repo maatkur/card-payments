@@ -355,14 +355,14 @@ class PaymentsConciliation(QMainWindow):
             quick_management_data = {
                 "NSU": tabs[selecte_tab]["payments"][clicked_row][10],
                 "transactionAuthorization": tabs[selecte_tab]["payments"][clicked_row][11],
-                "uId": tabs[selecte_tab]["payments"][clicked_row][12],
+                "uId": tabs[selecte_tab]["payments"][clicked_row][13],
                 "repository": "checkedOrders"
             }
         if selecte_tab == 1:
             quick_management_data = {
                 "NSU": tabs[selecte_tab]["payments"][clicked_row][5],
                 "transactionAuthorization": tabs[selecte_tab]["payments"][clicked_row][6],
-                "uId": tabs[selecte_tab]["payments"][clicked_row][7],
+                "uId": tabs[selecte_tab]["payments"][clicked_row][8],
                 "repository": "oldPayments"
             }
 

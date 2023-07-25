@@ -34,14 +34,12 @@ class Receiving(QMainWindow):
             0: {
                 "tab_name": "Pagamentos atuais",
                 "payments_count": len(self.checked_orders),
-                "total_value": sum(payment[4] for payment in self.checked_orders),
-                "all_status": RepositoryManager.checked_orders_repository().get_payments_status()
+                "total_value": sum(payment[4] for payment in self.checked_orders)
             },
             1: {
                 "tab_name": "Pagamentos conexão",
                 "payments_count": len(self.old_payments),
-                "total_value": sum(payment[2] for payment in self.old_payments),
-                "all_status": RepositoryManager.old_payments_repository().get_payments_status()
+                "total_value": sum(payment[2] for payment in self.old_payments)
             }
         }
 
@@ -56,64 +54,100 @@ class Receiving(QMainWindow):
 
     def load_new_table(self):
         # Obtém o status selecionado no combobox
-        selected_status = self.ui.status_combo_box.currentText()
+        selected_status = self.ui.status_combo_box.currentText().lower()
 
         # Filtra os dados com base no status selecionado
         filtered_orders = self.checked_orders
-        if selected_status != "Todos":
-            filtered_orders = [order for order in self.checked_orders if order[12] == selected_status]
 
-        num_rows = len(filtered_orders)
-        num_columns = len(filtered_orders[0]) - 1
+        if selected_status != "todos":
+            filtered_orders = [order for order in self.checked_orders if order[12].lower() == selected_status]
+        self.tabs_options[0]["payments_count"] = len(filtered_orders)
+        self.tabs_options[0]["total_value"] = sum(payment[4] for payment in filtered_orders)
+
+        self.ui.new_table.clearContents()
+        self.ui.new_table.setRowCount(0)
 
         # Limpa a tabela antes de carregar novos dados
-        self.ui.new_table.clearContents()
-        self.ui.new_table.setRowCount(num_rows)
-        self.ui.new_table.setColumnCount(num_columns)
 
-        for row, order in enumerate(filtered_orders):
-            for col, value in enumerate(order):
-                if col == 1:
-                    value = 'Crédito' if value == 'credit' else 'Débito'
-                if col == 4 or col == 9:
-                    value = f"R$ {round(value, 2)}"
-                if col == 6 or col == 7:
-                    value = DateHelpers.to_default_format(value)
-                item = QTableWidgetItem(str(value))
-                self.ui.new_table.setItem(row, col, item)
-            status_index = 12  # Substitua pelo índice correto do status no seu conjunto de dados
-            status = order[status_index]
-            if status.lower() == "indefinido":
-                for col in range(self.ui.new_table.columnCount()):
-                    self.ui.new_table.item(row, col).setBackground(QColor(255, 152, 154))  # Verde
-            if status.lower() == "agendado":
-                for col in range(self.ui.new_table.columnCount()):
-                    self.ui.new_table.item(row, col).setBackground(QColor(254, 255, 197))  # Verde
-            if status.lower() == "Enviado banco":
-                for col in range(self.ui.new_table.columnCount()):
-                    self.ui.new_table.item(row, col).setBackground(QColor(208, 255, 169))  # Verde
-            if status.lower() == "pago":
-                for col in range(self.ui.new_table.columnCount()):
-                    self.ui.new_table.item(row, col).setBackground(QColor(0, 255, 0))  # Verde
+        if filtered_orders:
 
-        self.ui.new_table.resizeColumnsToContents()
+            num_rows = len(filtered_orders)
+            num_columns = len(filtered_orders[0]) - 1
+            self.ui.new_table.setRowCount(num_rows)
+            self.ui.new_table.setColumnCount(num_columns)
+
+            for row, order in enumerate(filtered_orders):
+                for col, value in enumerate(order):
+                    if col == 1:
+                        value = 'Crédito' if value == 'credit' else 'Débito'
+                    if col == 4 or col == 9:
+                        value = f"R$ {round(value, 2)}"
+                    if col == 6 or col == 7:
+                        value = DateHelpers.to_default_format(value)
+                    item = QTableWidgetItem(str(value))
+                    self.ui.new_table.setItem(row, col, item)
+                status_index = 12  # Substitua pelo índice correto do status no seu conjunto de dados
+                status = order[status_index]
+                if status.lower() == "indefinido":
+                    for col in range(self.ui.new_table.columnCount()):
+                        self.ui.new_table.item(row, col).setBackground(QColor(255, 152, 154))  # Verde
+                if status.lower() == "agendado":
+                    for col in range(self.ui.new_table.columnCount()):
+                        self.ui.new_table.item(row, col).setBackground(QColor(254, 255, 197))  # Verde
+                if status.lower() == "enviado banco":
+                    for col in range(self.ui.new_table.columnCount()):
+                        self.ui.new_table.item(row, col).setBackground(QColor(208, 255, 169))  # Verde
+                if status.lower() == "pago":
+                    for col in range(self.ui.new_table.columnCount()):
+                        self.ui.new_table.item(row, col).setBackground(QColor(0, 255, 0))  # Verde
+
+            self.ui.new_table.resizeColumnsToContents()
 
     def load_old_table(self) -> None:
+        # Obtém o status selecionado no combobox
+        selected_status = self.ui.status_combo_box.currentText().lower()
 
-        num_rows = len(self.old_payments)
-        num_columns = len(self.old_payments[0]) - 1
+        # Filtra os dados com base no status selecionado
+        filtered_orders = self.old_payments
+        if selected_status != "todos":
+            filtered_orders = [order for order in self.old_payments if order[7].lower() == selected_status]
+        self.tabs_options[1]["payments_count"] = len(filtered_orders)
+        self.tabs_options[1]["total_value"] = sum(payment[2] for payment in filtered_orders)
 
-        self.ui.old_table.setRowCount(num_rows)
-        self.ui.old_table.setColumnCount(num_columns)
+        self.ui.old_table.clearContents()
+        self.ui.old_table.setRowCount(0)
 
-        for row, order in enumerate(self.old_payments):
-            for col, value in enumerate(order):
-                if col == 0:
-                    value = DateHelpers.to_default_format(value)
-                if col == 2:
-                    value = f"R$ {round(value, 2)}"
-                item = QTableWidgetItem(str(value))
-                self.ui.old_table.setItem(row, col, item)
+        if filtered_orders:
+            num_rows = len(filtered_orders)
+            num_columns = len(filtered_orders[0]) - 1
+
+            self.ui.old_table.setRowCount(num_rows)
+            self.ui.old_table.setColumnCount(num_columns)
+
+            for row, order in enumerate(filtered_orders):
+                for col, value in enumerate(order):
+                    if col == 0:
+                        value = DateHelpers.to_default_format(value)
+                    if col == 2:
+                        value = f"R$ {round(value, 2)}"
+                    item = QTableWidgetItem(str(value))
+                    self.ui.old_table.setItem(row, col, item)
+
+                status_index = 7
+                status = order[status_index]
+                if status.lower() == "indefinido":
+                    for col in range(self.ui.new_table.columnCount()):
+                        self.ui.old_table.item(row, col).setBackground(QColor(255, 152, 154))
+                if status.lower() == "agendado":
+                    for col in range(self.ui.old_table.columnCount()):
+                        self.ui.old_table.item(row, col).setBackground(QColor(254, 255, 197))
+                if status.lower() == "enviado banco":
+                    for col in range(self.ui.old_table.columnCount()):
+                        self.ui.old_table.item(row, col).setBackground(QColor(208, 255, 169))
+                if status.lower() == "pago":
+                    for col in range(self.ui.old_table.columnCount()):
+                        self.ui.old_table.item(row, col).setBackground(QColor(0, 255, 0))
+
             self.ui.old_table.resizeColumnsToContents()
 
     def manage_tables(self):
@@ -126,7 +160,6 @@ class Receiving(QMainWindow):
     def retrive_and_manage(self):
         self.retrieve_conciliated_orders()
         self.create_tabs_options()
-        self.load_all_status()
         self.manage_tables()
         self.load_tabs_options()
 
@@ -157,7 +190,6 @@ class Receiving(QMainWindow):
 
     def update_orders_status(self):
         payments_status, old_payments_status = self.load_carrier_status()
-        print(len(old_payments_status))
 
         self.update_payments_status(payments_status)
         self.update_old_payments_status(old_payments_status)
@@ -169,19 +201,17 @@ class Receiving(QMainWindow):
             self.ui.tabWidget.setTabText(index,
                                     f"{tabs['tab_name']} ({tabs['payments_count']}) R$ {round(tabs['total_value'], 2)}")
 
+    def clear_tabs_options(self):
+        for index in range(self.ui.tabWidget.count()):
+            tabs = self.tabs_options[index]
+            self.ui.tabWidget.setTabText(index, tabs["tab_name"])
+
     def conect_buttons_actions(self) -> None:
         self.ui.search_button.clicked.connect(self.retrive_and_manage)
         self.ui.clear_button.clicked.connect(self.new_search)
         self.ui.excel_button.clicked.connect(self.update_orders_status)
-        self.ui.tabWidget.currentChanged.connect(self.load_all_status)
-        self.ui.status_combo_box.currentIndexChanged.connect(self.load_new_table)
-
-    def load_all_status(self):
-        current_tab = self.ui.tabWidget.currentIndex()
-        self.ui.status_combo_box.clear()
-        self.ui.status_combo_box.addItem("Todos")
-        for status in self.tabs_options[current_tab]["all_status"]:
-            self.ui.status_combo_box.addItem(status[0])
+        self.ui.status_combo_box.currentIndexChanged.connect(self.manage_tables)
+        self.ui.status_combo_box.currentIndexChanged.connect(self.load_tabs_options)
 
     def set_current_date(self):
         WidgetHelpers.set_current_date(self)
@@ -189,6 +219,7 @@ class Receiving(QMainWindow):
     def new_search(self):
         self.checked_orders = None
         self.old_payments = None
+        self.clear_tabs_options()
         self.set_current_date()
         WidgetHelpers.clear_table(self)
 

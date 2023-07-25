@@ -131,10 +131,3 @@ class OldPaymentsRepository(RepositoryConfig):
         values += (uid, current_installment)
 
         self._execute_and_commit(command, values)
-
-    def get_payments_status(self):
-
-        return self.get_all({
-            "select": "status",
-            "distinct": True
-        })
