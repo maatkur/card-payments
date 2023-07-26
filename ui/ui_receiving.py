@@ -20,6 +20,7 @@ from PySide6.QtWidgets import (QApplication, QComboBox, QDateEdit, QFrame,
     QSizePolicy, QTabWidget, QTableWidget, QTableWidgetItem,
     QVBoxLayout, QWidget)
 
+
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
@@ -75,18 +76,21 @@ class Ui_MainWindow(object):
         self.excel_button = QPushButton(self.frame_2)
         self.excel_button.setObjectName(u"excel_button")
         self.excel_button.setGeometry(QRect(623, 38, 80, 25))
+        icon1 = QIcon()
+        icon1.addFile(f"{getenv('ICONS_PATH')}excel.ico", QSize(), QIcon.Normal, QIcon.Off)
+        self.excel_button.setIcon(icon1)
         self.search_button = QPushButton(self.frame_2)
         self.search_button.setObjectName(u"search_button")
         self.search_button.setGeometry(QRect(310, 38, 80, 25))
-        icon1 = QIcon()
-        icon1.addFile(f"{getenv('ICONS_PATH')}icons8-pesquisar-60.ico", QSize(), QIcon.Normal, QIcon.Off)
-        self.search_button.setIcon(icon1)
+        icon2 = QIcon()
+        icon2.addFile(f"{getenv('ICONS_PATH')}icons8-pesquisar-60.ico", QSize(), QIcon.Normal, QIcon.Off)
+        self.search_button.setIcon(icon2)
         self.clear_button = QPushButton(self.frame_2)
         self.clear_button.setObjectName(u"clear_button")
         self.clear_button.setGeometry(QRect(530, 38, 85, 25))
-        icon2 = QIcon()
-        icon2.addFile(f"{getenv('ICONS_PATH')}filtro-limpo.ico", QSize(), QIcon.Normal, QIcon.Off)
-        self.clear_button.setIcon(icon2)
+        icon3 = QIcon()
+        icon3.addFile(f"{getenv('ICONS_PATH')}filtro-limpo.ico", QSize(), QIcon.Normal, QIcon.Off)
+        self.clear_button.setIcon(icon3)
         self.status_combo_box = QComboBox(self.frame_2)
         self.status_combo_box.addItem("")
         self.status_combo_box.addItem("")
@@ -234,7 +238,7 @@ class Ui_MainWindow(object):
         self.label_2.setText(QCoreApplication.translate("MainWindow", u"Inicial:", None))
         self.label_3.setText(QCoreApplication.translate("MainWindow", u"Final:", None))
         self.update_button.setText(QCoreApplication.translate("MainWindow", u"Atualizar status", None))
-        self.excel_button.setText(QCoreApplication.translate("MainWindow", u"Gerar excel", None))
+        self.excel_button.setText(QCoreApplication.translate("MainWindow", u"Excel", None))
         self.search_button.setText(QCoreApplication.translate("MainWindow", u"Pesquisar", None))
         self.clear_button.setText(QCoreApplication.translate("MainWindow", u"Nova busca", None))
         self.status_combo_box.setItemText(0, QCoreApplication.translate("MainWindow", u"Todos", None))

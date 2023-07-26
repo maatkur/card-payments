@@ -11,6 +11,7 @@ from database.repositories.repository_manager import RepositoryManager
 from helpers.date_helpers import DateHelpers
 from helpers.widgets_helpers import WidgetHelpers
 from config.setup_config import setup_config
+from reports.report_manager import ReportManager
 
 setup_config()
 
@@ -26,6 +27,8 @@ class Receiving(QMainWindow):
         self.old_payments = None
         self.set_current_date()
         self.conect_buttons_actions()
+        self.disable_excel_button()
+        self.disable_update_button()
         self.file_path = fr"c:\users\{getlogin()}\desktop\recebimentocielo.xlsx"
         self.tabs_options = None
 
@@ -163,6 +166,28 @@ class Receiving(QMainWindow):
         self.manage_tables()
         self.load_tabs_options()
 
+    def enable_excel_button(self) -> None:
+        self.ui.excel_button.setDisabled(False)
+
+    def disable_excel_button(self) -> None:
+        self.ui.excel_button.setDisabled(True)
+
+    def update_excel_and_buttons_state(self) -> None:
+
+        if self.checked_orders or self.old_payments:
+            self.enable_excel_button()
+            self.enable_update_button()
+        else:
+            self.disable_excel_button()
+            self.disable_update_button()
+
+    def enable_update_button(self) -> None:
+        self.ui.update_button.setDisabled(False)
+
+    def disable_update_button(self) -> None:
+        self.ui.update_button.setDisabled(True)
+
+
     def load_carrier_status(self):
         carrier_excel = CarrierExcel(self.file_path)
         carrier_excel.load_carrier_payments({"initial_date": self.ui.initial_date.text(),
@@ -201,6 +226,9 @@ class Receiving(QMainWindow):
             self.ui.tabWidget.setTabText(index,
                                     f"{tabs['tab_name']} ({tabs['payments_count']}) R$ {round(tabs['total_value'], 2)}")
 
+    def generate_conciliateds_report(self) -> None:
+        ReportManager.conciliateds().generate((self.checked_orders, self.old_payments))
+
     def clear_tabs_options(self):
         for index in range(self.ui.tabWidget.count()):
             tabs = self.tabs_options[index]
@@ -208,10 +236,12 @@ class Receiving(QMainWindow):
 
     def conect_buttons_actions(self) -> None:
         self.ui.search_button.clicked.connect(self.retrive_and_manage)
+        self.ui.search_button.clicked.connect(self.update_excel_and_buttons_state)
         self.ui.clear_button.clicked.connect(self.new_search)
-        self.ui.excel_button.clicked.connect(self.update_orders_status)
+        self.ui.update_button.clicked.connect(self.update_orders_status)
         self.ui.status_combo_box.currentIndexChanged.connect(self.manage_tables)
         self.ui.status_combo_box.currentIndexChanged.connect(self.load_tabs_options)
+        self.ui.excel_button.clicked.connect(self.generate_conciliateds_report)
 
     def set_current_date(self):
         WidgetHelpers.set_current_date(self)
@@ -222,6 +252,8 @@ class Receiving(QMainWindow):
         self.clear_tabs_options()
         self.set_current_date()
         WidgetHelpers.clear_table(self)
+        self.disable_update_button()
+        self.disable_excel_button()
 
 
 if __name__ == "__main__":

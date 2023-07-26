@@ -13,6 +13,7 @@ from views.quick_management_view import QuickManagement
 from components.dialog_window_manager import DialogWindowManager
 from carrier_excel import CarrierExcel
 from helpers.widgets_helpers import WidgetHelpers
+from reports.report_manager import ReportManager
 
 setup_config()
 
@@ -31,6 +32,7 @@ class PaymentsConciliation(QMainWindow):
         self.connect_buttons_actions()
         self.set_current_date()
         self.disable_conciliate_button()
+        self.disable_excel_button()
         self.file_path = fr"c:\users\{getlogin()}\desktop\recebimentocielo.xlsx"
         self.setWindowTitle(f"Conciliação de pagamentos - {os.getenv('COMPANY')}")
         self.quick_management_window = None
@@ -228,6 +230,9 @@ class PaymentsConciliation(QMainWindow):
         self.set_unconciliated_count()
         self.set_unconciliated_values()
 
+    def generate_unconciliated_report(self) -> None:
+        ReportManager.unconciliateds().generate((self.unconciliated_payments, self.old_unconciliated))
+
     def set_current_date(self):
         WidgetHelpers.set_current_date(self)
 
@@ -237,12 +242,25 @@ class PaymentsConciliation(QMainWindow):
     def disable_conciliate_button(self) -> None:
         self.ui.conciliate_button.setDisabled(True)
 
+    def enable_excel_button(self) -> None:
+        self.ui.excel_button.setDisabled(False)
+
+    def disable_excel_button(self) -> None:
+        self.ui.excel_button.setDisabled(True)
+
     def manage_conciliate_button(self) -> None:
 
         if self.found_payments or self.old_found_payments:
             self.enable_conciliate_button()
         else:
             self.disable_conciliate_button()
+
+    def manage_excel_button(self) -> None:
+
+        if self.unconciliated_payments or self.old_unconciliated:
+            self.enable_excel_button()
+        else:
+            self.disable_excel_button()
 
     def conciliate_payments(self):
         for payment in self.found_payments:
@@ -326,16 +344,19 @@ class PaymentsConciliation(QMainWindow):
         self.clear_conciliate_tables()
         self.clear_unconciliated_tables()
         self.disable_conciliate_button()
+        self.disable_excel_button()
         self.set_current_date()
 
     def connect_buttons_actions(self):
         self.ui.conciliation_search_button.clicked.connect(self.verify_file)
         self.ui.conciliation_search_button.clicked.connect(self.manage_conciliate_button)
         self.ui.unconciliated_search_button.clicked.connect(self.manage_unconciliated_tables)
+        self.ui.unconciliated_search_button.clicked.connect(self.manage_excel_button)
         self.ui.clear_button.clicked.connect(self.clear_widgets)
         self.ui.conciliate_button.clicked.connect(self.manage_conciliations)
         self.ui.unconciliated_table.cellDoubleClicked.connect(self.handle_cell_double_click)
         self.ui.old_unconciliated_table.cellDoubleClicked.connect(self.handle_cell_double_click)
+        self.ui.excel_button.clicked.connect(self.generate_unconciliated_report)
 
     def handle_cell_double_click(self, row):
         selecte_tab = self.ui.unconciliated_tab.currentIndex()

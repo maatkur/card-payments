@@ -20,6 +20,7 @@ from PySide6.QtWidgets import (QAbstractItemView, QAbstractScrollArea, QApplicat
     QPushButton, QSizePolicy, QTabWidget, QTableWidget,
     QTableWidgetItem, QWidget)
 
+
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
@@ -245,6 +246,12 @@ class Ui_MainWindow(object):
         self.label_6.setObjectName(u"label_6")
         self.label_6.setGeometry(QRect(160, 28, 36, 16))
         self.label_6.setFont(font2)
+        self.excel_button = QPushButton(self.frame_3)
+        self.excel_button.setObjectName(u"excel_button")
+        self.excel_button.setGeometry(QRect(410, 20, 80, 25))
+        icon4 = QIcon()
+        icon4.addFile(f"{getenv('ICONS_PATH')}excel.ico", QSize(), QIcon.Normal, QIcon.Off)
+        self.excel_button.setIcon(icon4)
         self.frame_4 = QFrame(self.frame)
         self.frame_4.setObjectName(u"frame_4")
         self.frame_4.setGeometry(QRect(10, 67, 1249, 301))
@@ -491,6 +498,7 @@ class Ui_MainWindow(object):
         self.total_unconciliated_label.setText("")
         self.label_5.setText(QCoreApplication.translate("MainWindow", u"Inicial:", None))
         self.label_6.setText(QCoreApplication.translate("MainWindow", u"Final:", None))
+        self.excel_button.setText(QCoreApplication.translate("MainWindow", u"Excel", None))
         ___qtablewidgetitem21 = self.new_table.horizontalHeaderItem(0)
         ___qtablewidgetitem21.setText(QCoreApplication.translate("MainWindow", u"Pedido", None));
         ___qtablewidgetitem22 = self.new_table.horizontalHeaderItem(1)

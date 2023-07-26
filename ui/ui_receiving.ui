@@ -154,7 +154,11 @@
          </rect>
         </property>
         <property name="text">
-         <string>Gerar excel</string>
+         <string>Excel</string>
+        </property>
+        <property name="icon">
+         <iconset>
+          <normaloff>../icons/excel.ico</normaloff>../icons/excel.ico</iconset>
         </property>
        </widget>
        <widget class="QPushButton" name="search_button">
