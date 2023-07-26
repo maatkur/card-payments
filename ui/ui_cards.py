@@ -8,8 +8,7 @@
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-import os
-
+from os import getenv
 from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
     QMetaObject, QObject, QPoint, QRect,
     QSize, QTime, QUrl, Qt)
@@ -22,13 +21,14 @@ from PySide6.QtWidgets import (QAbstractItemView, QApplication, QDateEdit, QFram
     QMainWindow, QPushButton, QSizePolicy, QTableWidget,
     QTableWidgetItem, QWidget)
 
+
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(561, 268)
+        MainWindow.resize(561, 299)
         icon = QIcon()
-        icon.addFile(f"{os.getenv('ICONS_PATH')}pagamento-com-cartao-de-credito.ico", QSize(), QIcon.Normal, QIcon.Off)
+        icon.addFile(f"{getenv('ICONS_PATH')}pagamento-com-cartao-de-credito.ico", QSize(), QIcon.Normal, QIcon.Off)
         MainWindow.setWindowIcon(icon)
         MainWindow.setStyleSheet(u"* {\n"
 "  font-family: Arial;\n"
@@ -103,18 +103,18 @@ class Ui_MainWindow(object):
         self.excel_report_button.setFont(font)
         self.excel_report_button.setCursor(QCursor(Qt.PointingHandCursor))
         icon1 = QIcon()
-        icon1.addFile(f"{os.getenv('ICONS_PATH')}excel.ico", QSize(), QIcon.Normal, QIcon.Off)
+        icon1.addFile(f"{getenv('ICONS_PATH')}excel.ico", QSize(), QIcon.Normal, QIcon.Off)
         self.excel_report_button.setIcon(icon1)
         self.excel_report_button.setIconSize(QSize(20, 20))
         self.excel_report_button.setAutoDefault(False)
         self.excel_report_button.setFlat(False)
         self.add_card_payment_button = QPushButton(self.frame)
         self.add_card_payment_button.setObjectName(u"add_card_payment_button")
-        self.add_card_payment_button.setGeometry(QRect(9, 150, 195, 28))
+        self.add_card_payment_button.setGeometry(QRect(9, 145, 195, 28))
         self.add_card_payment_button.setFont(font)
         self.add_card_payment_button.setCursor(QCursor(Qt.PointingHandCursor))
         icon2 = QIcon()
-        icon2.addFile(f"{os.getenv('ICONS_PATH')}adicionar.ico", QSize(), QIcon.Normal, QIcon.Off)
+        icon2.addFile(f"{getenv('ICONS_PATH')}adicionar.ico", QSize(), QIcon.Normal, QIcon.Off)
         self.add_card_payment_button.setIcon(icon2)
         self.add_card_payment_button.setIconSize(QSize(20, 20))
         self.add_card_payment_button.setAutoDefault(False)
@@ -123,7 +123,7 @@ class Ui_MainWindow(object):
         self.refresh_button.setObjectName(u"refresh_button")
         self.refresh_button.setGeometry(QRect(150, 10, 38, 23))
         icon3 = QIcon()
-        icon3.addFile(f"{os.getenv('ICONS_PATH')}refresh.ico", QSize(), QIcon.Normal, QIcon.Off)
+        icon3.addFile(f"{getenv('ICONS_PATH')}refresh.ico", QSize(), QIcon.Normal, QIcon.Off)
         self.refresh_button.setIcon(icon3)
         self.refresh_button.setIconSize(QSize(20, 20))
         self.refresh_button.setFlat(True)
@@ -131,7 +131,7 @@ class Ui_MainWindow(object):
         self.search_button.setObjectName(u"search_button")
         self.search_button.setGeometry(QRect(110, 10, 38, 25))
         icon4 = QIcon()
-        icon4.addFile(f"{os.getenv('ICONS_PATH')}icons8-pesquisar-60.ico", QSize(), QIcon.Normal, QIcon.Off)
+        icon4.addFile(f"{getenv('ICONS_PATH')}icons8-pesquisar-60.ico", QSize(), QIcon.Normal, QIcon.Off)
         self.search_button.setIcon(icon4)
         self.search_button.setIconSize(QSize(20, 20))
         self.search_button.setFlat(True)
@@ -141,15 +141,31 @@ class Ui_MainWindow(object):
         self.search_order_entry.setMaximumSize(QSize(100, 16777215))
         self.management_button = QPushButton(self.frame)
         self.management_button.setObjectName(u"management_button")
-        self.management_button.setGeometry(QRect(10, 190, 195, 28))
+        self.management_button.setGeometry(QRect(10, 180, 195, 28))
         self.management_button.setFont(font)
         self.management_button.setCursor(QCursor(Qt.PointingHandCursor))
         icon5 = QIcon()
-        icon5.addFile(f"{os.getenv('ICONS_PATH')}management.ico", QSize(), QIcon.Normal, QIcon.Off)
+        icon5.addFile(f"{getenv('ICONS_PATH')}management.ico", QSize(), QIcon.Normal, QIcon.Off)
         self.management_button.setIcon(icon5)
         self.management_button.setIconSize(QSize(20, 20))
         self.management_button.setAutoDefault(False)
         self.management_button.setFlat(False)
+        self.conciliation_button = QPushButton(self.frame)
+        self.conciliation_button.setObjectName(u"conciliation_button")
+        self.conciliation_button.setGeometry(QRect(10, 215, 195, 28))
+        self.conciliation_button.setFont(font)
+        icon6 = QIcon()
+        icon6.addFile(f"{getenv('ICONS_PATH')}acordo.ico", QSize(), QIcon.Normal, QIcon.Off)
+        self.conciliation_button.setIcon(icon6)
+        self.conciliation_button.setIconSize(QSize(22, 22))
+        self.conciliation_button_2 = QPushButton(self.frame)
+        self.conciliation_button_2.setObjectName(u"conciliation_button_2")
+        self.conciliation_button_2.setGeometry(QRect(10, 250, 195, 28))
+        self.conciliation_button_2.setFont(font)
+        icon7 = QIcon()
+        icon7.addFile(f"{getenv('ICONS_PATH')}pagamentos.ico", QSize(), QIcon.Normal, QIcon.Off)
+        self.conciliation_button_2.setIcon(icon7)
+        self.conciliation_button_2.setIconSize(QSize(22, 22))
 
         self.horizontalLayout.addWidget(self.frame)
 
@@ -181,5 +197,7 @@ class Ui_MainWindow(object):
         self.refresh_button.setText("")
         self.search_button.setText("")
         self.management_button.setText(QCoreApplication.translate("MainWindow", u"Manuten\u00e7\u00e3o", None))
+        self.conciliation_button.setText(QCoreApplication.translate("MainWindow", u"Concilia\u00e7\u00e3o", None))
+        self.conciliation_button_2.setText(QCoreApplication.translate("MainWindow", u"Pagamentos", None))
     # retranslateUi
 

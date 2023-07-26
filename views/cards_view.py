@@ -13,6 +13,7 @@ from helpers.date_helpers import DateHelpers
 from helpers.widgets_helpers import WidgetHelpers
 from views.insert_payment_view import InsertPayment
 from ui.ui_cards import Ui_MainWindow
+from views.payments_conciliation_view import PaymentsConciliation
 from views.card_management_view import CardsManagement
 from components.dialog_window import DialogWindow
 
@@ -35,6 +36,7 @@ class Cards(QMainWindow):
         self.details_window = None
         self.add_payment_window = None
         self.cards_management_window = None
+        self.payments_conciliation_windoow = None
         self.dialog_window = DialogWindow()
         self.ui.tableWidget.setColumnWidth(2, 88)  # Definindo a largura da coluna da data para 88 pixels
         self.connect_button_actions()
@@ -66,6 +68,7 @@ class Cards(QMainWindow):
         self.ui.excel_report_button.clicked.connect(self.handle_report_button)
         self.ui.refresh_button.clicked.connect(self.handle_refresh_button)
         self.ui.management_button.clicked.connect(self.handle_management_button)
+        self.ui.conciliation_button.clicked.connect(self.handle_conciliation_button)
 
     def connect_text_changes(self) -> None:
         WidgetHelpers.connect_texts_changes(self, self.manage_search_button)
@@ -114,12 +117,14 @@ class Cards(QMainWindow):
     def get_filtered_order(self, order_number) -> None:
 
         if self.is_admin_user:
-            self.orders_data = RepositoryManager.order_stage_repository().filter_uncommited_order(self.logged_user["store"],
-                                                                                      order_number)
+            self.orders_data = RepositoryManager.order_stage_repository().filter_uncommited_order(
+                self.logged_user["store"],
+                order_number)
         else:
-            self.orders_data = RepositoryManager.order_stage_repository().filter_uncommited_order(self.logged_user["store"],
-                                                                                      order_number,
-                                                                                      self.logged_user["userCode"])
+            self.orders_data = RepositoryManager.order_stage_repository().filter_uncommited_order(
+                self.logged_user["store"],
+                order_number,
+                self.logged_user["userCode"])
 
     def load_filtered_order(self) -> None:
         order_number = self.ui.search_order_entry.text()
@@ -150,6 +155,13 @@ class Cards(QMainWindow):
         self.cards_management_window = CardsManagement()
         self.cards_management_window.show()
         self.cards_management_window.update_order.connect(self.fetch_and_load_orders)
+
+    def handle_conciliation_button(self) -> None:
+        if self.payments_conciliation_windoow is None:
+            self.payments_conciliation_windoow = PaymentsConciliation()
+            self.payments_conciliation_windoow.show()
+        else:
+            self.payments_conciliation_windoow.show()
 
     def handle_report_button(self) -> None:
         initial_date = DateHelpers.to_sql_format(self.ui.initial_date.text())
@@ -186,10 +198,12 @@ class Cards(QMainWindow):
     def disable_admin_button(self) -> None:
         self.ui.add_card_payment_button.setDisabled(True)
         self.ui.management_button.setDisabled(True)
+        self.ui.conciliation_button.setDisabled(True)
 
     def enable_admin_buttons(self) -> None:
         self.ui.add_card_payment_button.setDisabled(False)
         self.ui.management_button.setDisabled(False)
+        self.ui.conciliation_button.setDisabled(False)
 
     def manage_search_button(self) -> None:
         is_order_entry_filled = len(self.ui.search_order_entry.text()) >= 5

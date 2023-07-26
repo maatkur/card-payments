@@ -8,7 +8,7 @@ from helpers.date_helpers import DateHelpers
 
 def generate_management_report(data: list):
     workbook = openpyxl.Workbook()  # Crie um arquivo temporário
-    worksheet = workbook.active  # Seleciona a folha de trabalho do excel
+    worksheet = workbook.active  # Seleciona a folha de trabalho do excel.
 
     header = ["Pedido", "Caixa", "Movimento", "Transação", "Bandeira", "Valor", "Parcelas", "Data da venda",
               "Unidade", "NSU", "Autorizacao"]  # Cria o cabeçalho

@@ -23,3 +23,7 @@ class DateHelpers:
         formatted_date = date_object.strftime('%d%m%Y%H%M%S')
 
         return formatted_date
+
+    @staticmethod
+    def to_date_obj(date_str: str) -> datetime.date:
+        return datetime.strptime(date_str, "%d/%m/%Y").date()

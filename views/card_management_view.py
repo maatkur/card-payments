@@ -106,6 +106,7 @@ class CardsManagement(QMainWindow):
             query["final_date"] = DateHelpers.to_sql_format(final_date)
             if store_is_selected:
                 query["storeUnit"] = store_unit
+        query["conciliated"] = 0
 
         self.table_data = RepositoryManager.checked_orders_repository().get_all_by(query)
 
