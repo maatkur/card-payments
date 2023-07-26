@@ -20,7 +20,6 @@ from PySide6.QtWidgets import (QAbstractItemView, QAbstractScrollArea, QApplicat
     QPushButton, QSizePolicy, QTabWidget, QTableWidget,
     QTableWidgetItem, QWidget)
 
-
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
@@ -90,6 +89,13 @@ class Ui_MainWindow(object):
         self.label_4.setObjectName(u"label_4")
         self.label_4.setGeometry(QRect(160, 30, 36, 16))
         self.label_4.setFont(font2)
+        self.payments_status_button = QPushButton(self.frame_2)
+        self.payments_status_button.setObjectName(u"payments_status_button")
+        self.payments_status_button.setGeometry(QRect(668, 23, 161, 25))
+        icon4 = QIcon()
+        icon4.addFile(f"{getenv('ICONS_PATH')}pagamentos.ico", QSize(), QIcon.Normal, QIcon.Off)
+        self.payments_status_button.setIcon(icon4)
+        self.payments_status_button.setIconSize(QSize(20, 20))
         self.frame_3 = QFrame(self.frame)
         self.frame_3.setObjectName(u"frame_3")
         self.frame_3.setGeometry(QRect(10, 364, 1249, 351))
@@ -249,9 +255,9 @@ class Ui_MainWindow(object):
         self.excel_button = QPushButton(self.frame_3)
         self.excel_button.setObjectName(u"excel_button")
         self.excel_button.setGeometry(QRect(410, 20, 80, 25))
-        icon4 = QIcon()
-        icon4.addFile(f"{getenv('ICONS_PATH')}excel.ico", QSize(), QIcon.Normal, QIcon.Off)
-        self.excel_button.setIcon(icon4)
+        icon5 = QIcon()
+        icon5.addFile(f"{getenv('ICONS_PATH')}excel.ico", QSize(), QIcon.Normal, QIcon.Off)
+        self.excel_button.setIcon(icon5)
         self.frame_4 = QFrame(self.frame)
         self.frame_4.setObjectName(u"frame_4")
         self.frame_4.setGeometry(QRect(10, 67, 1249, 301))
@@ -448,6 +454,7 @@ class Ui_MainWindow(object):
         self.conciliate_button.setText(QCoreApplication.translate("MainWindow", u"Conciliar pagamentos ", None))
         self.label_3.setText(QCoreApplication.translate("MainWindow", u"Inicial:", None))
         self.label_4.setText(QCoreApplication.translate("MainWindow", u"Final:", None))
+        self.payments_status_button.setText(QCoreApplication.translate("MainWindow", u"Conciliar conferidos", None))
         self.label.setText(QCoreApplication.translate("MainWindow", u"Consultar pagamentos n\u00e3o conciliados", None))
         self.unconciliated_search_button.setText(QCoreApplication.translate("MainWindow", u"Pesquisar", None))
         ___qtablewidgetitem = self.unconciliated_table.horizontalHeaderItem(0)

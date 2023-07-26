@@ -7,7 +7,6 @@
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
-
 from os import getenv
 from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
     QMetaObject, QObject, QPoint, QRect,
@@ -26,7 +25,7 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(561, 299)
+        MainWindow.resize(561, 261)
         icon = QIcon()
         icon.addFile(f"{getenv('ICONS_PATH')}pagamento-com-cartao-de-credito.ico", QSize(), QIcon.Normal, QIcon.Off)
         MainWindow.setWindowIcon(icon)
@@ -158,14 +157,6 @@ class Ui_MainWindow(object):
         icon6.addFile(f"{getenv('ICONS_PATH')}acordo.ico", QSize(), QIcon.Normal, QIcon.Off)
         self.conciliation_button.setIcon(icon6)
         self.conciliation_button.setIconSize(QSize(22, 22))
-        self.conciliation_button_2 = QPushButton(self.frame)
-        self.conciliation_button_2.setObjectName(u"conciliation_button_2")
-        self.conciliation_button_2.setGeometry(QRect(10, 250, 195, 28))
-        self.conciliation_button_2.setFont(font)
-        icon7 = QIcon()
-        icon7.addFile(f"{getenv('ICONS_PATH')}pagamentos.ico", QSize(), QIcon.Normal, QIcon.Off)
-        self.conciliation_button_2.setIcon(icon7)
-        self.conciliation_button_2.setIconSize(QSize(22, 22))
 
         self.horizontalLayout.addWidget(self.frame)
 
@@ -197,7 +188,6 @@ class Ui_MainWindow(object):
         self.refresh_button.setText("")
         self.search_button.setText("")
         self.management_button.setText(QCoreApplication.translate("MainWindow", u"Manuten\u00e7\u00e3o", None))
-        self.conciliation_button.setText(QCoreApplication.translate("MainWindow", u"Concilia\u00e7\u00e3o", None))
-        self.conciliation_button_2.setText(QCoreApplication.translate("MainWindow", u"Pagamentos", None))
+        self.conciliation_button.setText(QCoreApplication.translate("MainWindow", u"Conferir / Conciliar", None))
     # retranslateUi
 

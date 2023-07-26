@@ -161,6 +161,7 @@ class Receiving(QMainWindow):
             self.load_old_table()
 
     def retrive_and_manage(self):
+        WidgetHelpers.clear_table(self)
         self.retrieve_conciliated_orders()
         self.create_tabs_options()
         self.manage_tables()

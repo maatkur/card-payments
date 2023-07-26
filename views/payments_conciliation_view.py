@@ -10,6 +10,7 @@ from helpers.date_helpers import DateHelpers
 
 from ui.ui_payments_conciliation import Ui_MainWindow
 from views.quick_management_view import QuickManagement
+from views.receiving_view import Receiving
 from components.dialog_window_manager import DialogWindowManager
 from carrier_excel import CarrierExcel
 from helpers.widgets_helpers import WidgetHelpers
@@ -29,7 +30,8 @@ class PaymentsConciliation(QMainWindow):
         self.not_found_payments = None
         self.unconciliated_payments = None
         self.old_unconciliated = None
-        self.connect_buttons_actions()
+        self.payment_receiving_window = None
+        self.connect_widget_actions()
         self.set_current_date()
         self.disable_conciliate_button()
         self.disable_excel_button()
@@ -262,6 +264,13 @@ class PaymentsConciliation(QMainWindow):
         else:
             self.disable_excel_button()
 
+    def handle_payment_status_button(self) -> None:
+        if self.payment_receiving_window is None:
+            self.payment_receiving_window = Receiving()
+            self.payment_receiving_window.show()
+        else:
+            self.payment_receiving_window.show()
+
     def conciliate_payments(self):
         for payment in self.found_payments:
             RepositoryManager.checked_orders_repository().conciliate_orders(
@@ -347,7 +356,7 @@ class PaymentsConciliation(QMainWindow):
         self.disable_excel_button()
         self.set_current_date()
 
-    def connect_buttons_actions(self):
+    def connect_widget_actions(self):
         self.ui.conciliation_search_button.clicked.connect(self.verify_file)
         self.ui.conciliation_search_button.clicked.connect(self.manage_conciliate_button)
         self.ui.unconciliated_search_button.clicked.connect(self.manage_unconciliated_tables)
@@ -357,6 +366,7 @@ class PaymentsConciliation(QMainWindow):
         self.ui.unconciliated_table.cellDoubleClicked.connect(self.handle_cell_double_click)
         self.ui.old_unconciliated_table.cellDoubleClicked.connect(self.handle_cell_double_click)
         self.ui.excel_button.clicked.connect(self.generate_unconciliated_report)
+        self.ui.payments_status_button.clicked.connect(self.handle_payment_status_button)
 
     def handle_cell_double_click(self, row):
         selecte_tab = self.ui.unconciliated_tab.currentIndex()

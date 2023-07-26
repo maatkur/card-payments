@@ -196,6 +196,29 @@
        <string>Final:</string>
       </property>
      </widget>
+     <widget class="QPushButton" name="payments_status_button">
+      <property name="geometry">
+       <rect>
+        <x>668</x>
+        <y>23</y>
+        <width>161</width>
+        <height>25</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Conciliar conferidos</string>
+      </property>
+      <property name="icon">
+       <iconset>
+        <normaloff>../icons/pagamentos.ico</normaloff>../icons/pagamentos.ico</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>20</width>
+        <height>20</height>
+       </size>
+      </property>
+     </widget>
     </widget>
     <widget class="QFrame" name="frame_3">
      <property name="geometry">

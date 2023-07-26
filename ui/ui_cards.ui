@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>561</width>
-    <height>299</height>
+    <height>261</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -404,39 +404,11 @@
         </font>
        </property>
        <property name="text">
-        <string>Conciliação</string>
+        <string>Conferir / Conciliar</string>
        </property>
        <property name="icon">
         <iconset>
          <normaloff>../icons/acordo.ico</normaloff>../icons/acordo.ico</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>22</width>
-         <height>22</height>
-        </size>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="conciliation_button_2">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>250</y>
-         <width>195</width>
-         <height>28</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>Pagamentos</string>
-       </property>
-       <property name="icon">
-        <iconset>
-         <normaloff>../icons/pagamentos.ico</normaloff>../icons/pagamentos.ico</iconset>
        </property>
        <property name="iconSize">
         <size>
