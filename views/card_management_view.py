@@ -20,11 +20,12 @@ class CardsManagement(QMainWindow):
     today = datetime.today()
     qdate = QDate(today.year, today.month, today.day)
 
-    def __init__(self) -> None:
+    def __init__(self, logged_user) -> None:
         super(CardsManagement, self).__init__()
         self.ui = Ui_Form()  # instanciar a classe Ui_form
         self.ui.setupUi(self)
         self.setWindowTitle("Manutenção")
+        self.logged_user = logged_user
         self.dialog_window = DialogWindow()
         self.set_date()
         self.install_event_filters()
@@ -32,6 +33,7 @@ class CardsManagement(QMainWindow):
         self.set_card_flags()
         self.disable_view_widgets()
         self.connect_button_actions()
+        self.manage_excel_button()
         self.table_data = None
         self.clicked_order_data = None
 
@@ -83,9 +85,10 @@ class CardsManagement(QMainWindow):
                 else:
                     self.ui.tableWidget.setItem(row, col, QTableWidgetItem(str(value)))
 
-        self.enable_excel_button()
+        self.manage_excel_button()
 
     def handle_search_button(self) -> None:
+        self.manage_excel_button()
         self.get_filtered_orders()
         self.verify_data()
 
@@ -157,6 +160,7 @@ class CardsManagement(QMainWindow):
         self.clicked_order_data = RepositoryManager.checked_orders_repository().get_first({"uId": uid})
 
     def fill_view_fields(self, order_data: dict) -> None:
+        self.manage_installment_combo_box()
         order_value = round(float(order_data["orderValue"]), 2)
         order_value = str(order_value)
 
@@ -189,7 +193,6 @@ class CardsManagement(QMainWindow):
         self.ui.flags_combo_box.setDisabled(False)
         self.ui.installments_combo_box.setDisabled(False)
         self.ui.delete_button.setDisabled(False)
-        self.ui.excel_button.setDisabled(False)
 
     def disable_view_widgets(self) -> None:
         self.ui.value_view.setDisabled(True)
@@ -203,7 +206,12 @@ class CardsManagement(QMainWindow):
         self.ui.installments_combo_box.setDisabled(True)
         self.ui.delete_button.setDisabled(True)
         self.ui.save_button.setDisabled(True)
-        self.ui.excel_button.setDisabled(True)
+
+    def manage_excel_button(self) -> None:
+        if self.logged_user["adminUser"]:
+            self.enable_excel_button()
+        else:
+            self.ui.excel_button.setDisabled(True)
 
     def set_date(self) -> None:
         self.ui.initial_date.setDate(self.qdate)
@@ -230,7 +238,17 @@ class CardsManagement(QMainWindow):
     def set_combo_box_default(self) -> None:
         self.ui.stores_comboBox.setCurrentText("Todas")
         self.ui.flags_combo_box.setCurrentText("Selecione")
-        self.ui.installments_combo_box.setCurrentText("1")
+
+    def manage_installment_combo_box(self) -> None:
+        transaction_type = self.clicked_order_data["transactionType"]
+
+        if transaction_type == 'credit':
+            self.ui.installments_combo_box.clear()
+            for installments in range(12):
+                self.ui.installments_combo_box.addItem(str(installments + 1))
+
+        if transaction_type == 'debit':
+            self.ui.installments_combo_box.addItem("0")
 
     def handle_clear_button(self) -> None:
         self.set_date()
@@ -358,6 +376,6 @@ class CardsManagement(QMainWindow):
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    window = CardsManagement()
+    window = CardsManagement("")
     window.show()
     app.exec()

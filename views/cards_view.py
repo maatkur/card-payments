@@ -152,7 +152,7 @@ class Cards(QMainWindow):
         self.add_payment_window.closed.connect(self.fetch_and_load_orders)
 
     def handle_management_button(self) -> None:
-        self.cards_management_window = CardsManagement()
+        self.cards_management_window = CardsManagement(self.logged_user)
         self.cards_management_window.show()
         self.cards_management_window.update_order.connect(self.fetch_and_load_orders)
 
@@ -197,12 +197,10 @@ class Cards(QMainWindow):
 
     def disable_admin_button(self) -> None:
         self.ui.add_card_payment_button.setDisabled(True)
-        self.ui.management_button.setDisabled(True)
         self.ui.conciliation_button.setDisabled(True)
 
     def enable_admin_buttons(self) -> None:
         self.ui.add_card_payment_button.setDisabled(False)
-        self.ui.management_button.setDisabled(False)
         self.ui.conciliation_button.setDisabled(False)
 
     def manage_search_button(self) -> None:
