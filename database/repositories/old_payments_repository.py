@@ -63,7 +63,7 @@ class OldPaymentsRepository(RepositoryConfig):
         command = f"""SELECT payday, tax, installmentValue, currentInstallment, installments, 
                         NSU, transactionAuthorization, status, uId 
                              FROM oldPayments WHERE payday BETWEEN '{initial_date}' AND '{final_date}' 
-                                AND conciliated = 0"""
+                                AND conciliated = 0 ORDER BY installmentValue"""
 
         return self._search_and_fetch_all(command)
 

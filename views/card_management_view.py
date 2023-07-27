@@ -1,5 +1,6 @@
 import sys
 from datetime import datetime
+from os import getenv
 
 from PySide6.QtCore import Signal, QDate, Qt, QEvent
 from PySide6.QtWidgets import *
@@ -24,7 +25,7 @@ class CardsManagement(QMainWindow):
         super(CardsManagement, self).__init__()
         self.ui = Ui_Form()  # instanciar a classe Ui_form
         self.ui.setupUi(self)
-        self.setWindowTitle("Manutenção")
+        self.setWindowTitle(f"{getenv('COMPANY')} | Manutenção")
         self.logged_user = logged_user
         self.dialog_window = DialogWindow()
         self.set_date()

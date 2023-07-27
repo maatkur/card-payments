@@ -13,8 +13,7 @@ class UnconciliatedsReport(ReportConfig):
 
         self.report_name = "nao_conciliados"
         super().__init__(self.header, self.report_name)
-        self.workbook["Sheet"].title = "Pagamentos atuais"
-        self.create_new_worksheet("Pagamentos conexão")
+
 
     def add_checked_orders_data(self, data: list) -> None:
         self.worksheet.append(self.header)
@@ -95,8 +94,11 @@ class UnconciliatedsReport(ReportConfig):
 
     def generate(self, data: tuple):
         checked_orders, old_payments = data
+        self.workbook["Sheet"].title = "Pagamentos atuais"
         self.add_checked_orders_data(checked_orders)
+        self.create_new_worksheet("Pagamentos conexão")
         self.switch_worksheet("Pagamentos conexão")
         self.add_old_payments_data(old_payments)
         self.set_header_style()
         self.save_workbook()
+        self.reset()

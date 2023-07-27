@@ -36,7 +36,7 @@ class PaymentsConciliation(QMainWindow):
         self.disable_conciliate_button()
         self.disable_excel_button()
         self.file_path = fr"c:\users\{getlogin()}\desktop\recebimentocielo.xlsx"
-        self.setWindowTitle(f"Conciliação de pagamentos - {os.getenv('COMPANY')}")
+        self.setWindowTitle(f"{os.getenv('COMPANY')} | Conciliação de pagamentos")
         self.quick_management_window = None
 
     def verify_file(self):

@@ -162,7 +162,7 @@ class CheckedOrdersRepository(RepositoryConfig):
         command = f"""SELECT orderNumber, transactionType, flag, installments, installmentValue, currentInstallment, 
                         purchaseDate, payday, flagTax, liquidValue, NSU, transactionAuthorization, status, uId 
                             FROM checkedOrders WHERE payday BETWEEN '{initial_date}' AND '{final_date}' 
-                                AND conciliated = 0 ORDER BY orderNumber"""
+                                AND conciliated = 0 ORDER BY installmentValue"""
 
         return self._search_and_fetch_all(command)
 

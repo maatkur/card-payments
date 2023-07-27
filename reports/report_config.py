@@ -47,3 +47,7 @@ class ReportConfig:
         temp_filename = rf'C:\Users\{user}\Desktop\{self.report_name}{date}.xlsx'
         self.workbook.save(temp_filename)
         system(f'start excel.exe "{temp_filename}"')
+
+    def reset(self) -> None:
+        self.workbook = openpyxl.Workbook()  # Init workbook
+        self.worksheet = self.workbook.active

@@ -96,8 +96,11 @@ class ConciliatedsReport(ReportConfig):
 
     def generate(self, data: tuple):
         checked_orders, old_payments = data
+        self.workbook["Sheet"].title = "Pagamentos atuais"
         self.add_checked_orders_data(checked_orders)
+        self.create_new_worksheet("Pagamentos conexão")
         self.switch_worksheet("Pagamentos conexão")
         self.add_old_payments_data(old_payments)
         self.set_header_style()
         self.save_workbook()
+        self.reset()
