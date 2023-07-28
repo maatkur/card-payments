@@ -14,8 +14,6 @@ class ConciliatedsReport(ReportConfig):
 
         self.report_name = "conciliados"
         super().__init__(self.header, self.report_name)
-        self.workbook["Sheet"].title = "Pagamentos atuais"
-        self.create_new_worksheet("Pagamentos conexão")
 
     def add_checked_orders_data(self, data: list) -> None:
         self.worksheet.append(self.header)

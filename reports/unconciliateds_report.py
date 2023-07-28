@@ -14,7 +14,6 @@ class UnconciliatedsReport(ReportConfig):
         self.report_name = "nao_conciliados"
         super().__init__(self.header, self.report_name)
 
-
     def add_checked_orders_data(self, data: list) -> None:
         self.worksheet.append(self.header)
 
