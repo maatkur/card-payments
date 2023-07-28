@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 
 
 def setup_config():
-    app_env = os.environ.get("APP_ENV", "dev")
+    app_env = os.environ.get("APP_ENV", "prod")
     if app_env == "dev":
         load_dotenv("../development.env")
     elif app_env == "prod":

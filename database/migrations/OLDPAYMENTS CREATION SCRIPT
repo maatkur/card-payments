@@ -1,0 +1,28 @@
+USE [card_payments]
+GO
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[oldPayments](
+	[id] [bigint] IDENTITY(1,1) NOT NULL,
+	[payday] [date] NULL,
+	[orderValue] [money] NULL,
+	[tax] [decimal](3, 2) NULL,
+	[installmentValue] [money] NULL,
+	[currentInstallment] [varchar](2) NULL,
+	[installments] [varchar](2) NULL,
+	[NSU] [varchar](50) NULL,
+	[transactionAuthorization] [varchar](50) NULL,
+	[uId] [varchar](36) NULL,
+	[conciliated] [bit] NULL,
+	[status] [varchar](30) NULL
+) ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[oldPayments] ADD  DEFAULT ((0)) FOR [conciliated]
+GO
+
+
